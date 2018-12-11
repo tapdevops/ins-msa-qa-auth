@@ -37,6 +37,7 @@ module.exports = ( app ) => {
 	const category = require( '../app/controllers/category.js' );
 	const login = require( '../app/controllers/login.js' );
 	const masterUser = require( '../app/controllers/masterUser.js' );
+	const mobileSync = require( '../app/controllers/mobileSync.js' );
 
 	// Routing: Auth
 	//app.post( '/api/login', auth.login );
@@ -126,6 +127,10 @@ module.exports = ( app ) => {
 	// ROUTE - CATEGORY
 	app.post( '/api/category', verifyToken, category.create );
 	app.get( '/api/category', verifyToken, category.find );
+
+	// ROUTE - MOBILE SYNC
+	app.get( '/api/mobile-sync', verifyToken, mobileSync.find );
+	app.post( '/api/mobile-sync', verifyToken, mobileSync.create );
 
 	// ROUTE - MASTER USER
 	app.get( '/api/master-user', verifyToken, masterUser.find );
