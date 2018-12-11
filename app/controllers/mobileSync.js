@@ -41,7 +41,7 @@ exports.create = ( req, res ) => {
 			});
 		}
 		else {
-			if( !req.body.TGL_MOBILE_SYNC || !req.body.TABEL_UPDATE || !req.body.IMEI ) {
+			if ( !req.body.TGL_MOBILE_SYNC || !req.body.TABEL_UPDATE || !req.body.IMEI ) {
 				return res.status( 400 ).send({
 					status: false,
 					message: 'Invalid input',
@@ -72,11 +72,9 @@ exports.create = ( req, res ) => {
 					data: {}
 				} );
 			} );
-
 		}
 	} );
 	
 };
-
 
 
