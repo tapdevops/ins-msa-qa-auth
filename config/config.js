@@ -7,6 +7,7 @@ module.exports = {
 	*/
 	app_port: process.env.PORT || 3001,
 	app_name: 'Microservice Auth',
+	app_ip: '149.129.242.205',
 
 	/*
 	|--------------------------------------------------------------------------

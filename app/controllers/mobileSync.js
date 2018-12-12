@@ -20,12 +20,36 @@ exports.find = ( req, res ) => {
 		}
 		else {
 			var auth = jwtDecode( req.token );
-			var find_condition = {};
 
-			res.send( {
-				status: true,
-				message: 'Error retrieving data',
-				data: {}
+			mobileSyncModel.find( {
+				INSERT_USER: auth.USER_AUTH_CODE
+			} )
+			.then( data => {
+				if ( !data ) {
+					return res.send( {
+						status: false,
+						message: 'Data not found 2',
+						data: {}
+					} );
+				}
+				res.send( {
+					status: true,
+					message: "Success",
+					data: data
+				} )
+			} ).catch( err => {
+				if( err.kind === 'ObjectId' ) {
+					return res.send( {
+						status: false,
+						message: 'Data not found 1',
+						data: {}
+					} );
+				}
+				return res.send( {
+					status: false,
+					message: 'Error retrieving data',
+					data: {}
+				} );
 			} );
 		}
 	} );
@@ -122,10 +146,7 @@ exports.findRegion = ( req, res ) => {
 					} );
 				}
 				else {
-					console.log('D');
 					var url = config.url.microservices.masterdata_region;
-
-					console.log( config.url.microservices.masterdata_region );
 
 					client.get( url, args, function (data, response) {
 						// parsed response body as js object

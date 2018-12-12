@@ -48,6 +48,8 @@ app.use( expressUpload() );
 
 // Server Running Message
 app.listen( config.app_port, () => {
+	var host = 'http://localhost:3001';
+	var port = config.app_port;
 	console.log( config.app_name + ' running on ' + config.app_port )
 } );
 
@@ -79,8 +81,6 @@ app.post( '/api/login', ( req, res ) => {
 			},
 			headers: { "Content-Type": "application/json" }
 		};
-
-		console.log( req.body );
 		
 		// 1. Check ke LDAP
 		client.post( url, args, function ( data, response ) {
@@ -403,6 +403,7 @@ app.post( '/api/logout', verifyToken, ( req, res) => {
 // Routes
 require( './routes/route.js' )( app );
 
+
 function verifyToken( req, res, next ) {
 	// Get auth header value
 	const bearerHeader = req.headers['authorization'];
@@ -441,3 +442,6 @@ function setHectareStatement() {
 		};
 	});
 }
+
+
+module.exports = app;
