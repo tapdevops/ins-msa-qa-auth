@@ -131,6 +131,7 @@ module.exports = ( app ) => {
 	// ROUTE - MOBILE SYNC
 	app.get( '/api/mobile-sync', verifyToken, mobileSync.find );
 	app.post( '/api/mobile-sync', verifyToken, mobileSync.create );
+	app.get( '/api/mobile-sync/hectare-statement/region', verifyToken, mobileSync.findRegion );
 
 	// ROUTE - MASTER USER
 	app.get( '/api/master-user', verifyToken, masterUser.find );

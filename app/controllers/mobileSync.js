@@ -9,6 +9,8 @@ const config = require( '../../config/config.js' );
 const uuid = require( 'uuid' );
 const nJwt = require( 'njwt' );
 const jwtDecode = require( 'jwt-decode' );
+const Client = require('node-rest-client').Client; 
+let moment = require( 'moment-timezone' );
 
 // Find 
 exports.find = ( req, res ) => {
@@ -24,6 +26,79 @@ exports.find = ( req, res ) => {
 				status: true,
 				message: 'Error retrieving data',
 				data: {}
+			} );
+		}
+	} );
+};
+
+// Find Region
+exports.findRegion = ( req, res ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
+		if ( err ) {
+			res.sendStatus( 403 );
+		}
+		else {
+			var date_now = moment( new Date() ).format( "YYYY-MM-DD" );
+			var parent_ms = 'hectare-statement';
+			var target_ms = 'region';
+			var url = config.url.microservices.sync_mobile_hectare_statement + '/' + target_ms + '/' + date_now;
+			var auth = jwtDecode( req.token );
+			var client = new Client();
+			var args = {
+				headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
+			};
+			var start_time = moment( date_now, "YYYY-MM-DD" ).startOf( 'day' );
+			var end_time = moment( start_time ).endOf( 'day' );
+
+			console.log( moment( new Date() ).format( "YYYY-MM-DD" ) );
+
+			mobileSyncModel.find( {
+				INSERT_USER: auth.USER_AUTH_CODE,
+				TABEL_UPDATE: parent_ms + '/' + target_ms,
+				IMEI: auth.IMEI,
+				TGL_MOBILE_SYNC: {
+					$gte: start_time.toDate(),
+					$lt: end_time.toDate()
+				}
+			} )
+			.then( data => {
+				if( !data ) {
+					return res.send( {
+						status: false,
+						message: 'Data not found 2',
+						data: {}
+					} );
+				}
+
+				if ( data.length > 0 ) {
+					res.send( {
+						status: false,
+						message: 'There is no data to sync',
+						data: {}
+					} );
+				}
+				else {
+					client.get( url, args, function ( data, response ) {
+						res.json( {
+							status: true,
+							message: "There are some data to sync",
+							data: data.data
+						} );
+					});
+				}
+			} ).catch( err => {
+				if( err.kind === 'ObjectId' ) {
+					return res.send( {
+						status: false,
+						message: 'Data not found 1',
+						data: {}
+					} );
+				}
+				return res.send( {
+					status: false,
+					message: 'Error retrieving data',
+					data: {}
+				} );
 			} );
 		}
 	} );
@@ -76,5 +151,4 @@ exports.create = ( req, res ) => {
 	} );
 	
 };
-
 

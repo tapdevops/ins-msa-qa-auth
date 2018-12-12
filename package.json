@@ -20,6 +20,8 @@
     "forever-monitor": "^1.7.1",
     "jsonwebtoken": "^8.3.0",
     "jwt-decode": "^2.2.0",
+    "moment": "^2.22.2",
+    "moment-timezone": "^0.5.23",
     "mongoose": "^5.3.9",
     "morgan": "^1.9.1",
     "njwt": "^0.4.0",
