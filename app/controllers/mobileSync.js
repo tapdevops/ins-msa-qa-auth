@@ -1,16 +1,16 @@
 const mobileSyncModel = require( '../models/mobileSync.js' );
 const dateFormat = require( 'dateformat' );
-var querystring = require('querystring');
-var url = require( 'url' );
+const querystring = require('querystring');
+const url = require( 'url' );
 const date = require( '../libraries/date.js' );
 const dateAndTimes = require( 'date-and-time' );
-let jwt = require( 'jsonwebtoken' );
+const jwt = require( 'jsonwebtoken' );
 const config = require( '../../config/config.js' );
 const uuid = require( 'uuid' );
 const nJwt = require( 'njwt' );
 const jwtDecode = require( 'jwt-decode' );
 const Client = require('node-rest-client').Client; 
-let moment = require( 'moment-timezone' );
+const moment = require( 'moment-timezone' );
 
 // Find 
 exports.find = ( req, res ) => {
@@ -50,8 +50,110 @@ exports.findRegion = ( req, res ) => {
 			var start_time = moment( date_now, "YYYY-MM-DD" ).startOf( 'day' );
 			var end_time = moment( start_time ).endOf( 'day' );
 
-			console.log( moment( new Date() ).format( "YYYY-MM-DD" ) );
+			//console.log( moment( new Date() ).format( "YYYY-MM-DD" ) );
+			console.log({
+				INSERT_USER: auth.USER_AUTH_CODE,
+				IMEI: auth.IMEI
+			})
 
+			mobileSyncModel.find( {
+				INSERT_USER: auth.USER_AUTH_CODE,
+				IMEI: auth.IMEI
+			} )
+			.then( data => {
+
+				if ( !data ) {
+					return res.send( {
+						status: false,
+						message: 'Data not found',
+						data: {}
+					} );
+				}
+
+				if ( data.length > 0 ) {
+					mobileSyncModel.find( {
+						INSERT_USER: auth.USER_AUTH_CODE,
+						TABEL_UPDATE: parent_ms + '/' + target_ms,
+						IMEI: auth.IMEI,
+						TGL_MOBILE_SYNC: {
+							$gte: start_time.toDate(),
+							$lt: end_time.toDate()
+						}
+					} )
+					.then( data => {
+						if( !data ) {
+							console.log( 'A' );
+							return res.send( {
+								status: false,
+								message: 'Data not found 2',
+								data: {}
+							} );
+						}
+
+						if ( data.length > 0 ) {
+							res.send( {
+								status: false,
+								message: 'There is no data to sync',
+								data: {}
+							} );
+						}
+						else {
+							client.get( url, args, function ( data, response ) {
+								res.json( {
+									status: true,
+									message: "There are some data to sync",
+									data: data.data
+								} );
+							});
+						}
+					} ).catch( err => {
+						if( err.kind === 'ObjectId' ) {
+							return res.send( {
+								status: false,
+								message: 'Data not found 1',
+								data: {}
+							} );
+						}
+						return res.send( {
+							status: false,
+							message: 'Error retrieving data',
+							data: {}
+						} );
+					} );
+				}
+				else {
+					var url = config.url.microservices.masterdata_region;
+					var args = {
+						headers: { "Content-Type": "application/json" }
+					};
+
+					client.get( url, args, function (data, response) {
+						// parsed response body as js object
+						res.json( { 
+							"status": data.status,
+							"message": data.message,
+							"data": data.data
+						} );
+					});
+				}
+				
+
+			} ).catch( err => {
+				if( err.kind === 'ObjectId' ) {
+					return res.send( {
+						status: false,
+						message: 'Data not found 1',
+						data: {}
+					} );
+				}
+				return res.send( {
+					status: false,
+					message: 'Error retrieving data',
+					data: {}
+				} );
+			} );
+
+			/*
 			mobileSyncModel.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
 				TABEL_UPDATE: parent_ms + '/' + target_ms,
@@ -63,6 +165,7 @@ exports.findRegion = ( req, res ) => {
 			} )
 			.then( data => {
 				if( !data ) {
+					console.log( 'A' );
 					return res.send( {
 						status: false,
 						message: 'Data not found 2',
@@ -99,7 +202,7 @@ exports.findRegion = ( req, res ) => {
 					message: 'Error retrieving data',
 					data: {}
 				} );
-			} );
+			} );*/
 		}
 	} );
 };
