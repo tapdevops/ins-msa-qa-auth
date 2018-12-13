@@ -82,19 +82,14 @@ exports.findRegion = ( req, res ) => {
 					}
 				}
 				else {
-					//if ( data.length > 0 ) {
-						res.json({
-							mes:'ew'
-						})
 					// Tidak ada data yang ditemukan, baru pertama kali sync
-					/*
+					
 					var url = config.url.microservices.masterdata_region;
 					var client = new Client();
 					var args = {
 						headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
 					};
 
-					//console.log(url);
 					client.get( url, args, function (data, response) {
 						// parsed response body as js object
 						var insert = {};
@@ -109,7 +104,6 @@ exports.findRegion = ( req, res ) => {
 							}
 						} );
 					});
-					*/
 				}
 				
 			} );/*.catch( err => {
