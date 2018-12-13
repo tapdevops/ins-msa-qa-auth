@@ -33,14 +33,14 @@ module.exports = {
 
 			masterdata_block: 'http://149.129.242.205:3003/block',
 			masterdata_afdeling: 'http://149.129.242.205:3003/afdeling',
-			masterdata_region: 'http://localhost:3003/region',
+			masterdata_region: 'http://149.129.242.205:3003/region',
 
 			images: 'http://149.129.242.205:3004/image',
 
 			finding: 'http://149.129.242.205:3005/finding',
 			finding_history: 'http://149.129.242.205:3005/finding-history',
 
-			sync_mobile_hectare_statement: 'http://localhost:3003/sync-mobile',
+			sync_mobile_hectare_statement: 'http://149.129.242.205:3003/sync-mobile',
 
 			ldap: 'http://tap-ldapdev.tap-agri.com/login'
 		}
