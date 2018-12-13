@@ -22,14 +22,12 @@ exports.findRegion = ( req, res ) => {
 
 			var auth = jwtDecode( req.token );
 			var date_now = moment( new Date() ).format( "YYYY-MM-DD" );
-			var parent_ms = 'hectare-statement';
-			var target_ms = 'region';
-			var url = config.url.microservices.sync_mobile_hectare_statement + '/' + target_ms + '/';
 			
-
+			
+			console.log(auth);
 
 			mobileSyncModel.find( {
-				INSERT_USER: auth.USER_AUTH_CODE + 'AA',
+				INSERT_USER: auth.USER_AUTH_CODE,
 				IMEI: auth.IMEI,
 				TABEL_UPDATE: 'hectare-statement/region'
 			} )
@@ -46,18 +44,30 @@ exports.findRegion = ( req, res ) => {
 
 				if ( data.length > 0 ) {
 					// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
+					
 					var dt = data[0];
 					var date_last_sync = moment( dt.TGL_MOBILE_SYNC ).format( "YYYY-MM-DD" );
 					var start_time = moment( date_last_sync, "YYYY-MM-DD" ).startOf( 'day' );
 					var end_time = moment( date_now, "YYYY-MM-DD" ).endOf( 'day' );
 
-					if ( start_time != end_time ) {
+					var start_date = moment( start_time ).format( "YYYY-MM-DD" );
+					var end_date = moment( end_time ).format( "YYYY-MM-DD" );
+
+					console.log( start_date + '/' + end_date );
+					
+					if ( start_date != end_date ) {
 						// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
+						
 						var client = new Client();
 						var args = {
 							headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
 						};
+
+						var parent_ms = 'hectare-statement';
+						var target_ms = 'region';
+						var url = config.url.microservices.sync_mobile_hectare_statement + '/' + target_ms + '/';
 						var url_final = url + moment( start_time ).format( "YYYY-MM-DD" ) + '/' + moment( end_time ).format( "YYYY-MM-DD" );
+						
 						client.get( url_final, args, function ( data, response ) {
 							res.json( {
 								status: data.status,
@@ -87,6 +97,7 @@ exports.findRegion = ( req, res ) => {
 						headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
 					};
 
+					console.log(url);
 					client.get( url, args, function (data, response) {
 						// parsed response body as js object
 						var insert = {};
