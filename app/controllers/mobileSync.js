@@ -11,14 +11,17 @@ const moment_pure = require( 'moment' );
 const moment = require( 'moment-timezone' );
 const date = require( '../libraries/date.js' );
 
-// FindTest
+// Find Region
 exports.findRegion = ( req, res ) => {
 	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
-			res.sendStatus( 403 );
+			res.send({
+				status: false,
+				message: "Invalid Token",
+				data: {}
+			} );
 		}
 		else {
-
 			var auth = jwtDecode( req.token );
 
 			mobileSyncModel.find( {
@@ -37,29 +40,23 @@ exports.findRegion = ( req, res ) => {
 					} );
 				}
 
-				//console.log( data[0].TGL_MOBILE_SYNC );
-				//console.log( 'AW->' + moment( data[0].TGL_MOBILE_SYNC, 'Asia/Jakarta' ).format( "YYYY-MM-DD hh:mm:ss" ) );
-
 				if ( data.length > 0 ) {
 					// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 					var dt = data[0];
 					var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYY-MM-DD' );
 					var end_date = date.convert( 'now', 'YYYY-MM-DD' );
-					console.log( start_date + '/' + end_date );
 					
 					if ( start_date != end_date ) {
 						// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
-						
 						var client = new Client();
 						var args = {
 							headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
 						};
-
 						var parent_ms = 'hectare-statement';
 						var target_ms = 'region';
-						var url = config.url.microservices.sync_mobile_hectare_statement + '/' + target_ms + '/';
+						var url = config.url.microservices.hectare_statement + '/sync-mobile/' + target_ms + '/';
 						var url_final = url + start_date + '/' + end_date;
-						
+					
 						client.get( url_final, args, function ( data, response ) {
 							res.json( {
 								status: data.status,
@@ -106,54 +103,11 @@ exports.findRegion = ( req, res ) => {
 					});
 				}
 				
-			} );/*.catch( err => {
-				if( err.kind === 'ObjectId' ) {
-					return res.send( {
-						status: false,
-						message: 'Data not found 1',
-						data: {}
-					} );
-				}
-				return res.send( {
-					status: false,
-					message: 'Error retrieving data',
-					data: {}
-				} );
-			} );*/
-		}
-	} );
-};
-
-// Find 
-exports.find = ( req, res ) => {
-	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
-		if ( err ) {
-			res.sendStatus( 403 );
-		}
-		else {
-			var auth = jwtDecode( req.token );
-
-			mobileSyncModel.find( {
-				INSERT_USER: auth.USER_AUTH_CODE
-			} )
-			.then( data => {
-				if ( !data ) {
-					return res.send( {
-						status: false,
-						message: 'Data not found 2',
-						data: {}
-					} );
-				}
-				res.send( {
-					status: true,
-					message: "Success",
-					data: data
-				} )
 			} ).catch( err => {
 				if( err.kind === 'ObjectId' ) {
 					return res.send( {
 						status: false,
-						message: 'Data not found 1',
+						message: 'ObjectId Error',
 						data: {}
 					} );
 				}
@@ -167,7 +121,69 @@ exports.find = ( req, res ) => {
 	} );
 };
 
+// Find 
+exports.find = ( req, res ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
+		if ( err ) {
+			res.send({
+				status: false,
+				message: "Invalid Token",
+				data: {}
+			} );
+		}
+		else {
+			var auth = jwtDecode( req.token );
 
+			mobileSyncModel.find( {
+				INSERT_USER: auth.USER_AUTH_CODE
+			})
+			.select( {
+				_id: 0,
+				TGL_MOBILE_SYNC: 1,
+				TABEL_UPDATE: 1,
+				IMEI: 1
+			} )
+			.then( data => {
+				if ( !data ) {
+					return res.send( {
+						status: false,
+						message: 'Data error',
+						data: {}
+					} );
+				}
+
+				var response = [];
+
+				data.forEach( function( result ) {
+					response.push( {
+						TGL_MOBILE_SYNC: date.convert( String( result.TGL_MOBILE_SYNC ), 'YYYY-MM-DD hh-mm-ss' ),
+						TABEL_UPDATE: result.TABEL_UPDATE,
+						IMEI: result.IMEI,
+					} );
+				} );
+
+				res.send( {
+					status: true,
+					message: "Success",
+					data: response
+				} )
+			} ).catch( err => {
+				if( err.kind === 'ObjectId' ) {
+					return res.send( {
+						status: false,
+						message: 'ObjectId error',
+						data: {}
+					} );
+				}
+				return res.send( {
+					status: false,
+					message: 'Error retrieving data',
+					data: {}
+				} );
+			} );
+		}
+	} );
+};
 
 // Create
 exports.create = ( req, res ) => {
@@ -176,9 +192,9 @@ exports.create = ( req, res ) => {
 		if ( err ) {
 			res.send({
 				status: false,
-				message: 'Token expired!',
+				message: "Invalid Token",
 				data: {}
-			});
+			} );
 		}
 		else {
 			if ( !req.body.TGL_MOBILE_SYNC || !req.body.TABEL_UPDATE ) {
@@ -200,20 +216,34 @@ exports.create = ( req, res ) => {
 
 			set.save()
 			.then( data => {
+				if ( !data ) {
+					return res.send( {
+						status: false,
+						message: 'Data error',
+						data: {}
+					} );
+				}
+
 				res.send({
 					status: true,
 					message: 'Success',
 					data: {}
 				});
 			} ).catch( err => {
-				res.send( {
+				if( err.kind === 'ObjectId' ) {
+					return res.send( {
+						status: false,
+						message: 'ObjectId error',
+						data: {}
+					} );
+				}
+				return res.send( {
 					status: false,
-					message: 'Some error occurred while creating data',
+					message: 'Error retrieving data',
 					data: {}
 				} );
 			} );
 		}
 	} );
-	
 };
 
