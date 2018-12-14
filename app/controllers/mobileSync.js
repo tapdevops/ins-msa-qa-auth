@@ -188,10 +188,10 @@ exports.create = ( req, res ) => {
 					data: {}
 				});
 			}
-
+			
 			var auth = jwtDecode( req.token );
 			const set = new mobileSyncModel({
-				TGL_MOBILE_SYNC: req.body.TGL_MOBILE_SYNC,
+				TGL_MOBILE_SYNC: date.convert( req.body.TGL_MOBILE_SYNC, 'YYYYMMDDhhmmss' ),
 				TABEL_UPDATE: req.body.TABEL_UPDATE || "",
 				IMEI: auth.IMEI,
 				INSERT_USER: auth.USER_AUTH_CODE,
