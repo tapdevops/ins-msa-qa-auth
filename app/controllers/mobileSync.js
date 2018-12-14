@@ -89,15 +89,17 @@ exports.findRegion = ( req, res ) => {
 
 					client.get( url, args, function (data, response) {
 						// parsed response body as js object
-						var insert = {};
-						insert = data.data
+						var insert = [];
+						if ( data.data.length > 0 ) {
+							insert = data.data;
+						}
 						res.json( { 
 							"status": data.status,
 							"message": "Pertama kali sync. " + data.message,
 							"data": {
 								"insert": insert,
-								"update": {},
-								"delete": {}
+								"update": [],
+								"delete": []
 							}
 						} );
 					});

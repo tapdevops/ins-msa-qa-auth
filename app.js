@@ -403,7 +403,6 @@ app.post( '/api/logout', verifyToken, ( req, res) => {
 // Routes
 require( './routes/route.js' )( app );
 
-
 function verifyToken( req, res, next ) {
 	// Get auth header value
 	const bearerHeader = req.headers['authorization'];
