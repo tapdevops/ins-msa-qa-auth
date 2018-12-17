@@ -86,6 +86,8 @@ app.post( '/api/login', ( req, res ) => {
 		client.post( url, args, function ( data, response ) {
 			// 2.1. Kondisi data terdapat pada LDAP
 
+			//console.log( data );
+
 			if ( data.status == true ) {
 
 				const loginModel = require( './app/models/login.js' );
