@@ -93,14 +93,24 @@ exports.findRegion = ( req, res ) => {
 						if ( data.data.length > 0 ) {
 							insert = data.data;
 						}
+						console.log(insert);
+						//res.json( { 
+						//	status: data.status,
+						//	message: "Pertama kali sync. " + data.message,
+						//	data: {
+						//		delete: {}
+						//		insert: insert,
+						//		update: {}
+						//	}
+						//} );
 						res.json( { 
-							status: data.status,
-							message: "Pertama kali sync. " + data.message,
-							//data: {
-							//	delete: {}
-							//	insert: insert,
-							//	update: {}
-							//}
+							"status": data.status,
+							"message": "First time sync",
+							"data": {
+								delete: [],
+								insert: data.data,
+								update: []
+							}
 						} );
 					});
 				}
@@ -390,7 +400,7 @@ exports.create = ( req, res ) => {
 					} );
 				});
 			}
-			
+
 			else {
 				// Tidak ada data yang ditemukan, baru pertama kali sync
 				
