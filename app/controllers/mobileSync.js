@@ -393,7 +393,7 @@ exports.create = ( req, res ) => {
 			else {
 				// Tidak ada data yang ditemukan, baru pertama kali sync
 				
-				var url = config.url.microservices.hectare_statement + '/est';
+				var url = config.url.microservices.hectare_statement + '/afdeling';
 				var client = new Client();
 				var args = {
 					headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
