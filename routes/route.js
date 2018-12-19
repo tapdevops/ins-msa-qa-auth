@@ -1,19 +1,8 @@
-function verifyToken( req, res, next ) {
-	// Get auth header value
-	const bearerHeader = req.headers['authorization'];
-
-	if ( typeof bearerHeader !== 'undefined' ) {
-		const bearer = bearerHeader.split( ' ' );
-		const bearerToken = bearer[1];
-
-		req.token = bearerToken;
-		next();
-	}
-	else {
-		// Forbidden
-		res.sendStatus( 403 );
-	}
-}
+const jwt = require( 'jsonwebtoken' );
+const config = require( '../config/config.js' );
+const uuid = require( 'uuid' );
+const nJwt = require( 'njwt' );
+const jwtDecode = require( 'jwt-decode' );
 
 module.exports = ( app ) => {
 
@@ -132,6 +121,9 @@ module.exports = ( app ) => {
 	app.get( '/api/mobile-sync', verifyToken, mobileSync.find );
 	app.post( '/api/mobile-sync', verifyToken, mobileSync.create );
 	app.get( '/api/mobile-sync/hectare-statement/region', verifyToken, mobileSync.findRegion );
+	app.get( '/api/mobile-sync/hectare-statement/est', token_verify, mobileSync.findEst );
+	app.get( '/api/mobile-sync/hectare-statement/afdeling', token_verify, mobileSync.findAfd );
+	app.get( '/api/mobile-sync/hectare-statement/block', token_verify, mobileSync.findBlock );
 
 	//app.get( '/api/mobile-sync/hectare-statement/test', verifyToken, mobileSync.findTest );
 
@@ -141,4 +133,54 @@ module.exports = ( app ) => {
 	const test = require( '../app/controllers/test.js' );
 	app.get( '/test', test.test );
 
+}
+
+function verifyToken( req, res, next ) {
+	// Get auth header value
+	const bearerHeader = req.headers['authorization'];
+
+	if ( typeof bearerHeader !== 'undefined' ) {
+		const bearer = bearerHeader.split( ' ' );
+		const bearerToken = bearer[1];
+
+		req.token = bearerToken;
+		next();
+	}
+	else {
+		// Forbidden
+		res.sendStatus( 403 );
+	}
+}
+
+function token_verify( req, res, next ) {
+	// Get auth header value
+	const bearerHeader = req.headers['authorization'];
+
+	if ( typeof bearerHeader !== 'undefined' ) {
+		const bearer = bearerHeader.split( ' ' );
+		const bearer_token = bearer[1];
+
+		req.token = bearer_token;
+
+		nJwt.verify( bearer_token, config.secret_key, config.token_algorithm, ( err, authData ) => {
+			if ( err ) {
+				res.send({
+					status: false,
+					message: "Invalid Token",
+					data: []
+				} );
+			}
+			else {
+				req.auth = jwtDecode( req.token );
+				req.auth.LOCATION_CODE_GROUP = req.auth.LOCATION_CODE.split( ',' );
+				req.config = config;
+				next();
+			}
+		} );
+		
+	}
+	else {
+		// Forbidden
+		res.sendStatus( 403 );
+	}
 }

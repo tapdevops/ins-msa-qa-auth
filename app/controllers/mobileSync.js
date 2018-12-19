@@ -71,9 +71,9 @@ exports.findRegion = ( req, res ) => {
 							status: false,
 							message: "Sudah melakukan sync pada tanggal " + end_date,
 							data: {
-								insert: {},
-								update: {},
-								delete: {}
+								delete: [],
+								insert: [],
+								update: []
 							}
 						} );
 					}
@@ -94,13 +94,13 @@ exports.findRegion = ( req, res ) => {
 							insert = data.data;
 						}
 						res.json( { 
-							"status": data.status,
-							"message": "Pertama kali sync. " + data.message,
-							"data": {
-								"insert": insert,
-								"update": [],
-								"delete": []
-							}
+							status: data.status,
+							message: "Pertama kali sync. " + data.message,
+							//data: {
+							//	delete: {}
+							//	insert: insert,
+							//	update: {}
+							//}
 						} );
 					});
 				}
@@ -249,3 +249,277 @@ exports.create = ( req, res ) => {
 	} );
 };
 
+/*
+|--------------------------------------------------------------------------
+| Clear Function
+|--------------------------------------------------------------------------
+*/
+	// Find Region
+	exports.findEst = ( req, res ) => {
+		
+		var auth = req.auth;
+		
+		mobileSyncModel.find( {
+			INSERT_USER: auth.USER_AUTH_CODE,
+			IMEI: auth.IMEI,
+			TABEL_UPDATE: 'hectare-statement/region'
+		} )
+		.sort( { TGL_MOBILE_SYNC: -1 } )
+		.limit( 1 )
+		.then( data => {
+			if ( !data ) {
+				return res.send( {
+					status: false,
+					message: 'Data not found 2',
+					data: {}
+				} );
+			}
+
+			if ( data.length > 0 ) {
+
+				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
+				var dt = data[0];
+				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
+				var end_date = date.convert( 'now', 'YYYYMMDDhhmmss' );
+				
+				// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
+				var client = new Client();
+				var args = {
+					headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
+				};
+				var parent_ms = 'hectare-statement';
+				var target_ms = 'est';
+				var url = config.url.microservices.hectare_statement + '/sync-mobile/' + target_ms + '/';
+				var url_final = url + start_date + '/' + end_date;
+
+				client.get( url_final, args, function ( data, response ) {
+					res.json( {
+						status: data.status,
+						message: data.message,
+						data: data.data
+					} );
+				});
+			}
+			else {
+				// Tidak ada data yang ditemukan, baru pertama kali sync
+				
+				var url = config.url.microservices.hectare_statement + '/est';
+				var client = new Client();
+				var args = {
+					headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
+				};
+
+				client.get( url, args, function (data, response) {
+					// parsed response body as js object
+					var insert = [];
+					if ( data.data.length > 0 ) {
+						insert = data.data;
+					}
+					res.json( { 
+						"status": data.status,
+						"message": "First time sync",
+						"data": {
+							delete: [],
+							insert: data.data,
+							update: []
+						}
+					} );
+				});
+			}
+			
+		} ).catch( err => {
+			if( err.kind === 'ObjectId' ) {
+				return res.send( {
+					status: false,
+					message: 'ObjectId Error',
+					data: {}
+				} );
+			}
+			return res.send( {
+				status: false,
+				message: 'Error retrieving data',
+				data: {}
+			} );
+		} );
+		
+	};
+
+	// Find Afdeling
+	exports.findAfd = ( req, res ) => {
+		
+		var auth = req.auth;
+		
+		mobileSyncModel.find( {
+			INSERT_USER: auth.USER_AUTH_CODE,
+			IMEI: auth.IMEI,
+			TABEL_UPDATE: 'hectare-statement/afdeling'
+		} )
+		.sort( { TGL_MOBILE_SYNC: -1 } )
+		.limit( 1 )
+		.then( data => {
+			if ( !data ) {
+				return res.send( {
+					status: false,
+					message: 'Data not found 2',
+					data: {}
+				} );
+			}
+
+			if ( data.length > 0 ) {
+
+				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
+				var dt = data[0];
+				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
+				var end_date = date.convert( 'now', 'YYYYMMDDhhmmss' );
+				
+				// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
+				var client = new Client();
+				var args = {
+					headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
+				};
+				var parent_ms = 'hectare-statement';
+				var target_ms = 'afdeling';
+				var url = config.url.microservices.hectare_statement + '/sync-mobile/' + target_ms + '/';
+				var url_final = url + start_date + '/' + end_date;
+
+				client.get( url_final, args, function ( data, response ) {
+					res.json( {
+						status: data.status,
+						message: data.message,
+						data: data.data
+					} );
+				});
+			}
+			else {
+				// Tidak ada data yang ditemukan, baru pertama kali sync
+				
+				var url = config.url.microservices.hectare_statement + '/est';
+				var client = new Client();
+				var args = {
+					headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
+				};
+
+				client.get( url, args, function (data, response) {
+					// parsed response body as js object
+					var insert = [];
+					if ( data.data.length > 0 ) {
+						insert = data.data;
+					}
+					res.json( { 
+						"status": data.status,
+						"message": "First time sync",
+						"data": {
+							delete: [],
+							insert: data.data,
+							update: []
+						}
+					} );
+				});
+			}
+			
+		} ).catch( err => {
+			if( err.kind === 'ObjectId' ) {
+				return res.send( {
+					status: false,
+					message: 'ObjectId Error',
+					data: {}
+				} );
+			}
+			return res.send( {
+				status: false,
+				message: 'Error retrieving data',
+				data: {}
+			} );
+		} );
+		
+	};
+
+	// Find Block
+	exports.findBlock = ( req, res ) => {
+		
+		var auth = req.auth;
+		
+		mobileSyncModel.find( {
+			INSERT_USER: auth.USER_AUTH_CODE,
+			IMEI: auth.IMEI,
+			TABEL_UPDATE: 'hectare-statement/block'
+		} )
+		.sort( { TGL_MOBILE_SYNC: -1 } )
+		.limit( 1 )
+		.then( data => {
+			if ( !data ) {
+				return res.send( {
+					status: false,
+					message: 'Data not found 2',
+					data: {}
+				} );
+			}
+
+			if ( data.length > 0 ) {
+
+				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
+				var dt = data[0];
+				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
+				var end_date = date.convert( 'now', 'YYYYMMDDhhmmss' );
+				
+				// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
+				var client = new Client();
+				var args = {
+					headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
+				};
+				var parent_ms = 'hectare-statement';
+				var target_ms = 'block';
+				var url = config.url.microservices.hectare_statement + '/sync-mobile/' + target_ms + '/';
+				var url_final = url + start_date + '/' + end_date;
+
+				client.get( url_final, args, function ( data, response ) {
+					res.json( {
+						status: data.status,
+						message: data.message,
+						data: data.data
+					} );
+				});
+			}
+			else {
+				// Tidak ada data yang ditemukan, baru pertama kali sync
+				
+				var url = config.url.microservices.hectare_statement + '/block';
+				var client = new Client();
+				var args = {
+					headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
+				};
+
+				client.get( url, args, function (data, response) {
+					// parsed response body as js object
+					var insert = [];
+					if ( data.data.length > 0 ) {
+						insert = data.data;
+					}
+					res.json( { 
+						"status": data.status,
+						"message": "First time sync",
+						"data": {
+							delete: [],
+							insert: data.data,
+							update: []
+						}
+					} );
+				});
+			}
+			
+		} ).catch( err => {
+			if( err.kind === 'ObjectId' ) {
+				return res.send( {
+					status: false,
+					message: 'ObjectId Error',
+					data: {}
+				} );
+			}
+			return res.send( {
+				status: false,
+				message: 'Error retrieving data',
+				data: {}
+			} );
+		} );
+		
+	};
