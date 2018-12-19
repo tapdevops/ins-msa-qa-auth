@@ -121,6 +121,7 @@ module.exports = ( app ) => {
 	app.get( '/api/mobile-sync', verifyToken, mobileSync.find );
 	app.post( '/api/mobile-sync', verifyToken, mobileSync.create );
 	app.get( '/api/mobile-sync/hectare-statement/region', verifyToken, mobileSync.findRegion );
+	app.get( '/api/mobile-sync/hectare-statement/comp', token_verify, mobileSync.findComp );
 	app.get( '/api/mobile-sync/hectare-statement/est', token_verify, mobileSync.findEst );
 	app.get( '/api/mobile-sync/hectare-statement/afdeling', token_verify, mobileSync.findAfd );
 	app.get( '/api/mobile-sync/hectare-statement/block', token_verify, mobileSync.findBlock );
