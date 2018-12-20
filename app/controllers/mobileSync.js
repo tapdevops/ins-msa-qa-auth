@@ -27,7 +27,7 @@ exports.findRegion = ( req, res ) => {
 			console.log(auth);
 			mobileSyncModel.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
-				IMEI: auth.IMEI,
+				//IMEI: auth.IMEI,
 				TABEL_UPDATE: 'hectare-statement/region'
 			} )
 			.sort( { TGL_MOBILE_SYNC: -1 } )
