@@ -263,7 +263,7 @@ exports.create = ( req, res ) => {
 		
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			IMEI: auth.IMEI,
+			//IMEI: auth.IMEI,
 			TABEL_UPDATE: 'hectare-statement/region'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -321,9 +321,9 @@ exports.create = ( req, res ) => {
 						"status": data.status,
 						"message": "First time sync",
 						"data": {
-							delete: [],
-							insert: data.data,
-							update: []
+							hapus: [],
+							simpan: data.data,
+							ubah: []
 						}
 					} );
 				});
@@ -353,7 +353,7 @@ exports.create = ( req, res ) => {
 		
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			IMEI: auth.IMEI,
+			//IMEI: auth.IMEI,
 			TABEL_UPDATE: 'hectare-statement/afdeling'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -413,9 +413,9 @@ exports.create = ( req, res ) => {
 						"status": data.status,
 						"message": "First time sync",
 						"data": {
-							delete: [],
-							insert: data.data,
-							update: []
+							hapus: [],
+							simpan: data.data,
+							ubah: []
 						}
 					} );
 				});
@@ -445,7 +445,7 @@ exports.create = ( req, res ) => {
 		
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			IMEI: auth.IMEI,
+			//IMEI: auth.IMEI,
 			TABEL_UPDATE: 'hectare-statement/block'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -503,9 +503,9 @@ exports.create = ( req, res ) => {
 						"status": data.status,
 						"message": "First time sync",
 						"data": {
-							delete: [],
-							insert: data.data,
-							update: []
+							hapus: [],
+							simpan: data.data,
+							ubah: []
 						}
 					} );
 				});
@@ -535,7 +535,7 @@ exports.create = ( req, res ) => {
 		
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			IMEI: auth.IMEI,
+			//IMEI: auth.IMEI,
 			TABEL_UPDATE: 'hectare-statement/comp'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -595,9 +595,9 @@ exports.create = ( req, res ) => {
 						"status": data.status,
 						"message": "First time sync",
 						"data": {
-							delete: [],
-							insert: data.data,
-							update: []
+							hapus: [],
+							simpan: data.data,
+							ubah: []
 						}
 					} );
 				});
