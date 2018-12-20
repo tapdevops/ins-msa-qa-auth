@@ -431,7 +431,7 @@ describe( testing_name, function() {
 
 	dummy.forEach( function( result ) {
 		it ( i + ' - Login dengan username ' + result.username, function( done ) {
-			this.timeout( 15000 );
+			this.timeout( 25000 );
 			request( app )
 				.post( '/api/login' )
 				.set( 'Accept', 'application/json' )

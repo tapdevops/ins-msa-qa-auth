@@ -24,6 +24,7 @@ exports.findRegion = ( req, res ) => {
 		else {
 			var auth = jwtDecode( req.token );
 
+			console.log(auth);
 			mobileSyncModel.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
 				IMEI: auth.IMEI,
@@ -43,8 +44,8 @@ exports.findRegion = ( req, res ) => {
 				if ( data.length > 0 ) {
 					// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 					var dt = data[0];
-					var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYY-MM-DD' );
-					var end_date = date.convert( 'now', 'YYYY-MM-DD' );
+					var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDD' );
+					var end_date = date.convert( 'now', 'YYYYMMDD' );
 					
 					if ( start_date != end_date ) {
 						// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
@@ -56,7 +57,7 @@ exports.findRegion = ( req, res ) => {
 						var target_ms = 'region';
 						var url = config.url.microservices.hectare_statement + '/sync-mobile/' + target_ms + '/';
 						var url_final = url + start_date + '/' + end_date;
-					
+						console.log(url_final)
 						client.get( url_final, args, function ( data, response ) {
 							res.json( {
 								status: data.status,
@@ -71,9 +72,9 @@ exports.findRegion = ( req, res ) => {
 							status: false,
 							message: "Sudah melakukan sync pada tanggal " + end_date,
 							data: {
-								delete: [],
-								insert: [],
-								update: []
+								hapus: [],
+								simpan: [],
+								ubah: []
 							}
 						} );
 					}
@@ -98,9 +99,9 @@ exports.findRegion = ( req, res ) => {
 							"status": data.status,
 							"message": "First time sync",
 							"data": {
-								delete: [],
-								insert: data.data,
-								update: []
+								hapus: [],
+								simpan: data.data,
+								ubah: []
 							}
 						} );
 					});

@@ -44,7 +44,7 @@ module.exports = {
 
 
 
-			hectare_statement: 'http://localhost:3003',
+			hectare_statement: 'http://149.129.242.205:3003',
 
 			ldap: 'http://tap-ldapdev.tap-agri.com/login'
 		}
