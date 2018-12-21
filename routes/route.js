@@ -104,7 +104,7 @@ module.exports = ( app ) => {
 	app.get( '/api/parameter', parameter.find );
 
 	// ROUTE - Contacts
-	app.get( '/api/contacts', verifyToken, contacts.find );
+	app.get( '/api/contacts', token_verify, contacts.find );
 
 	// ROUTE - Login
 	app.get( '/api/login', verifyToken, login.find );
