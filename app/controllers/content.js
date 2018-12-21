@@ -28,6 +28,7 @@ exports.find = ( req, res ) => {
 			FLAG_TYPE: 1,
 			URUTAN: 1
 		})
+		
 		.then( data => {
 			if( !data ) {
 				return res.send( {
