@@ -7,8 +7,7 @@
  |
  */
  	// Models
-	const contentModel = require( '../models/content.js' );
-	const contentLabelModel = require( '../models/contentLabel.js' );
+	const kriteriaModel = require( '../models/kriteria.js' );
 
 	// Node Modules
 	const querystring = require( 'querystring' );
@@ -34,9 +33,9 @@
 		var auth = req.token;
 		var url_query = req.query;
 		var url_query_length = Object.keys( url_query ).length;
-			//url_query.DELETE_USER = "";
+			url_query.DELETE_USER = "";
 
-		contentLabelModel.find( url_query )
+		kriteriaModel.find( url_query )
 		.select( {
 			_id: 0,
 			INSERT_TIME: 0,
@@ -78,14 +77,14 @@
 	exports.create = ( req, res ) => {
 		
 		var auth = req.auth;
-		const set_data = new contentLabelModel( {
+		const set_data = new kriteriaModel( {
+			KRITERIA_CODE: req.body.KRITERIA_CODE || "",
 			CONTENT_LABEL_CODE: req.body.CONTENT_LABEL_CODE || "",
-			CONTENT_CODE: req.body.CONTENT_CODE || "",
-			LABEL_NAME: req.body.LABEL_NAME || "",
-			LABEL_ICON: req.body.LABEL_ICON || "",
-			URUTAN_LABEL: req.body.URUTAN_LABEL || "",
-			LABEL_SCORE: req.body.LABEL_SCORE || 0,
-			WARNA_LABEL: req.body.WARNA_LABEL || "",
+			VALUE: req.body.VALUE || "",
+			COLOR: req.body.COLOR || "",
+			GRADE: req.body.GRADE || "",
+			BATAS_ATAS: req.body.BATAS_ATAS || 0,
+			BATAS_BAWAH: req.body.BATAS_BAWAH || 0,
 			INSERT_USER: auth.USER_AUTH_CODE,
 			INSERT_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
 			UPDATE_USER: auth.USER_AUTH_CODE,

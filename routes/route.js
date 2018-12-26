@@ -28,6 +28,7 @@ module.exports = ( app ) => {
 	const login = require( '../app/controllers/login.js' );
 	const masterUser = require( '../app/controllers/masterUser.js' );
 	const mobileSync = require( '../app/controllers/mobileSync.js' );
+	const kriteria = require( '../app/controllers/kriteria.js' );
 
 	// Routing: Auth
 	//app.post( '/api/login', auth.login );
@@ -99,7 +100,12 @@ module.exports = ( app ) => {
 	app.delete( '/api/modules/:id', verifyToken, modules.delete );
 
 	// ROUTE - Content
-	app.get( '/api/content', content.find );
+	app.get( '/api/content', token_verify, content.find );
+	app.post( '/api/content', token_verify, content.create );
+
+	// ROUTE - Content
+	app.get( '/api/content-label', token_verify, contentLabel.find );
+	app.post( '/api/content-label', token_verify, contentLabel.create );
 
 	// ROUTE - Parameter
 	app.get( '/api/parameter', parameter.find );
@@ -132,6 +138,10 @@ module.exports = ( app ) => {
 
 	// ROUTE - MASTER USER
 	app.get( '/api/master-user', verifyToken, masterUser.find );
+
+	// ROUTE - KRITERIA
+	app.post( '/api/kriteria', token_verify, kriteria.create );
+	app.get( '/api/kriteria', token_verify, kriteria.find );
 
 	const test = require( '../app/controllers/test.js' );
 	app.get( '/test', test.test );

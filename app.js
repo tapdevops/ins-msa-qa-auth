@@ -29,8 +29,9 @@ require( 'express-aglio' )(app,{
 	source: __dirname+ '/docs/source/index.apib',
 	output: __dirname+ '/docs/html/index.html',
 	aglioOptions: {
-    	themeVariables: 'streak'
-    }
+		themeCondenseNav: true,
+		themeVariables: 'streak'
+	}
 });
 
 // Setup Database

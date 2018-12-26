@@ -1,21 +1,25 @@
 const mongoose = require( 'mongoose' );
 
-const ContentSchema = mongoose.Schema( {
-
-	CONTENT_CODE: String,
-	GROUP_CATEGORY: String,
-	CATEGORY: String,
-	CONTENT_NAME: String,
-	CONTENT_TYPE: String,
-	UOM: String,
-	FLAG_TYPE: String,
-	BOBOT: {
+const KriteriaSchema = mongoose.Schema( {
+	
+	KRITERIA_CODE: String,
+	CONTENT_LABEL_CODE: String,
+	VALUE: String,
+	COLOR: String,
+	GRADE: String,
+	BATAS_ATAS: {
+		type: Number,
+		alias: 'i',
+		default: function() {
+			return 0;
+		}
+	},
+	BATAS_BAWAH: {
 		type: Number,
 		default: function() {
 			return 0;
 		}
 	},
-	URUTAN: String,
 	INSERT_USER: String,
 	INSERT_TIME: {
 		type: Number,
@@ -45,16 +49,8 @@ const ContentSchema = mongoose.Schema( {
 		default: function() {
 			return 0;
 		}
-	},
-	TBM0: String,
-	TBM1: String,
-	TBM2: String,
-	TBM3: String,
-	TM: String,
-
+	}
 
 });
 
-module.exports = mongoose.model( 'Content', ContentSchema, 'TM_CONTENT' );
-
-
+module.exports = mongoose.model( 'Kriteria', KriteriaSchema, 'TM_KRITERIA' );
