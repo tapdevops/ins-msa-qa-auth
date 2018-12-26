@@ -20,6 +20,7 @@ module.exports = ( app ) => {
 	const syncDBLog = require( '../app/controllers/syncDBLog.js' );
 	const modules = require( '../app/controllers/modules.js' );
 	const content = require( '../app/controllers/content.js' );
+	const contentLabel = require( '../app/controllers/contentLabel.js' );
 	const parameter = require( '../app/controllers/parameter.js' );
 	const userAuthorization = require( '../app/controllers/userAuthorization.js' );
 	const contacts = require( '../app/controllers/contacts.js' );

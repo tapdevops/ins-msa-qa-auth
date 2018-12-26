@@ -24,6 +24,15 @@ let db = mongoose.connection;
 const uuid = require( 'uuid' );
 const nJwt = require( 'njwt' );
 
+// Generate Documentation
+require( 'express-aglio' )(app,{
+	source: __dirname+ '/docs/source/index.apib',
+	output: __dirname+ '/docs/html/index.html',
+	aglioOptions: {
+    	themeVariables: 'streak'
+    }
+});
+
 // Setup Database
 mongoose.Promise = global.Promise;
 
@@ -58,7 +67,7 @@ app.get( '/', ( req, res ) => {
 } );
 
 // Login
-app.post( '/api/login', ( req, res ) => {
+app.post( '/api/logins', ( req, res ) => {
 
 	console.log(req.body.imei);
 
@@ -303,7 +312,7 @@ app.post( '/api/login', ( req, res ) => {
 } );
 
 // Login
-app.post( '/api/login-real', ( req, res ) => {
+app.post( '/api/login', ( req, res ) => {
 
 	console.log(req.body.imei);
 

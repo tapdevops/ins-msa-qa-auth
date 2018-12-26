@@ -1,0 +1,204 @@
+FORMAT: 1A
+
+# Mobile Inspection - Microservice Auth
+
+Untuk mengotorisasi microservice-microservice lainnya. Untuk menggunakan service ini, dibutuhkan security token yang diisi pada header **Authorization**. Token ini bisa didapatkan setelah melakukan proses login.
+
+```http
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVU0VSTkFNRSI6ImZlcmRpbmFuZCIsIlVTRVJfQVVUSF9DT0RFIjoiVEFDMDAwMDQiLCJVU0VSX1JPTEUiOiJBU0lTVEVOX0xBUEFOR0FOIiwiTE9DQVRJT05fQ09ERSI6IjQxMjFBLDUxMjFBLDMxMjFBIiwiUkVGRkVSRU5DRV9ST0xFIjoiQUZEX0NPREUiLCJFTVBMT1lFRV9OSUsiOiIxMjM0MzIiLCJJTUVJIjoiMzU1NDEwMDkwMDg4NTQ1IiwianRpIjoiMTk3NzgzNjgtODEzZi00OWZhLWIxMzMtYTkyOTFkYzBhMzc5IiwiaWF0IjoxNTQ1NjUyNTA3LCJleHAiOjE1NDYyNTczMDd9.YjCWBNHoaidEC_EzAvZbPoEArucChO3LTEY72fG0jdU
+```
+
+# Group Login
+
+Untuk mendapatkan akses token, anda harus login terlebih dahulu dengan user yang sudah terdaftar pada tabel **TM_EMPOYEE_HRIS** maupun **TM_EMPLOYEE_SAP** (jika merupakan pejabat sementara).
+
+## Login Collections [/api/login]
+
+### Post [POST]
+
++ Headers
+	Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVU0VSTkFNRSI6ImZlcmRpbmFuZCIsIlVTRVJfQVVUSF9DT0RFIjoiVEFDMDAwMDQiLCJVU0VSX1JPTEUiOiJBU0lTVEVOX0xBUEFOR0FOIiwiTE9DQVRJT05fQ09ERSI6IjQxMjFBLDUxMjFBLDMxMjFBIiwiUkVGRkVSRU5DRV9ST0xFIjoiQUZEX0NPREUiLCJFTVBMT1lFRV9OSUsiOiIxMjM0MzIiLCJJTUVJIjoiMzU1NDEwMDkwMDg4NTQ1IiwianRpIjoiMTk3NzgzNjgtODEzZi00OWZhLWIxMzMtYTkyOTFkYzBhMzc5IiwiaWF0IjoxNTQ1NjUyNTA3LCJleHAiOjE1NDYyNTczMDd9.YjCWBNHoaidEC_EzAvZbPoEArucChO3LTEY72fG0jdU
+
++ Request (application/json)
+	{
+		"username": "username.ldap",
+		"password": "password123",
+		"imei": "123456"
+	}
+
++ Response 200 (application/json)
+	{
+		"status": true,
+		"message": "Success",
+		"data": {
+			"USERNAME": "ferdinand",
+			"NIK": "123432",
+			"ACCESS_TOKEN": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVU0VSTkFNRSI6ImZlcmRpbmFuZCIsIlVTRVJfQVVUSF9DT0RFIjoiVEFDMDAwMDQiLCJVU0VSX1JPTEUiOiJBU0lTVEVOX0xBUEFOR0FOIiwiTE9DQVRJT05fQ09ERSI6IjQxMjFBLDUxMjFBLDMxMjFBIiwiUkVGRkVSRU5DRV9ST0xFIjoiQUZEX0NPREUiLCJFTVBMT1lFRV9OSUsiOiIxMjM0MzIiLCJJTUVJIjoiMzU1NDEwMDkwMDg4NTQ1IiwianRpIjoiMTk3NzgzNjgtODEzZi00OWZhLWIxMzMtYTkyOTFkYzBhMzc5IiwiaWF0IjoxNTQ1NjUyNTA3LCJleHAiOjE1NDYyNTczMDd9.YjCWBNHoaidEC_EzAvZbPoEArucChO3LTEY72fG0jdU",
+			"JOB_CODE": "ASISTEN LAPANGAN",
+			"USER_AUTH_CODE": "TAC00004",
+			"REFFERENCE_ROLE": "AFD_CODE",
+			"USER_ROLE": "ASISTEN_LAPANGAN",
+			"LOCATION_CODE": "4121A,5121A,3121A"
+		}
+	}
+
++ Response 400 (application/json)
+	{
+		"status": false,
+		"message": "Username/Password anda salah. (LDAP Failed)",
+		"data": {}
+	}
+
+# Group Inspection Header
+
+Untuk mengirimkan hasil inspeksi header. Berikut list table yang digunakan :
+
+No | Database Schema | Table
+--:| ---- | -----------
+ 1 | S_INSPEKSI  | TR_BLOCK_INSPECTION_H
+ 2 | S_INSPEKSI  | T_LOG_BLOCK_INSPECTION_H
+
+## Inspection Header Collections [/api/inspection-header]
+
+### Post [POST]
+
++ Headers
+	Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVU0VSTkFNRSI6ImZlcmRpbmFuZCIsIlVTRVJfQVVUSF9DT0RFIjoiVEFDMDAwMDQiLCJVU0VSX1JPTEUiOiJBU0lTVEVOX0xBUEFOR0FOIiwiTE9DQVRJT05fQ09ERSI6IjQxMjFBLDUxMjFBLDMxMjFBIiwiUkVGRkVSRU5DRV9ST0xFIjoiQUZEX0NPREUiLCJFTVBMT1lFRV9OSUsiOiIxMjM0MzIiLCJJTUVJIjoiMzU1NDEwMDkwMDg4NTQ1IiwianRpIjoiMTk3NzgzNjgtODEzZi00OWZhLWIxMzMtYTkyOTFkYzBhMzc5IiwiaWF0IjoxNTQ1NjUyNTA3LCJleHAiOjE1NDYyNTczMDd9.YjCWBNHoaidEC_EzAvZbPoEArucChO3LTEY72fG0jdU
+
++ Request (application/json)
+	{
+		"BLOCK_INSPECTION_CODE": "TESTING",
+		"WERKS": "4121",
+		"AFD_CODE": "H",
+		"BLOCK_CODE": "001",
+		"INSPECTION_DATE": "2018-10-26 01:01:01",
+		"INSPECTION_RESULT": "A",
+		"STATUS_SYNC": "SYNC",
+		"SYNC_TIME": "2018-10-26 01:01:01",
+		"START_INSPECTION": "2018-10-26 01:01:01",
+		"END_INSPECTION": "2018-10-26 01:01:01",
+		"LAT_START_INSPECTION": "-1.3225216667",
+		"LONG_START_INSPECTION": "116.3819266667",
+		"LAT_END_INSPECTION": "-1.4225216667",
+		"LONG_END_INSPECTION": "117.3819266667"
+	}
+
++ Response 200 (application/json)
+	{
+		"status": true,
+		"message": "Success! ",
+		"data": {}
+	}
++ Response 403 (text/plain)
+	Forbidden
+
++ Response 404 (application/json)
+	{
+		"status": false,
+		"message": "Error! Data gagal diproses",
+		"data": {}
+	}
+
++ Response 500 (application/json)
+	{
+		"status": false,
+		"message": "Error! Terjadi kesalahan dalam pembuatan data",
+		"data": {}
+	}
+
+# Group Inspection Detail
+
+Untuk mengirimkan hasil inspeksi detail. Berikut list table yang digunakan :
+
+No | Database Schema | Table
+--:| ---- | -----------
+ 1 | S_INSPEKSI  | TR_BLOCK_INSPECTION_D
+ 2 | S_INSPEKSI  | T_LOG_BLOCK_INSPECTION_D
+
+## Inspection Detail Collections [/api/inspection-detail]
+
+### Post [POST]
+
++ Headers
+	Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVU0VSTkFNRSI6ImZlcmRpbmFuZCIsIlVTRVJfQVVUSF9DT0RFIjoiVEFDMDAwMDQiLCJVU0VSX1JPTEUiOiJBU0lTVEVOX0xBUEFOR0FOIiwiTE9DQVRJT05fQ09ERSI6IjQxMjFBLDUxMjFBLDMxMjFBIiwiUkVGRkVSRU5DRV9ST0xFIjoiQUZEX0NPREUiLCJFTVBMT1lFRV9OSUsiOiIxMjM0MzIiLCJJTUVJIjoiMzU1NDEwMDkwMDg4NTQ1IiwianRpIjoiMTk3NzgzNjgtODEzZi00OWZhLWIxMzMtYTkyOTFkYzBhMzc5IiwiaWF0IjoxNTQ1NjUyNTA3LCJleHAiOjE1NDYyNTczMDd9.YjCWBNHoaidEC_EzAvZbPoEArucChO3LTEY72fG0jdU
+
++ Request (application/json)
+	{
+		"BLOCK_INSPECTION_CODE": "123432-INS-20181123-4121-H-001-ZmCij",
+		"BLOCK_INSPECTION_CODE_D": "TESTING",
+		"CONTENT_CODE": "CIC0005",
+		"AREAL": "11",
+		"VALUE": "10",
+		"STATUS_SYNC": "SYNC",
+		"SYNC_TIME": "2018-10-26 01:01:01"
+	}
+
++ Response 200 (application/json)
+	{
+		"status": true,
+		"message": "Success! ",
+		"data": {}
+	}
++ Response 403 (text/plain)
+	Forbidden
+
++ Response 404 (application/json)
+	{
+		"status": false,
+		"message": "Error! Data gagal diproses",
+		"data": {}
+	}
+
++ Response 500 (application/json)
+	{
+		"status": false,
+		"message": "Error! Terjadi kesalahan dalam pembuatan data",
+		"data": {}
+	}
+
+# Group Inspection Tracking
+
+Untuk mengirimkan hasil tracking inspeksi. Berikut list table yang digunakan :
+
+No | Database Schema | Table
+--:| ---- | -----------
+ 1 | S_INSPEKSI  | TR_TRACK_INSPECTION
+
+## Inspection Tracking Collections [/api/inspection-tracking]
+
+### Post [POST]
+
++ Headers
+	Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVU0VSTkFNRSI6ImZlcmRpbmFuZCIsIlVTRVJfQVVUSF9DT0RFIjoiVEFDMDAwMDQiLCJVU0VSX1JPTEUiOiJBU0lTVEVOX0xBUEFOR0FOIiwiTE9DQVRJT05fQ09ERSI6IjQxMjFBLDUxMjFBLDMxMjFBIiwiUkVGRkVSRU5DRV9ST0xFIjoiQUZEX0NPREUiLCJFTVBMT1lFRV9OSUsiOiIxMjM0MzIiLCJJTUVJIjoiMzU1NDEwMDkwMDg4NTQ1IiwianRpIjoiMTk3NzgzNjgtODEzZi00OWZhLWIxMzMtYTkyOTFkYzBhMzc5IiwiaWF0IjoxNTQ1NjUyNTA3LCJleHAiOjE1NDYyNTczMDd9.YjCWBNHoaidEC_EzAvZbPoEArucChO3LTEY72fG0jdU
+
++ Request (application/json)
+	{
+		"BLOCK_INSPECTION_CODE": "123432-INS-20181123-4121-H-001-pJWB1",
+		"DATE_TRACK": "2018-10-01 00:00:00",
+		"LAT_TRACK": "-1.3225216667",
+		"LONG_TRACK": "116.3819266667",
+		"SYNC_TIME": "2018-10-01 00:00:00"
+	}
+
++ Response 200 (application/json)
+	{
+		"status": true,
+		"message": "Success! ",
+		"data": {}
+	}
++ Response 403 (text/plain)
+	Forbidden
+
++ Response 404 (application/json)
+	{
+		"status": false,
+		"message": "Error! Data gagal diproses",
+		"data": {}
+	}
+
++ Response 500 (application/json)
+	{
+		"status": false,
+		"message": "Error! Terjadi kesalahan dalam pembuatan data",
+		"data": {}
+	}

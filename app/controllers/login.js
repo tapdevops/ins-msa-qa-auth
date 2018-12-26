@@ -21,45 +21,6 @@ exports.find = ( req, res ) => {
 	url_query.DELETE_USER = "";
 	url_query.DELETE_TIME = "";
 
-
-
-loginModel.virtual('members', {
-  ref: 'TM_USER_AUTH', // The model to use
-  localField: 'USER_AUTH_CODE', // Find people where `localField`
-  foreignField: 'USER_AUTH_CODE', // is equal to `foreignField`
-  // If `justOne` is true, 'members' will be a single doc as opposed to
-  // an array. `justOne` is false by default.
-  justOne: false,
-  options: { sort: { name: -1 }, limit: 5 } // Query options, see http://bit.ly/mongoose-query-options
-})
-	.then( data => {
-		if( !data ) {
-			return res.send( {
-				status: false,
-				message: 'Data not found 2',
-				data: {}
-			} );
-		}
-		res.send( {
-			status: true,
-			message: 'Success',
-			data: data
-		} );
-	} ).catch( err => {
-		if( err.kind === 'ObjectId' ) {
-			return res.send( {
-				status: false,
-				message: 'Data not found 1',
-				data: {}
-			} );
-		}
-		return res.send( {
-			status: false,
-			message: 'Error retrieving data',
-			data: {}
-		} );
-	} );
-	/*
 	loginModel.find( url_query ).populate( 'UserAuthModel' )
 	.then( data => {
 		if( !data ) {
@@ -88,5 +49,4 @@ loginModel.virtual('members', {
 			data: {}
 		} );
 	} );
-	*/
 };

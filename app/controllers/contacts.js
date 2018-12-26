@@ -1,102 +1,183 @@
-const userAuthModel = require( '../models/userAuth.js' );
-const querystring = require('querystring');
-const url = require( 'url' );
-const jwt = require( 'jsonwebtoken' );
-const config = require( '../../config/config.js' );
-const uuid = require( 'uuid' );
-const nJwt = require( 'njwt' );
-const jwtDecode = require( 'jwt-decode' );
-const Client = require('node-rest-client').Client; 
-const moment_pure = require( 'moment' );
-const moment = require( 'moment-timezone' );
-const date = require( '../libraries/date.js' );
+/*
+ |--------------------------------------------------------------------------
+ | App Setup
+ |--------------------------------------------------------------------------
+ |
+ | Untuk menghandle models, libraries, helper, node modules, dan lain-lain
+ |
+ */
+ 	// Models
+	const viewUserAuthModel = require( '../models/viewUserAuth.js' );
 
-// Retrieve and return all notes from the database.
-exports.find = ( req, res ) => {
-	// Auth Data
-	var auth = req.auth;
+	// Node Modules
+	const querystring = require( 'querystring' );
+	const url = require( 'url' );
+	const jwt = require( 'jsonwebtoken' );
+	const uuid = require( 'uuid' );
+	const nJwt = require( 'njwt' );
+	const jwtDecode = require( 'jwt-decode' );
+	const Client = require( 'node-rest-client' ).Client; 
+	const moment_pure = require( 'moment' );
+	const moment = require( 'moment-timezone' );
 
-	var location_code_group = auth.LOCATION_CODE.split( ',' );
-	var ref_role = auth.REFFERENCE_ROLE;
-	var location_code_final = [];
-	var key = [];
-	var query = {};
-	
-	if ( ref_role != 'ALL' ) {
-		location_code_group.forEach( function( data ) {
+	// Libraries
+	const config = require( '../../config/config.js' );
+	const date = require( '../libraries/date.js' );
+
+/**
+ * find
+ * Untuk mengambil data contact berdasarkan location code
+ * --------------------------------------------------------------------------
+ */
+	exports.find = ( req, res ) => {
+		// Auth Data
+		var auth = req.auth;
+
+		var location_code_group = auth.LOCATION_CODE.split( ',' );
+		var ref_role = auth.REFFERENCE_ROLE;
+		var location_code_final = [];
+		var key = [];
+		var query = {};
+		var query_search = [];
+		
+
+		if ( ref_role != 'NATIONAL' ) {
+			location_code_group.forEach( function( data ) {
+				switch ( ref_role ) {
+					case 'REGION_CODE':
+						location_code_final.push( data );
+					break;
+					case 'COMP_CODE':
+						location_code_final.push( data );
+					break;
+					case 'AFD_CODE':
+						location_code_final.push( data );
+					break;
+					case 'BA_CODE':
+						location_code_final.push( data );
+					break;
+				}
+			} );
+
 			switch ( ref_role ) {
 				case 'REGION_CODE':
-					location_code_final.push( data );
+					location_code_final.forEach( function( q ) {
+						query_search.push( {
+							LOCATION_CODE_REGION: q
+						} );
+						query_search.push( {
+							LOCATION_CODE_COMP: new RegExp( '^' + q.substr( 1, 1 ) )
+						} );
+						query_search.push( {
+							LOCATION_CODE_BA: new RegExp( '^' + q.substr( 1, 1 ) )
+						} );
+						query_search.push( {
+							LOCATION_CODE_AFD: new RegExp( '^' + q.substr( 1, 1 ) )
+						} )
+					} );
 				break;
 				case 'COMP_CODE':
-					location_code_final.push( data );
-				break;
-				case 'AFD_CODE':
-					location_code_final.push( data );
+					location_code_final.forEach( function( q ) {
+						query_search.push( {
+							LOCATION_CODE_COMP: q
+						} );
+						query_search.push( {
+							LOCATION_CODE_BA: new RegExp( '^' + q.substr( 0, 2 ) )
+						} );
+						query_search.push( {
+							LOCATION_CODE_AFD: new RegExp( '^' + q.substr( 0, 2 ) )
+						} )
+					} );
 				break;
 				case 'BA_CODE':
-					location_code_final.push( data );
+					location_code_final.forEach( function( q ) {
+						query_search.push( {
+							LOCATION_CODE_BA: q
+						} );
+						query_search.push( {
+							LOCATION_CODE_AFD: new RegExp( '^' + q.substr( 0, 4 ) )
+						} )
+					} );
+				break;
+				case 'AFD_CODE':
+					location_code_final.forEach( function( q ) {
+						query_search.push( {
+							LOCATION_CODE_AFD: q
+						} )
+					} );
 				break;
 			}
-		} );
-	}
 
-	switch ( ref_role ) {
-		case 'REGION_CODE':
-			key = ref_role;
-			query[key] = location_code_final;
-		break;
-		case 'COMP_CODE':
-			key = ref_role;
-			query[key] = location_code_final;
-		break;
-		case 'AFD_CODE':
-			key = 'WERKS_AFD_CODE';
-			query[key] = location_code_final;
-		break;
-		case 'BA_CODE':
-			key = 'WERKS';
-			query[key] = location_code_final;
-		break;
-		case 'NATIONAL':
-			key = 'NATIONAL';
-			query[key] = 'NATIONAL';
-		break;
-	}
+			viewUserAuthModel.find( 
+				{ 
+					$or: query_search
+					//$or: [
+					//	{ LOCATION_CODE_REGION: /^04/ },
+					//	{ LOCATION_CODE_COMP: /^41/ },
+					//	{ LOCATION_CODE_BA: /^4121/ },
+					//	{ LOCATION_CODE_AFD: /^4121/ }
+					//]
+				}
+			 )
+			.select( {
+				USER_AUTH_CODE: 1,
+				EMPLOYEE_NIK: 1,
+				USER_ROLE: 1,
+				LOCATION_CODE: 1,
+				REF_ROLE: 1,
+				PJS_JOB: 1,
+				PJS_FULLNAME: 1,
+				LOCATION_CODE_NATIONAL: 1,
+				LOCATION_CODE_REGION: 1,
+				LOCATION_CODE_COMP: 1,
+				LOCATION_CODE_BA: 1,
+				LOCATION_CODE_AFD: 1
+			} )
+			.then( data => {
+				if( !data ) {
+					return res.send( {
+						status: false,
+						message: 'Data not found 2',
+						data: {}
+					} );
+				}
+				res.send( {
+					status: true,
+					message: 'Success',
+					data: data
+				} );
+			} ).catch( err => {
+				if( err.kind === 'ObjectId' ) {
+					return res.send( {
+						status: false,
+						message: 'Data not found 1',
+						data: {}
+					} );
+				}
+				return res.send( {
+					status: false,
+					message: 'Error retrieving data',
+					data: {}
+				} );
+			} );
 
-	res.json({
-		query: query
-	})
-	/*
-	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
-		if ( err ) {
-			res.sendStatus( 403 );
 		}
 		else {
-			var auth = jwtDecode( req.token );
-			var find_condition = {};
-
-			if ( auth.REFFERENCE_ROLE == 'NATIONAL' ) {
-				find_condition = {
-					REF_ROLE: 'NATIONAL'
-				}
-			}
-			
-			else if ( auth.REFFERENCE_ROLE == 'AFD_CODE' ) {
-				find_condition = {
-					REF_ROLE: 'AFD_CODE',
-					LOCATION_CODE: auth.LOCATION_CODE
-				}
-			}
-			
-			else if ( auth.REFFERENCE_ROLE == 'BA_CODE' ) {
-				find_condition = {
-					REF_ROLE: 'AFD_CODE',
-					LOCATION_CODE: auth.LOCATION_CODE
-				}
-			}
-
-			userAuthModel.find( find_condition )
+			viewUserAuthModel.find({})
+			.select( {
+				USER_AUTH_CODE: 1,
+				EMPLOYEE_NIK: 1,
+				USER_ROLE: 1,
+				LOCATION_CODE: 1,
+				REF_ROLE: 1,
+				PJS_JOB: 1,
+				PJS_FULLNAME: 1,
+				LOCATION_CODE_NATIONAL: 1,
+				LOCATION_CODE_REGION: 1,
+				LOCATION_CODE_COMP: 1,
+				LOCATION_CODE_BA: 1,
+				LOCATION_CODE_AFD: 1
+			} )
 			.then( data => {
 				if( !data ) {
 					return res.send( {
@@ -125,9 +206,7 @@ exports.find = ( req, res ) => {
 				} );
 			} );
 		}
-	} );
-	*/
-};
+	};
 
 
 
