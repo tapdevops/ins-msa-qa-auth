@@ -129,36 +129,30 @@
 				PJS_FULLNAME: 1,
 				HRIS_JOB: 1,
 				HRIS_FULLNAME: 1,
-				LOCATION_CODE_NATIONAL: 1,
-				LOCATION_CODE_REGION: 1,
-				LOCATION_CODE_COMP: 1,
-				LOCATION_CODE_BA: 1,
-				LOCATION_CODE_AFD: 1
+				//LOCATION_CODE_NATIONAL: 1,
+				//LOCATION_CODE_REGION: 1,
+				//LOCATION_CODE_COMP: 1,
+				//LOCATION_CODE_BA: 1,
+				//LOCATION_CODE_AFD: 1
 			} )
 			.then( data => {
 				if( !data ) {
 					return res.send( {
 						status: false,
-						message: 'Data not found 2',
+						message: config.error_message.find_404,
 						data: {}
 					} );
 				}
+
 				res.send( {
 					status: true,
-					message: 'Success',
+					message: config.error_message.find_200,
 					data: data
 				} );
 			} ).catch( err => {
-				if( err.kind === 'ObjectId' ) {
-					return res.send( {
-						status: false,
-						message: 'Data not found 1',
-						data: {}
-					} );
-				}
-				return res.send( {
+				res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: config.error_message.find_500 + ' - 2',
 					data: {}
 				} );
 			} );
@@ -184,26 +178,20 @@
 				if( !data ) {
 					return res.send( {
 						status: false,
-						message: 'Data not found 2',
+						message: config.error_message.find_404,
 						data: {}
 					} );
 				}
+
 				res.send( {
 					status: true,
-					message: 'Success',
+					message: config.error_message.find_200,
 					data: data
 				} );
 			} ).catch( err => {
-				if( err.kind === 'ObjectId' ) {
-					return res.send( {
-						status: false,
-						message: 'Data not found 1',
-						data: {}
-					} );
-				}
-				return res.send( {
+				res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: config.error_message.find_500 + ' - 2',
 					data: {}
 				} );
 			} );
