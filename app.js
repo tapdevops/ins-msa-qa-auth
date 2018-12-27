@@ -26,10 +26,11 @@ const nJwt = require( 'njwt' );
 
 // Generate Documentation
 require( 'express-aglio' )(app,{
-	source: __dirname+ '/docs/source/index.apib',
+	source: __dirname+ '/docs/source/index.md',
 	output: __dirname+ '/docs/html/index.html',
 	aglioOptions: {
 		themeCondenseNav: true,
+		themeTemplate: 'triple',
 		themeVariables: 'streak'
 	}
 });
