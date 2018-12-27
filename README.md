@@ -1,1 +1,1 @@
-# ms-gateway
+<!-- include(./docs/source/index.md) -->
