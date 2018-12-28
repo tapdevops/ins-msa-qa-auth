@@ -18,3 +18,4 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVU0VSTkFNRSI6ImZlc
 <!-- include(kriteria.md) -->
 <!-- include(login.md) -->
 <!-- include(mobile-sync.md) -->
+<!-- include(mobile-sync-finding.md) -->

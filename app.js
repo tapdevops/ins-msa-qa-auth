@@ -18,7 +18,7 @@ let bearerToken = require( 'express-bearer-token' ); 			// Import Express Bearer
 const app = express(); 											// Define App
 const config = require( './config/config.js' ); 				// Config
 const dbConfig = require( './config/database.js' ); 			// Database Config
-const tokenLib = require( './app/libraries/token.js' ); 		// Database Config
+const tokenLib = require( './app/libraries/token.js' ); 		// Token Config
 let db = mongoose.connection;
 
 const uuid = require( 'uuid' );
@@ -92,9 +92,6 @@ app.post( '/api/logins', ( req, res ) => {
 			},
 			headers: { "Content-Type": "application/json" }
 		};
-		
-
-			
 
 		const loginModel = require( './app/models/login.js' );
 		const loginLib = require( './app/libraries/login.js' );

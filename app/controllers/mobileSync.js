@@ -256,6 +256,98 @@ exports.create = ( req, res ) => {
 | Clear Function
 |--------------------------------------------------------------------------
 */
+	// Find Finding
+	exports.findFinding = ( req, res ) => {
+		
+		var auth = req.auth;
+		
+		mobileSyncModel.find( {
+			INSERT_USER: auth.USER_AUTH_CODE,
+			//IMEI: auth.IMEI,
+			TABEL_UPDATE: 'finding'
+		} )
+		.sort( { TGL_MOBILE_SYNC: -1 } )
+		.limit( 1 )
+		.then( data => {
+			if ( !data ) {
+				return res.send( {
+					status: false,
+					message: 'Data not found 2',
+					data: {}
+				} );
+			}
+			console.log(auth);
+			if ( data.length > 0 ) {
+
+				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
+				var dt = data[0];
+				//var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
+				//var end_date = date.convert( 'now', 'YYYYMMDDhhmmss' );
+				var start_date = 20181204000005;
+				var end_date = 20181231000005;
+				
+				// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
+				var client = new Client();
+				var args = {
+					headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
+				};
+				var parent_ms = 'finding';
+				var target_ms = '';
+				var url = config.url.microservices.finding + '/sync-mobile/finding' + target_ms + '/';
+				var url_final = url + start_date + '/' + end_date;
+				
+				console.log(url_final);
+
+				client.get( url_final, args, function ( data, response ) {
+					res.json( {
+						status: data.status,
+						message: data.message,
+						data: data.data
+					} );
+				});
+			}
+			else {
+				// Tidak ada data yang ditemukan, baru pertama kali sync
+				
+				var url = config.url.microservices.finding + '/finding';
+				var client = new Client();
+				var args = {
+					headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
+				};
+				console.log(url);
+				client.get( url, args, function (data, response) {
+					// parsed response body as js object
+					var insert = [];
+					
+					res.json( { 
+						"status": data.status,
+						"message": "First time sync",
+						"data": {
+							hapus: [],
+							simpan: data.data,
+							ubah: []
+						}
+					} );
+				});
+			}
+			
+		} ).catch( err => {
+			if( err.kind === 'ObjectId' ) {
+				return res.send( {
+					status: false,
+					message: 'ObjectId Error',
+					data: {}
+				} );
+			}
+			return res.send( {
+				status: false,
+				message: 'Error retrieving data',
+				data: {}
+			} );
+		} );
+		
+	};
+
 	// Find Region
 	exports.findEst = ( req, res ) => {
 		
@@ -264,7 +356,7 @@ exports.create = ( req, res ) => {
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
 			//IMEI: auth.IMEI,
-			TABEL_UPDATE: 'hectare-statement/region'
+			TABEL_UPDATE: 'hectare-statement/est'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
 		.limit( 1 )

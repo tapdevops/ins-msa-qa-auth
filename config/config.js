@@ -37,15 +37,14 @@ module.exports = {
 
 			images: 'http://149.129.242.205:3004/image',
 
-			finding: 'http://localhost:3005/finding',
-			finding_history: 'http://localhost:3005/finding-history',
+			//finding: 'http://localhost:3005/finding',
+			//finding_history: 'http://localhost:3005/finding-history',
 
 			sync_mobile_hectare_statement: 'http://localhost:3003/sync-mobile',
 
 
-
-			//hectare_statement: 'http://149.129.242.205:3003',
 			hectare_statement: 'http://149.129.242.205:3003',
+			finding: 'http://localhost:3005',
 
 			ldap: 'http://tap-ldapdev.tap-agri.com/login'
 		}

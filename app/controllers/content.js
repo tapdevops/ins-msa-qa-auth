@@ -35,7 +35,7 @@
 		var url_query_length = Object.keys( url_query ).length;
 			//url_query.DELETE_USER = "";
 
-		contentModel.find( url_query )
+		contentModel.find( {} )
 		.select( {
 			_id: 0,
 			INSERT_TIME: 0,
