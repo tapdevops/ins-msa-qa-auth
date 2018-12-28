@@ -8,6 +8,7 @@ WORKDIR /usr/src/app
 # where available (npm@5+)
 COPY package.json /usr/src/app
 
+RUN npm install -g nodemon
 RUN npm install
 # If you are building your code for production
 # RUN npm install --only=production
@@ -16,7 +17,9 @@ RUN npm install
 COPY . /usr/src/app
 
 EXPOSE 3008
-CMD [ "npm", "start" ]
+//CMD [ "npm", "start" ]
+CMD [ "nodemon", "app.js" ]
+CMD [ "rs" ]
 
 #RUN npm install
 #RUN node  app.js
