@@ -264,6 +264,8 @@ exports.create = ( req, res ) => {
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
 			//IMEI: auth.IMEI,
+
+			
 			TABEL_UPDATE: 'finding'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
