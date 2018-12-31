@@ -31,19 +31,19 @@ module.exports = {
 			inspection_detail: 'http://localhost:3002/inspection-detail',
 			inspection_tracking: 'http://localhost:3002/inspection-tracking',
 
-			masterdata_block: 'http://149.129.242.205:3003/block',
-			masterdata_afdeling: 'http://149.129.242.205:3003/afdeling',
-			masterdata_region: 'http://149.129.242.205:3003/region',
+			masterdata_block: 'http://149.129.242.205:3009/block',
+			masterdata_afdeling: 'http://149.129.242.205:3009/afdeling',
+			masterdata_region: 'http://149.129.242.205:3009/region',
 
 			images: 'http://149.129.242.205:3004/image',
 
 			//finding: 'http://localhost:3005/finding',
 			//finding_history: 'http://localhost:3005/finding-history',
 
-			sync_mobile_hectare_statement: 'http://localhost:3003/sync-mobile',
+			sync_mobile_hectare_statement: 'http://10.20.10.155:3009/sync-mobile',
 
 
-			hectare_statement: 'http://149.129.242.205:3003',
+			hectare_statement: 'http://10.20.10.155:3009',
 			finding: 'http://localhost:3005',
 
 			ldap: 'http://tap-ldapdev.tap-agri.com/login'
