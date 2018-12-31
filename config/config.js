@@ -26,7 +26,7 @@ module.exports = {
 	url: {
 		microservices: {
 
-			inspection: 'http://149.129.244.86:3010/inspection',
+			
 			inspection_header: 'http://149.129.244.86:3010/inspection-header',
 			inspection_detail: 'http://149.129.244.86:3010/inspection-detail',
 			inspection_tracking: 'http://149.129.244.86:3010/inspection-tracking',
@@ -35,7 +35,7 @@ module.exports = {
 			masterdata_afdeling: 'http://149.129.244.86:3009/afdeling',
 			masterdata_region: 'http://149.129.244.86:3009/region',
 
-			images: 'http://149.129.242.205:3004/image',
+			
 
 			//finding: 'http://localhost:3005/finding',
 			//finding_history: 'http://localhost:3005/finding-history',
@@ -43,7 +43,9 @@ module.exports = {
 			sync_mobile_hectare_statement: 'http://149.129.244.86:3009/sync-mobile',
 
 			hectare_statement: 'http://149.129.244.86:3009',
+			inspection: 'http://149.129.244.86:3010/inspection',
 			finding: 'http://149.129.244.86:3011',
+			images: 'http://149.129.244.86:3012/image',
 
 			ldap: 'http://tap-ldapdev.tap-agri.com/login'
 		}
