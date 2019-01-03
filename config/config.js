@@ -7,7 +7,6 @@ module.exports = {
 	*/
 	app_port: process.env.PORT || 3008,
 	app_name: 'Microservice Auths',
-	//app_ip: '149.129.242.205',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -35,8 +34,6 @@ module.exports = {
 			masterdata_afdeling: 'http://149.129.244.86:3009/afdeling',
 			masterdata_region: 'http://149.129.244.86:3009/region',
 
-			
-
 			//finding: 'http://localhost:3005/finding',
 			//finding_history: 'http://localhost:3005/finding-history',
 
@@ -45,8 +42,7 @@ module.exports = {
 			hectare_statement: 'http://149.129.244.86:3009',
 			inspection: 'http://149.129.244.86:3010/inspection',
 			finding: 'http://149.129.244.86:3011',
-			images: 'http://149.129.244.86:3012/image',
-
+			images: 'http://localhost:3012',
 			ldap: 'http://tap-ldapdev.tap-agri.com/login'
 		}
 	},
@@ -66,7 +62,14 @@ module.exports = {
 		find_403: 'Forbidden ',
 		find_404: 'Error! Tidak ada data yang ditemukan ',
 		find_500: 'Error! Terjadi kesalahan dalam penampilan data ',
+		put_200: 'Success! ',
+		put_403: 'Forbidden ',
+		put_404: 'Error! Data gagal diupdate ',
+		put_500: 'Error! Terjadi kesalahan dalam perubahan data ',
+		delete_200: 'Success! ',
+		delete_403: 'Forbidden ',
+		delete_404: 'Error! Data gagal dihapus ',
+		delete_500: 'Error! Terjadi kesalahan dalam penghapusan data ',
 	}
-
 
 }

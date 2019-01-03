@@ -12,6 +12,7 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVU0VSTkFNRSI6ImZlc
 <!-- include(content.md) -->
 <!-- include(content-label.md) -->
 <!-- include(finding.md) -->
+<!-- include(image.md) -->
 <!-- include(inspection-header.md) -->
 <!-- include(inspection-detail.md) -->
 <!-- include(inspection-tracking.md) -->

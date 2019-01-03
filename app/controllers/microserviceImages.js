@@ -1,34 +1,51 @@
-const Client = require( 'node-rest-client' ).Client;
-const fs = require( 'file-system' );
-const request = require( 'request' );
-const config = require( '../../config/config.js' );
-let jwt = require( 'jsonwebtoken' );
-const uuid = require( 'uuid' );
-const nJwt = require( 'njwt' );
+/*
+ |--------------------------------------------------------------------------
+ | App Setup
+ |--------------------------------------------------------------------------
+ |
+ | Untuk menghandle models, libraries, helper, node modules, dan lain-lain
+ |
+ */
+	// Node Modules
+	const querystring = require( 'querystring' );
+	const url = require( 'url' );
+	const jwt = require( 'jsonwebtoken' );
+	const uuid = require( 'uuid' );
+	const nJwt = require( 'njwt' );
+	const jwtDecode = require( 'jwt-decode' );
+	const Client = require( 'node-rest-client' ).Client; 
+	const moment_pure = require( 'moment' );
+	const moment = require( 'moment-timezone' );
+	const fs = require( 'file-system' );
 
-// FINDING - CREATE
-exports.create = async ( req, res ) => {
-	
-	
-	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
-		if ( err ) {
-			res.sendStatus( 403 );
-		}
-		else {
-			var client = new Client();
-			var url = config.url.microservices.images + '/description';
-			var args = {
-				data: req.body,
-				headers: { 
-					"Content-Type": "application/json",
-					"Authorization": req.headers.authorization
-				}
-			};
+	// Libraries
+	const config = require( '../../config/config.js' );
+	const date = require( '../libraries/date.js' );
 
-			client.post( url, args, function ( data, response ) {
-				res.json( { data } );
-			});
-		}
-	} );
-	
-}
+/**
+ * create
+ * Untuk membuat dan menyimpan data baru
+ * --------------------------------------------------------------------------
+ */
+	exports.create = async ( req, res ) => {
+		
+		var client = new Client();
+		var url = config.url.microservices.images + '/image/description';
+		
+		var args = {
+			data: req.body,
+			headers: { 
+				"Content-Type": "application/json",
+				"Authorization": req.headers.authorization
+			}
+		};
+
+		client.post( url, args, function ( data, response ) {
+			res.json( {
+				status: data.status,
+				message: data.message,
+				data: data.data,
+			} );
+		});
+		
+	}

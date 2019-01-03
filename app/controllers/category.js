@@ -1,89 +1,115 @@
-const categoryModel = require( '../models/category.js' );
-const dateFormat = require( 'dateformat' );
-var querystring = require('querystring');
-var url = require( 'url' );
-const date = require( '../libraries/date.js' );
-const dateAndTimes = require( 'date-and-time' );
-let jwt = require( 'jsonwebtoken' );
-const config = require( '../../config/config.js' );
-const uuid = require( 'uuid' );
-const nJwt = require( 'njwt' );
+/*
+ |--------------------------------------------------------------------------
+ | App Setup
+ |--------------------------------------------------------------------------
+ |
+ | Untuk menghandle models, libraries, helper, node modules, dan lain-lain
+ |
+ */
+ 	// Models
+	const categoryModel = require( '../models/category.js' );
 
-exports.find = ( req, res ) => {
+	// Node Modules
+	const querystring = require( 'querystring' );
+	const url = require( 'url' );
+	const jwt = require( 'jsonwebtoken' );
+	const uuid = require( 'uuid' );
+	const nJwt = require( 'njwt' );
+	const jwtDecode = require( 'jwt-decode' );
+	const Client = require( 'node-rest-client' ).Client; 
+	const moment_pure = require( 'moment' );
+	const moment = require( 'moment-timezone' );
 
-	url_query = req.query;
-	var url_query_length = Object.keys( url_query ).length;
+	// Libraries
+	const config = require( '../../config/config.js' );
+	const date = require( '../libraries/date.js' );
 
-	categoryModel.find( url_query )
-	.then( data => {
-		if( !data ) {
-			return res.send( {
-				status: false,
-				message: 'Data not found 2',
-				data: {}
-			} );
-		}
-		res.send( {
-			status: true,
-			message: 'Success',
-			data: data
-		} );
-	} ).catch( err => {
-		if( err.kind === 'ObjectId' ) {
-			return res.send( {
-				status: false,
-				message: 'Data not found 1',
-				data: {}
-			} );
-		}
-		return res.send( {
-			status: false,
-			message: 'Error retrieving data',
-			data: {}
-		} );
-	} );
-};
+/**
+ * Find
+ * Untuk menampilkan data kriteria
+ * --------------------------------------------------------------------------
+ */
+	exports.find = ( req, res ) => {
+		var auth = req.auth;
+		var url_query = req.query;
+		var url_query_length = Object.keys( url_query ).length;
+			url_query.DELETE_USER = "";
 
-// Create and Save new Data
-exports.create = ( req, res ) => {
-
-	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
-		if ( err ) {
-			res.send({
-				status: false,
-				message: 'Token expired!',
-				data: {}
-			});
-		}
-		else {
-			if( !req.body.CATEGORY_NAME ) {
-				return res.status( 400 ).send({
+		categoryModel.find( {} )
+		.select( {
+			_id: 0,
+			INSERT_TIME: 0,
+			INSERT_USER: 0,
+			DELETE_TIME: 0,
+			DELETE_USER: 0,
+			UPDATE_TIME: 0,
+			UPDATE_USER: 0,
+			__v: 0
+		} )
+		.then( data => {
+			if( !data ) {
+				return res.send( {
 					status: false,
-					message: 'Invalid input',
-					data: {}
-				});
-			}
-
-			const set = new categoryModel({
-				CATEGORY_NAME: req.body.CATEGORY_NAME || "",
-				ICON: req.body.CATEGORY_NAME || ""
-			});
-
-			set.save()
-			.then( data => {
-				res.send({
-					status: true,
-					message: 'Success',
-					data: {}
-				});
-			} ).catch( err => {
-				res.status( 500 ).send( {
-					status: false,
-					message: 'Some error occurred while creating data',
+					message: config.error_message.find_404,
 					data: {}
 				} );
+			}
+			res.send( {
+				status: true,
+				message: config.error_message.find_200,
+				data: data
 			} );
-		}
-	} );
+		} ).catch( err => {
+			res.send( {
+				status: false,
+				message: config.error_message.find_500,
+				data: {}
+			} );
+		} );
+
+	};
+
+/**
+ * create
+ * Untuk membuat dan menyimpan data kriteria baru
+ * --------------------------------------------------------------------------
+ */
 	
-};
+	exports.create = ( req, res ) => {
+		
+		var auth = req.auth;
+		const set_data = new categoryModel( {
+			CATEGORY_NAME: req.body.CATEGORY_NAME || "",
+			ICON: req.body.CATEGORY_NAME || "",
+			INSERT_USER: auth.USER_AUTH_CODE,
+			INSERT_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
+			UPDATE_USER: auth.USER_AUTH_CODE,
+			UPDATE_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
+			DELETE_USER: "",
+			DELETE_TIME: 0
+		} );
+
+		set_data.save()
+		.then( data => {
+			if ( !data ) {
+				return res.send( {
+					status: false,
+					message: config.error_message.create_404,
+					data: {}
+				} );
+			}
+			
+			res.send( {
+				status: true,
+				message: config.error_message.create_200,
+				data: {}
+			} );
+		} ).catch( err => {
+			res.send( {
+				status: false,
+				message: config.error_message.create_500,
+				data: {}
+			} );
+		} );
+		
+	};

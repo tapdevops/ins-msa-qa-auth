@@ -72,7 +72,9 @@ module.exports = ( app ) => {
 	app.put( '/api/finding/:id', verifyToken, microserviceFinding.update );
 	app.delete( '/api/finding/:id', verifyToken, microserviceFinding.delete );
 
-	app.post( '/api/image/description', verifyToken, microserviceImages.create  );
+	// ROUTE - IMAGES
+	app.post( '/api/image/description', token_verify, microserviceImages.create  );
+	
 	// ROUTE - EMPLOYEE HRIS
 	app.post( '/sync/employee-hris', employeeHRIS.createOrUpdate );
 	app.get( '/api/employee-hris', verifyToken, employeeHRIS.find );
@@ -101,11 +103,17 @@ module.exports = ( app ) => {
 
 	// ROUTE - Content
 	app.get( '/api/content', token_verify, content.find );
+	app.get( '/api/content/:id', token_verify, content.findOne );
 	app.post( '/api/content', token_verify, content.create );
+	app.put( '/api/content/:id', token_verify, content.update );
+	app.delete( '/api/content/:id', token_verify, content.delete );
 
 	// ROUTE - Content
 	app.get( '/api/content-label', token_verify, contentLabel.find );
+	app.get( '/api/content-label/:id', token_verify, contentLabel.findOne );
 	app.post( '/api/content-label', token_verify, contentLabel.create );
+	app.put( '/api/content-label/:id', token_verify, contentLabel.update );
+	app.delete( '/api/content-label/:id', token_verify, contentLabel.delete );
 
 	// ROUTE - Parameter
 	app.get( '/api/parameter', parameter.find );
@@ -121,7 +129,7 @@ module.exports = ( app ) => {
 	app.get( '/api/user-authorization', verifyToken, userAuthorization.find );
 
 	// ROUTE - CATEGORY
-	app.post( '/api/category', verifyToken, category.create );
+	app.post( '/api/category', token_verify, category.create );
 	app.get( '/api/category', verifyToken, category.find );
 
 	// ROUTE - MOBILE SYNC
