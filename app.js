@@ -313,7 +313,7 @@ app.post( '/api/logins', ( req, res ) => {
 // Login
 app.post( '/api/login', ( req, res ) => {
 
-	console.log(req.body.imei);
+	//console.log(req.body.imei);
 
 	if ( req.body.username && req.body.password ) {
 		
@@ -332,7 +332,15 @@ app.post( '/api/login', ( req, res ) => {
 				username: req.body.username,
 				password: req.body.password
 			},
-			headers: { "Content-Type": "application/json" }
+			headers: { "Content-Type": "application/json" },
+			requestConfig: {
+				timeout: 10000, //request timeout in milliseconds
+				noDelay: true, //Enable/disable the Nagle algorithm
+				keepAlive: true, //Enable/disable keep-alive functionalityidle socket
+			},
+			responseConfig: {
+				timeout: 10000
+			}
 		};
 		
 		// 1. Check ke LDAP
@@ -340,6 +348,7 @@ app.post( '/api/login', ( req, res ) => {
 			// 2.1. Kondisi data terdapat pada LDAP
 
 			//console.log( data );
+			console.log( data );
 
 			if ( data.status == true ) {
 
@@ -557,7 +566,30 @@ app.post( '/api/login', ( req, res ) => {
 					data: {}
 				} );
 			}		
-		});
+		} )
+		.on( 'requestTimeout', function ( req ) {
+			//req.abort();
+			res.send( {
+				status: false,
+				message: 'Request Timeout',
+				data: {}
+			} );
+		} )
+		.on( 'responseTimeout', function ( res ) {
+			res.send( {
+				status: false,
+				message: 'Response Timeout',
+				data: {}
+			} );
+		} )
+		.on( 'error', function ( err ) {
+			res.send( {
+				status: false,
+				message: 'Error Login!',
+				data: {}
+			} );
+		} );
+
 	}
 	else {
 		res.status( 400 ).send( {
