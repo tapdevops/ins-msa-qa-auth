@@ -29,7 +29,7 @@
  * Untuk mengambil data contact berdasarkan location code
  * --------------------------------------------------------------------------
  */
-	exports.find = ( req, res ) => {
+	exports.find = async ( req, res ) => {
 		// Auth Data
 		var auth = req.auth;
 
@@ -107,18 +107,16 @@
 					} );
 				break;
 			}
-
-			viewUserAuthModel.find( 
-				{ 
-					$or: query_search
-					//$or: [
-					//	{ LOCATION_CODE_REGION: /^04/ },
-					//	{ LOCATION_CODE_COMP: /^41/ },
-					//	{ LOCATION_CODE_BA: /^4121/ },
-					//	{ LOCATION_CODE_AFD: /^4121/ }
-					//]
-				}
-			 )
+			
+			viewUserAuthModel.find( { 
+				$or: query_search
+				//$or: [
+				//	{ LOCATION_CODE_REGION: /^04/ },
+				//	{ LOCATION_CODE_COMP: /^41/ },
+				//	{ LOCATION_CODE_BA: /^4121/ },
+				//	{ LOCATION_CODE_AFD: /^4121/ }
+				//]
+			}  )
 			.select( {
 				USER_AUTH_CODE: 1,
 				EMPLOYEE_NIK: 1,
@@ -144,10 +142,30 @@
 					} );
 				}
 
+				var results = [];
+				data.forEach( function( result ) {
+					var result = Object.keys(result).map(function(k) {
+						return [+k, result[k]];
+					});
+					result = result[3][1];
+
+					//if ( result.USE )
+
+					results.push( {
+						USER_AUTH_CODE: result.USER_AUTH_CODE,
+						EMPLOYEE_NIK: result.EMPLOYEE_NIK,
+						USER_ROLE: result.USER_ROLE,
+						LOCATION_CODE: result.LOCATION_CODE,
+						REF_ROLE: result.REF_ROLE,
+						JOB: ( !result.PJS_JOB ) ? result.HRIS_JOB : result.PJS_JOB,
+						FULLNAME: ( !result.PJS_FULLNAME ) ? result.HRIS_FULLNAME : result.PJS_FULLNAME
+					} );
+				} );
+
 				res.send( {
 					status: true,
 					message: config.error_message.find_200,
-					data: data
+					data: results
 				} );
 			} ).catch( err => {
 				res.send( {
