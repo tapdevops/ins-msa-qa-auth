@@ -297,6 +297,11 @@ exports.create = ( req, res ) => {
 				else {
 					var results = [];
 					var data_response = data.data;
+
+					res.json({
+						d: data_response
+					})
+					/*
 					data_response.forEach( function( result ) {
 						results.push( result );
 						console.log(result);
@@ -355,6 +360,7 @@ exports.create = ( req, res ) => {
 							data: {}
 						} );
 					} );
+					*/
 				}
 
 			});
