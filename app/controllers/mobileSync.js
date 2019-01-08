@@ -283,6 +283,11 @@ exports.create = ( req, res ) => {
 
 			client.get( url_final, args, function ( data, response ) {
 
+				console.log ( data );
+				res.json({
+					data: data
+				})
+				/*
 				if ( data.data.length == 0 ) {
 					res.json({
 						"status": true,
@@ -361,7 +366,7 @@ exports.create = ( req, res ) => {
 						} );
 					} );
 					*/
-				}
+				//}
 
 			});
 			
