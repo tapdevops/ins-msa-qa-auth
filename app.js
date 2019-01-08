@@ -69,7 +69,7 @@ app.get( '/', ( req, res ) => {
 } );
 
 // Login
-app.post( '/api/logins', ( req, res ) => {
+app.post( '/api/login', ( req, res ) => {
 
 	console.log(req.body.imei);
 
@@ -311,7 +311,7 @@ app.post( '/api/logins', ( req, res ) => {
 } );
 
 // Login
-app.post( '/api/login', ( req, res ) => {
+app.post( '/api/logins', ( req, res ) => {
 
 	//console.log(req.body.imei);
 

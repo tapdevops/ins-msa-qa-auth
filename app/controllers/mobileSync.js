@@ -303,9 +303,12 @@ exports.create = ( req, res ) => {
 
 			client.get( url_final, args, function ( data, response ) {
 
+				res.json({
+					data: data
+				});
+				/*
 				var results = [];
 				var data_response = data.data;
-				/*
 				data_response.forEach( function( result ) {
 					results.push( result );
 					console.log(result);
@@ -333,11 +336,7 @@ exports.create = ( req, res ) => {
 							ubah: []
 						}
 					} );
-				} );
-				*/
-				res.json( {
-					data: data.data
-				} )
+				} );*/
 
 			});
 			
