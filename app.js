@@ -566,7 +566,8 @@ app.post( '/api/logins', ( req, res ) => {
 					data: {}
 				} );
 			}		
-		} )
+		} );
+		/*
 		.on( 'requestTimeout', function ( req ) {
 			//req.abort();
 			res.send( {
@@ -589,7 +590,7 @@ app.post( '/api/logins', ( req, res ) => {
 				data: {}
 			} );
 		} );
-
+		*/
 	}
 	else {
 		res.status( 400 ).send( {
