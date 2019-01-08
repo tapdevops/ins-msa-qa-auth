@@ -60,7 +60,7 @@
 						CATEGORY_CODE: result.CATEGORY_CODE,
 						CATEGORY_NAME: result.CATEGORY_NAME,
 						ICON: result.ICON,
-						SOURCE_IMAGE: 'data:image/jpg;base64,' + new Buffer( bitmap ).toString( 'base64' )
+						SOURCE_IMAGE: 'data:image/png;base64,' + new Buffer( bitmap ).toString( 'base64' )
 					} );
 				}
 				
