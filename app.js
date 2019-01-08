@@ -24,6 +24,9 @@ let db = mongoose.connection;
 const uuid = require( 'uuid' );
 const nJwt = require( 'njwt' );
 
+global._directory_base = __dirname;
+global._directory_root = '';
+
 // Generate Documentation
 /*
 require( 'express-aglio' )(app,{

@@ -19,6 +19,7 @@
 	const Client = require( 'node-rest-client' ).Client; 
 	const moment_pure = require( 'moment' );
 	const moment = require( 'moment-timezone' );
+	const fServer = require( 'fs' );
 
 	// Libraries
 	const config = require( '../../config/config.js' );
@@ -81,7 +82,7 @@
 		const set_data = new categoryModel( {
 			CATEGORY_CODE: req.body.CATEGORY_CODE || "",
 			CATEGORY_NAME: req.body.CATEGORY_NAME || "",
-			ICON: req.body.CATEGORY_NAME || "",
+			ICON: req.body.ICON || "",
 			INSERT_USER: auth.USER_AUTH_CODE,
 			INSERT_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
 			UPDATE_USER: auth.USER_AUTH_CODE,

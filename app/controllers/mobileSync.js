@@ -37,44 +37,30 @@ exports.findRegion = ( req, res ) => {
 			// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 			var dt = data[0];
 			var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
-				var end_date = date.convert( 'now', 'YYYYMMDDhhmmss' );
+			var end_date = date.convert( 'now', 'YYYYMMDDhhmmss' );
 			
-			if ( start_date != end_date ) {
-				// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
-				var client = new Client();
-				var args = {
-					headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
-				};
-				var parent_ms = 'hectare-statement';
-				var target_ms = 'region';
-				var url = config.url.microservices.hectare_statement + '/sync-mobile/' + target_ms + '/';
-				var url_final = url + start_date + '/' + end_date;
-				console.log(url_final)
-				client.get( url_final, args, function ( data, response ) {
-					res.json( {
-						status: data.status,
-						message: data.message,
-						data: data.data
-					} );
-				});
-			}
-			else {
-				// Tidak perlu lagi sync karena sudah dilakukan pada tanggal saat ini
-				res.send( {
-					status: false,
-					message: "Sudah melakukan sync pada tanggal " + end_date,
-					data: {
-						hapus: [],
-						simpan: [],
-						ubah: []
-					}
+			// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
+			var client = new Client();
+			var args = {
+				headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
+			};
+			var parent_ms = 'hectare-statement';
+			var target_ms = 'region';
+			var url = config.url.microservices.hectare_statement + '/sync-mobile/' + target_ms + '/';
+			var url_final = url + start_date + '/' + end_date;
+			console.log(url_final)
+			client.get( url_final, args, function ( data, response ) {
+				res.json( {
+					status: data.status,
+					message: data.message,
+					data: data.data
 				} );
-			}
+			});
 		}
 		else {
 			// Tidak ada data yang ditemukan, baru pertama kali sync
-			
-			var url = config.url.microservices.masterdata_region;
+			var url = config.url.microservices.hectare_statement + '/region';
+			//var url = config.url.microservices.masterdata_region;
 			var client = new Client();
 			var args = {
 				headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
@@ -86,7 +72,7 @@ exports.findRegion = ( req, res ) => {
 				if ( data.data.length > 0 ) {
 					insert = data.data;
 				}
-				console.log(insert);
+				
 				res.json( { 
 					"status": data.status,
 					"message": "First time sync",
@@ -394,7 +380,7 @@ exports.create = ( req, res ) => {
 		
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			//IMEI: auth.IMEI,
+			IMEI: auth.IMEI,
 			TABEL_UPDATE: 'finding'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -484,7 +470,7 @@ exports.create = ( req, res ) => {
 		
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			//IMEI: auth.IMEI,
+			IMEI: auth.IMEI,
 			TABEL_UPDATE: 'hectare-statement/est'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -574,7 +560,7 @@ exports.create = ( req, res ) => {
 		
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			//IMEI: auth.IMEI,
+			IMEI: auth.IMEI,
 			TABEL_UPDATE: 'hectare-statement/afdeling'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -666,7 +652,7 @@ exports.create = ( req, res ) => {
 		
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			//IMEI: auth.IMEI,
+			IMEI: auth.IMEI,
 			TABEL_UPDATE: 'hectare-statement/block'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -756,7 +742,7 @@ exports.create = ( req, res ) => {
 		
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			//IMEI: auth.IMEI,
+			IMEI: auth.IMEI,
 			TABEL_UPDATE: 'hectare-statement/comp'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
