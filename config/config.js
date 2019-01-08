@@ -38,7 +38,7 @@ module.exports = {
 
 			sync_mobile_hectare_statement: 'http://149.129.244.86:3009/sync-mobile',
 
-			hectare_statement: 'http://localhost:3009',
+			hectare_statement: 'http://149.129.244.86:3009',
 			inspection: 'http://149.129.244.86:3010/inspection',
 			finding: 'http://149.129.244.86:3011',
 			images: 'http://149.129.244.86:3012',
