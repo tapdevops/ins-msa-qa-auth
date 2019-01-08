@@ -30,44 +30,64 @@
  * Untuk menampilkan data kriteria
  * --------------------------------------------------------------------------
  */
-	exports.find = ( req, res ) => {
+	exports.find = async ( req, res ) => {
 		var auth = req.auth;
 		var url_query = req.query;
 		var url_query_length = Object.keys( url_query ).length;
 			url_query.DELETE_USER = "";
+		var query = await categoryModel
+			.find()
+			.select( {
+				_id: 0,
+				INSERT_TIME: 0,
+				INSERT_USER: 0,
+				DELETE_TIME: 0,
+				DELETE_USER: 0,
+				UPDATE_TIME: 0,
+				UPDATE_USER: 0,
+				__v: 0
+			} );
 
-		categoryModel.find( {} )
-		.select( {
-			_id: 0,
-			INSERT_TIME: 0,
-			INSERT_USER: 0,
-			DELETE_TIME: 0,
-			DELETE_USER: 0,
-			UPDATE_TIME: 0,
-			UPDATE_USER: 0,
-			__v: 0
-		} )
-		.then( data => {
-			if( !data ) {
-				return res.send( {
-					status: false,
-					message: config.error_message.find_404,
-					data: {}
+		if ( query.length > 0 ) {
+
+			var results = [];
+			query.forEach( function( result ) {
+				var pth = _directory_base + '/' +result.ICON;
+				if ( fServer.existsSync( pth ) ) {
+
+					var bitmap = fServer.readFileSync( pth );
+					results.push( {
+						CATEGORY_CODE: result.CATEGORY_CODE,
+						CATEGORY_NAME: result.CATEGORY_NAME,
+						ICON: result.ICON,
+						SOURCE_IMAGE: 'data:image/jpg;base64,' + new Buffer( bitmap ).toString( 'base64' )
+					} );
+				}
+				
+			} );
+
+			if ( results.length > 0 ) {
+				res.send( {
+					status: true,
+					message: config.error_message.find_200,
+					data: results
 				} );
 			}
+			else {
+				res.send( {
+					status: true,
+					message: config.error_message.find_404 + ' 2',
+					data: data
+				} );
+			}
+		}
+		else {
 			res.send( {
 				status: true,
-				message: config.error_message.find_200,
+				message: config.error_message.find_404,
 				data: data
 			} );
-		} ).catch( err => {
-			res.send( {
-				status: false,
-				message: config.error_message.find_500,
-				data: {}
-			} );
-		} );
-
+		}
 	};
 
 /**
@@ -75,7 +95,7 @@
  * Untuk membuat dan menyimpan data kriteria baru
  * --------------------------------------------------------------------------
  */
-	
+
 	exports.create = ( req, res ) => {
 		
 		var auth = req.auth;
