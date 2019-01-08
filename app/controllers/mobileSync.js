@@ -384,8 +384,6 @@ exports.create = ( req, res ) => {
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
 			//IMEI: auth.IMEI,
-
-			
 			TABEL_UPDATE: 'finding'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -403,10 +401,8 @@ exports.create = ( req, res ) => {
 
 				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 				var dt = data[0];
-				//var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
-				//var end_date = date.convert( 'now', 'YYYYMMDDhhmmss' );
-				var start_date = 20181204000005;
-				var end_date = 20181231000005;
+				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
+				var end_date = date.convert( 'now', 'YYYYMMDDhhmmss' );
 				
 				// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
 				var client = new Client();
