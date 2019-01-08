@@ -41,8 +41,8 @@ module.exports = {
 
 			hectare_statement: 'http://149.129.244.86:3009',
 			inspection: 'http://149.129.244.86:3010/inspection',
-			finding: 'http://localhost:3011',
-			images: 'http://localhost:3012',
+			finding: 'http://149.129.244.86:3011',
+			images: 'http://149.129.244.86:3012',
 			ldap: 'http://tap-ldapdev.tap-agri.com/login'
 		}
 	},

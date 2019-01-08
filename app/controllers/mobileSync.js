@@ -305,7 +305,7 @@ exports.create = ( req, res ) => {
 
 				var results = [];
 				var data_response = data.data;
-
+				/*
 				data_response.forEach( function( result ) {
 					results.push( result );
 					console.log(result);
@@ -334,6 +334,10 @@ exports.create = ( req, res ) => {
 						}
 					} );
 				} );
+				*/
+				res.json( {
+					data: data.data
+				} )
 
 			});
 			
