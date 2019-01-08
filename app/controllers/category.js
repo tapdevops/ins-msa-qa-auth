@@ -79,6 +79,7 @@
 		
 		var auth = req.auth;
 		const set_data = new categoryModel( {
+			CATEGORY_CODE: req.body.CATEGORY_CODE || "",
 			CATEGORY_NAME: req.body.CATEGORY_NAME || "",
 			ICON: req.body.CATEGORY_NAME || "",
 			INSERT_USER: auth.USER_AUTH_CODE,

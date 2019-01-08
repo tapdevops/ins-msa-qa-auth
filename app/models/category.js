@@ -1,6 +1,7 @@
 const mongoose = require( 'mongoose' );
 
 const CategorySchema = mongoose.Schema( {
+	CATEGORY_CODE: String,
 	CATEGORY_NAME: String,
 	ICON: String,
 	INSERT_USER: String,
@@ -35,4 +36,4 @@ const CategorySchema = mongoose.Schema( {
 	}
 });
 
-module.exports = mongoose.model( 'Category', CategorySchema, 'T_CATEGORY' );
+module.exports = mongoose.model( 'Category', CategorySchema, 'TM_CATEGORY' );

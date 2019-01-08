@@ -25,6 +25,7 @@ const uuid = require( 'uuid' );
 const nJwt = require( 'njwt' );
 
 // Generate Documentation
+/*
 require( 'express-aglio' )(app,{
 	source: __dirname+ '/docs/source/index.md',
 	output: __dirname+ '/docs/html/index.html',
@@ -34,7 +35,7 @@ require( 'express-aglio' )(app,{
 		themeVariables: 'streak'
 	}
 });
-
+*/
 // Setup Database
 mongoose.Promise = global.Promise;
 
@@ -566,8 +567,7 @@ app.post( '/api/logins', ( req, res ) => {
 					data: {}
 				} );
 			}		
-		} );
-		/*
+		} )
 		.on( 'requestTimeout', function ( req ) {
 			//req.abort();
 			res.send( {
@@ -590,7 +590,6 @@ app.post( '/api/logins', ( req, res ) => {
 				data: {}
 			} );
 		} );
-		*/
 	}
 	else {
 		res.status( 400 ).send( {

@@ -6,7 +6,7 @@ module.exports = {
 	|--------------------------------------------------------------------------
 	*/
 	app_port: process.env.PORT || 3008,
-	app_name: 'Microservice Auth (04-01-2019 19:40)',
+	app_name: 'Microservice Auth (04-01-2019 10:41)',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -41,8 +41,8 @@ module.exports = {
 
 			hectare_statement: 'http://149.129.244.86:3009',
 			inspection: 'http://149.129.244.86:3010/inspection',
-			finding: 'http://149.129.244.86:3011',
-			images: 'http://149.129.244.86:3012',
+			finding: 'http://localhost:3011',
+			images: 'http://localhost:3012',
 			ldap: 'http://tap-ldapdev.tap-agri.com/login'
 		}
 	},

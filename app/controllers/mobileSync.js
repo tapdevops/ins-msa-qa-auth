@@ -13,116 +13,107 @@ const date = require( '../libraries/date.js' );
 
 // Find Region
 exports.findRegion = ( req, res ) => {
-	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
-		if ( err ) {
-			res.send({
+	
+	var auth = req.auth;
+
+	mobileSyncModel.find( {
+		INSERT_USER: auth.USER_AUTH_CODE,
+		IMEI: auth.IMEI,
+		TABEL_UPDATE: 'hectare-statement/region'
+	} )
+	.sort( { TGL_MOBILE_SYNC: -1 } )
+	.limit( 1 )
+	.then( data => {
+		if ( !data ) {
+			return res.send( {
 				status: false,
-				message: "Invalid Token",
+				message: 'Data not found 2',
 				data: {}
 			} );
 		}
-		else {
-			var auth = jwtDecode( req.token );
 
-			console.log(auth);
-			mobileSyncModel.find( {
-				INSERT_USER: auth.USER_AUTH_CODE,
-				//IMEI: auth.IMEI,
-				TABEL_UPDATE: 'hectare-statement/region'
-			} )
-			.sort( { TGL_MOBILE_SYNC: -1 } )
-			.limit( 1 )
-			.then( data => {
-				if ( !data ) {
-					return res.send( {
-						status: false,
-						message: 'Data not found 2',
-						data: {}
+		console.log( data );
+		if ( data.length > 0 ) {
+			// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
+			var dt = data[0];
+			var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
+				var end_date = date.convert( 'now', 'YYYYMMDDhhmmss' );
+			
+			if ( start_date != end_date ) {
+				// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
+				var client = new Client();
+				var args = {
+					headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
+				};
+				var parent_ms = 'hectare-statement';
+				var target_ms = 'region';
+				var url = config.url.microservices.hectare_statement + '/sync-mobile/' + target_ms + '/';
+				var url_final = url + start_date + '/' + end_date;
+				console.log(url_final)
+				client.get( url_final, args, function ( data, response ) {
+					res.json( {
+						status: data.status,
+						message: data.message,
+						data: data.data
 					} );
-				}
-
-				if ( data.length > 0 ) {
-					// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
-					var dt = data[0];
-					var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDD' );
-					var end_date = date.convert( 'now', 'YYYYMMDD' );
-					
-					if ( start_date != end_date ) {
-						// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
-						var client = new Client();
-						var args = {
-							headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
-						};
-						var parent_ms = 'hectare-statement';
-						var target_ms = 'region';
-						var url = config.url.microservices.hectare_statement + '/sync-mobile/' + target_ms + '/';
-						var url_final = url + start_date + '/' + end_date;
-						console.log(url_final)
-						client.get( url_final, args, function ( data, response ) {
-							res.json( {
-								status: data.status,
-								message: data.message,
-								data: data.data
-							} );
-						});
-					}
-					else {
-						// Tidak perlu lagi sync karena sudah dilakukan pada tanggal saat ini
-						res.send( {
-							status: false,
-							message: "Sudah melakukan sync pada tanggal " + end_date,
-							data: {
-								hapus: [],
-								simpan: [],
-								ubah: []
-							}
-						} );
-					}
-				}
-				else {
-					// Tidak ada data yang ditemukan, baru pertama kali sync
-					
-					var url = config.url.microservices.masterdata_region;
-					var client = new Client();
-					var args = {
-						headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
-					};
-
-					client.get( url, args, function (data, response) {
-						// parsed response body as js object
-						var insert = [];
-						if ( data.data.length > 0 ) {
-							insert = data.data;
-						}
-						console.log(insert);
-						res.json( { 
-							"status": data.status,
-							"message": "First time sync",
-							"data": {
-								hapus: [],
-								simpan: data.data,
-								ubah: []
-							}
-						} );
-					});
-				}
-				
-			} ).catch( err => {
-				if( err.kind === 'ObjectId' ) {
-					return res.send( {
-						status: false,
-						message: 'ObjectId Error',
-						data: {}
-					} );
-				}
-				return res.send( {
+				});
+			}
+			else {
+				// Tidak perlu lagi sync karena sudah dilakukan pada tanggal saat ini
+				res.send( {
 					status: false,
-					message: 'Error retrieving data',
-					data: {}
+					message: "Sudah melakukan sync pada tanggal " + end_date,
+					data: {
+						hapus: [],
+						simpan: [],
+						ubah: []
+					}
 				} );
+			}
+		}
+		else {
+			// Tidak ada data yang ditemukan, baru pertama kali sync
+			
+			var url = config.url.microservices.masterdata_region;
+			var client = new Client();
+			var args = {
+				headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
+			};
+
+			client.get( url, args, function (data, response) {
+				// parsed response body as js object
+				var insert = [];
+				if ( data.data.length > 0 ) {
+					insert = data.data;
+				}
+				console.log(insert);
+				res.json( { 
+					"status": data.status,
+					"message": "First time sync",
+					"data": {
+						hapus: [],
+						simpan: data.data,
+						ubah: []
+					}
+				} );
+			});
+		}
+		
+	} ).catch( err => {
+		if( err.kind === 'ObjectId' ) {
+			return res.send( {
+				status: false,
+				message: 'ObjectId Error',
+				data: {}
 			} );
 		}
+		return res.send( {
+			status: false,
+			message: 'Error retrieving data',
+			data: {}
+		} );
 	} );
+
 };
 
 // Find 
@@ -192,62 +183,51 @@ exports.find = ( req, res ) => {
 // Create
 exports.create = ( req, res ) => {
 
-	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
-		if ( err ) {
-			res.send({
+	if ( !req.body.TGL_MOBILE_SYNC || !req.body.TABEL_UPDATE ) {
+		return res.send({
+			status: false,
+			message: 'Invalid input',
+			data: {}
+		});
+	}
+
+	var auth = req.auth;
+	const set = new mobileSyncModel({
+		TGL_MOBILE_SYNC: date.convert( req.body.TGL_MOBILE_SYNC, 'YYYYMMDDhhmmss' ),
+		TABEL_UPDATE: req.body.TABEL_UPDATE || "",
+		IMEI: auth.IMEI,
+		INSERT_USER: auth.USER_AUTH_CODE,
+		INSERT_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
+	});
+
+	set.save()
+	.then( data => {
+		if ( !data ) {
+			return res.send( {
 				status: false,
-				message: "Invalid Token",
+				message: 'Data error',
 				data: {}
 			} );
 		}
-		else {
-			if ( !req.body.TGL_MOBILE_SYNC || !req.body.TABEL_UPDATE ) {
-				return res.send({
-					status: false,
-					message: 'Invalid input',
-					data: {}
-				});
-			}
-			
-			var auth = jwtDecode( req.token );
-			const set = new mobileSyncModel({
-				TGL_MOBILE_SYNC: date.convert( req.body.TGL_MOBILE_SYNC, 'YYYYMMDDhhmmss' ),
-				TABEL_UPDATE: req.body.TABEL_UPDATE || "",
-				IMEI: auth.IMEI,
-				INSERT_USER: auth.USER_AUTH_CODE,
-				INSERT_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
-			});
 
-			set.save()
-			.then( data => {
-				if ( !data ) {
-					return res.send( {
-						status: false,
-						message: 'Data error',
-						data: {}
-					} );
-				}
-
-				res.send({
-					status: true,
-					message: 'Success',
-					data: {}
-				});
-			} ).catch( err => {
-				if( err.kind === 'ObjectId' ) {
-					return res.send( {
-						status: false,
-						message: 'ObjectId error',
-						data: {}
-					} );
-				}
-				return res.send( {
-					status: false,
-					message: 'Error retrieving data',
-					data: {}
-				} );
+		res.send({
+			status: true,
+			message: 'Success',
+			data: {}
+		});
+	} ).catch( err => {
+		if( err.kind === 'ObjectId' ) {
+			return res.send( {
+				status: false,
+				message: 'ObjectId error',
+				data: {}
 			} );
 		}
+		return res.send( {
+			status: false,
+			message: 'Error retrieving data',
+			data: {}
+		} );
 	} );
 };
 
@@ -303,40 +283,79 @@ exports.create = ( req, res ) => {
 
 			client.get( url_final, args, function ( data, response ) {
 
-				res.json({
-					data: data
-				});
-				/*
-				var results = [];
-				var data_response = data.data;
-				data_response.forEach( function( result ) {
-					results.push( result );
-					console.log(result);
-				} );
-
-				var finding_images = new Client();
-				var finding_images_url = config.url.microservices.images + '/sync-mobile/images';
-				var finding_images_args = {
-					data: {
-						"TR_CODE": results
-					},
-					headers: { 
-						"Content-Type": "application/json", 
-						"Authorization": req.headers.authorization
-					}
-				};
-
-				finding_images.post( finding_images_url, finding_images_args, function( data, response ) {
-					res.json( {
-						"status": data.status,
-						"message": data.message,
+				if ( data.data.length == 0 ) {
+					res.json({
+						"status": true,
+						"message": 'Tidak ada data',
 						"data": {
 							hapus: [],
-							simpan: data.data,
+							simpan: [],
 							ubah: []
 						}
+					});
+				}
+				else {
+					var results = [];
+					var data_response = data.data;
+					data_response.forEach( function( result ) {
+						results.push( result );
+						console.log(result);
 					} );
-				} );*/
+
+					var finding_images = new Client();
+					var finding_images_url = config.url.microservices.images + '/sync-mobile/images';
+					var finding_images_args = {
+						data: {
+							"TR_CODE": results
+						},
+						headers: { 
+							"Content-Type": "application/json", 
+							"Authorization": req.headers.authorization
+						},
+						requestConfig: {
+							timeout: 500, //request timeout in milliseconds
+							noDelay: true, //Enable/disable the Nagle algorithm
+							keepAlive: true, //Enable/disable keep-alive functionalityidle socket
+						},
+						responseConfig: {
+							timeout: 500
+						}
+					};
+
+					finding_images.post( finding_images_url, finding_images_args, function( data, response ) {
+						res.json( {
+							"status": data.status,
+							"message": data.message,
+							"data": {
+								hapus: [],
+								simpan: data.data,
+								ubah: []
+							}
+						} );
+					} )
+					.on( 'requestTimeout', function ( req ) {
+						//req.abort();
+						res.send( {
+							status: false,
+							message: 'Request Timeout',
+							data: {}
+						} );
+					} )
+					.on( 'responseTimeout', function ( res ) {
+						res.send( {
+							status: false,
+							message: 'Response Timeout',
+							data: {}
+						} );
+					} )
+					.on( 'error', function ( err ) {
+						res.send( {
+							status: false,
+							message: 'Error Login!',
+							data: {}
+						} );
+					} );
+				}
 
 			});
 			
@@ -760,7 +779,7 @@ exports.create = ( req, res ) => {
 				var target_ms = 'comp';
 				var url = config.url.microservices.hectare_statement + '/sync-mobile/' + target_ms + '/';
 				var url_final = url + start_date + '/' + end_date;
-
+				console.log( url_final );
 				client.get( url_final, args, function ( data, response ) {
 					res.json( {
 						status: data.status,
