@@ -52,7 +52,8 @@
 
 			var results = [];
 			query.forEach( function( result ) {
-				var pth = _directory_base + '/' + result.ICON;
+				/*var pth = _directory_base + '/' + result.ICON;
+				
 				if ( fServer.existsSync( pth ) ) {
 
 					var bitmap = fServer.readFileSync( pth );
@@ -70,8 +71,14 @@
 						ICON: result.ICON,
 						SOURCE_IMAGE: ''
 					} );
-				}
-				
+				}*/
+				var path = 'files/images/category/' + result.ICON;
+				results.push( {
+					CATEGORY_CODE: result.CATEGORY_CODE,
+					CATEGORY_NAME: result.CATEGORY_NAME,
+					ICON: result.ICON,
+					ICON_URL: req.protocol + '://' + req.get('host') + '/' + path
+				} );
 			} );
 
 			if ( results.length > 0 ) {

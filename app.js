@@ -54,6 +54,8 @@ mongoose.connect( dbConfig.url, {
 // Parse request of content-type - application/x-www-form-urlencoded
 app.use( bodyParser.urlencoded( { extended: false } ) );
 
+app.use( '/files', express.static( 'public' ) );
+
 // Parse request of content-type - application/json
 app.use( bodyParser.json() );
 
@@ -62,7 +64,6 @@ app.use( expressUpload() );
 
 // Server Running Message
 app.listen( config.app_port, () => {
-	var host = 'http://localhost:3001';
 	var port = config.app_port;
 	console.log( config.app_name + ' running on ' + config.app_port )
 } );

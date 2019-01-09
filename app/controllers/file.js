@@ -16,17 +16,7 @@ exports.findImage = ( req, res ) => {
 
 	if ( fServer.existsSync( path ) ) {
 		console.log( path );
-		res.writeHead(200, {'Content-Type': 'image/png'});
-		//res.write('<html><body><img src="data:image/jpeg;base64,')
-		res.write( Buffer.from( path ).toString( 'base64' ) );
-		//res.end('"/></body></html>');
-		
-		
-		/*res.json( {
-			message: 'OK',
-			source_type: source_type,
-			filename: fServer.readFile( path )
-		} );*/
+		console.log(req.originalUrl)
 	}
 	else {
 		res.format( {
@@ -34,6 +24,7 @@ exports.findImage = ( req, res ) => {
 				res.send( 'File not found' );
 			},
 		} );
+		console.log( req.protocol + '://' + req.get('host') + '/files/images/category/ic_pokok-abnormal.png' )
 	}
 	
 }
