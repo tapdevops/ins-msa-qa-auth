@@ -63,6 +63,14 @@
 						SOURCE_IMAGE: 'data:image/png;base64,' + new Buffer( bitmap ).toString( 'base64' )
 					} );
 				}
+				else {
+					results.push( {
+						CATEGORY_CODE: result.CATEGORY_CODE,
+						CATEGORY_NAME: result.CATEGORY_NAME,
+						ICON: result.ICON,
+						SOURCE_IMAGE: ''
+					} );
+				}
 				
 			} );
 
@@ -77,7 +85,7 @@
 				res.send( {
 					status: true,
 					message: config.error_message.find_404 + ' 2',
-					data: data
+					data: {}
 				} );
 			}
 		}
@@ -85,7 +93,7 @@
 			res.send( {
 				status: true,
 				message: config.error_message.find_404,
-				data: data
+				data: {}
 			} );
 		}
 	};
