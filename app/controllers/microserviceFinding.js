@@ -15,7 +15,7 @@ exports.find = async ( req, res ) => {
 		}
 		else {
 			var client = new Client();
-			var url = config.url.microservices.finding;
+			var url = config.url.microservices.finding + '/finding';
 
 			if ( url_query_length > 0 ) {
 				url = url + req._parsedUrl.search;
@@ -47,7 +47,7 @@ exports.findByTokenAuthCode = async ( req, res ) => {
 		}
 		else {
 			var client = new Client();
-			var url = config.url.microservices.finding_history;
+			var url = config.url.microservices.finding + '/finding-history';
 
 			if ( url_query_length > 0 ) {
 				url = url + req._parsedUrl.search;
@@ -76,7 +76,7 @@ exports.create = async ( req, res ) => {
 		}
 		else {
 			var client = new Client();
-			var url = config.url.microservices.finding;
+			var url = config.url.microservices.finding + '/finding';
 			var args = {
 				data: req.body,
 				headers: { 
@@ -100,7 +100,7 @@ exports.findOne = async ( req, res ) => {
 		}
 		else {
 			var client = new Client();
-			var url = config.url.microservices.finding + '/' + req.params.id;
+			var url = config.url.microservices.finding + '/finding/' + req.params.id;
 			var args = {
 				headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
 			};
@@ -120,7 +120,7 @@ exports.update = async ( req, res ) => {
 		}
 		else {
 			var client = new Client();
-			var url = config.url.microservices.finding + '/' + req.params.id;
+			var url = config.url.microservices.finding + '/finding/' + req.params.id;
 			var args = {
 				data: req.body,
 				headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
@@ -141,7 +141,7 @@ exports.delete = async ( req, res ) => {
 		}
 		else {
 			var client = new Client();
-			var url = config.url.microservices.finding + '/' + req.params.id;
+			var url = config.url.microservices.finding + '/finding/' + req.params.id;
 			var args = {
 				headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
 			};
