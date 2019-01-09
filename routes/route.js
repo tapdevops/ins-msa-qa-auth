@@ -29,7 +29,6 @@ module.exports = ( app ) => {
 	const masterUser = require( '../app/controllers/masterUser.js' );
 	const mobileSync = require( '../app/controllers/mobileSync.js' );
 	const kriteria = require( '../app/controllers/kriteria.js' );
-	const file = require( '../app/controllers/file.js' );
 
 	// Routing: Auth
 	//app.post( '/api/login', auth.login );
@@ -153,9 +152,6 @@ module.exports = ( app ) => {
 	// ROUTE - KRITERIA
 	app.post( '/api/kriteria', token_verify, kriteria.create );
 	app.get( '/api/kriteria', token_verify, kriteria.find );
-
-	// ROUTE - KRITERIA
-	app.get( '/api/file/image/:source_type/:filename', token_verify, file.findImage );
 
 	const test = require( '../app/controllers/test.js' );
 	app.get( '/test', test.test );

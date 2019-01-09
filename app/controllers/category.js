@@ -77,7 +77,7 @@
 					CATEGORY_CODE: result.CATEGORY_CODE,
 					CATEGORY_NAME: result.CATEGORY_NAME,
 					ICON: result.ICON,
-					ICON_URL: req.protocol + '://' + req.get('host') + '/' + path
+					ICON_URL: req.protocol + '://' + req.get( 'host' ) + '/' + path
 				} );
 			} );
 
