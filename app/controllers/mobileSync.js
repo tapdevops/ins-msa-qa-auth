@@ -258,7 +258,15 @@ exports.create = ( req, res ) => {
 			// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
 			var client = new Client();
 			var args = {
-				headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
+				headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization },
+				requestConfig: {
+					timeout: 3000, //request timeout in milliseconds
+					noDelay: true, //Enable/disable the Nagle algorithm
+					keepAlive: true, //Enable/disable keep-alive functionalityidle socket
+				},
+				responseConfig: {
+					timeout: 3000
+				}
 			};
 			var parent_ms = 'finding';
 			var target_ms = '';
@@ -268,16 +276,66 @@ exports.create = ( req, res ) => {
 			console.log(url_final);
 
 			client.get( url_final, args, function ( data, response ) {
+				
 
-				console.log ( data.data );
+				if ( data.data.length > 0 ) {
+					var trcode = [];
+					for ( i = 0; i <= ( data.data.length - 1 ); i++ ) {
+						trcode.push( String( data.data[i] ) );
+					}
+
+
+					var finding_images = new Client();
+					var finding_images_url = config.url.microservices.images + '/sync-mobile/images';
+					var finding_images_args = {
+						data: {
+							"TR_CODE": trcode
+						},
+						headers: { 
+							"Content-Type": "application/json", 
+							"Authorization": req.headers.authorization
+						},
+						requestConfig: {
+							timeout: 500, //request timeout in milliseconds
+							noDelay: true, //Enable/disable the Nagle algorithm
+							keepAlive: true, //Enable/disable keep-alive functionalityidle socket
+						},
+						responseConfig: {
+							timeout: 500
+						}
+					};
+					console.log( finding_images_args );
+					finding_images.post( finding_images_url, finding_images_args, function( data, response ) {
+						res.json( {
+							"status": data.status,
+							"message": data.message,
+							"data": {
+								hapus: [],
+								simpan: data.data,
+								ubah: []
+							}
+						} );
+					} );
+				}
+				else {
+					res.json({
+						"status": true,
+						"message": 'Tidak ada data',
+						"data": {
+							hapus: [],
+							simpan: [],
+							ubah: []
+						}
+					});
+				}
 				//res.json({
 				//	data: data.data
 				//})
-
+				var dt = data.data;
 				var results = [];
-				data.data.foreach( function( result ) {
-					console.log( result );
-				} );
+				//dt.foreach( function( result ) {
+				//	console.log( result );
+				//} );
 				/*
 				if ( data.data.length == 0 ) {
 					res.json({
@@ -359,7 +417,14 @@ exports.create = ( req, res ) => {
 					*/
 				//}
 
-			});
+			})
+			.on( 'error', function ( err ) {
+				res.send( {
+					status: false,
+					message: 'Error Login!',
+					data: {}
+				} );
+			} );
 			
 		} ).catch( err => {
 			if( err.kind === 'ObjectId' ) {
