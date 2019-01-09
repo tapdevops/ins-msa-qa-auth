@@ -53,6 +53,7 @@ module.exports = {
 	|--------------------------------------------------------------------------
 	*/
 	error_message: {
+		
 		invalid_token: 'Token expired! ',
 		create_200: 'Success! ',
 		create_403: 'Forbidden ',

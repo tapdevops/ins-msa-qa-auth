@@ -28,7 +28,6 @@ global._directory_base = __dirname;
 global._directory_root = '';
 
 // Generate Documentation
-/*
 require( 'express-aglio' )(app,{
 	source: __dirname+ '/docs/source/index.md',
 	output: __dirname+ '/docs/html/index.html',
@@ -38,7 +37,7 @@ require( 'express-aglio' )(app,{
 		themeVariables: 'streak'
 	}
 });
-*/
+
 // Setup Database
 mongoose.Promise = global.Promise;
 
