@@ -230,7 +230,7 @@ exports.create = ( req, res ) => {
 		
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			//IMEI: auth.IMEI,
+			IMEI: auth.IMEI,
 			TABEL_UPDATE: 'finding'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -269,10 +269,15 @@ exports.create = ( req, res ) => {
 
 			client.get( url_final, args, function ( data, response ) {
 
-				console.log ( data );
-				res.json({
-					data: data
-				})
+				console.log ( data.data );
+				//res.json({
+				//	data: data.data
+				//})
+
+				var results = [];
+				data.data.foreach( function( result ) {
+					console.log( result );
+				} );
 				/*
 				if ( data.data.length == 0 ) {
 					res.json({

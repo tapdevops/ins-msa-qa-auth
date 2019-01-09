@@ -52,7 +52,7 @@
 
 			var results = [];
 			query.forEach( function( result ) {
-				var pth = _directory_base + '/' +result.ICON;
+				var pth = _directory_base + '/' + result.ICON;
 				if ( fServer.existsSync( pth ) ) {
 
 					var bitmap = fServer.readFileSync( pth );
@@ -95,7 +95,6 @@
  * Untuk membuat dan menyimpan data kriteria baru
  * --------------------------------------------------------------------------
  */
-
 	exports.create = ( req, res ) => {
 		
 		var auth = req.auth;
