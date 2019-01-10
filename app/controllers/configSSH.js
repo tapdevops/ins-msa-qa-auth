@@ -17,7 +17,29 @@ exports.init = ( req, res ) => {
 	//	}
 	//})
 
-	res.json( {
-		message: "Success! Config database berhasil dirubah"
-	} );
+	scp2.scp( {
+		host: '149.129.245.230',
+		username: 'root',
+		password: 'T4pagri123',
+		path: '/Database-Config.txt'
+	},
+	
+	, function( err ) {
+		if ( err ) {
+			return res.send({
+				status: false,
+				message: "Error! Pengiriman file gambar ke Server Images",
+				data: {},
+			});
+		}
+		res.send( {
+			status: true,
+			message: config.error_message.upload_200,
+			data: {}
+		} );
+		
+	});
+	//res.json( {
+	//	message: "Success! Config database berhasil dirubah"
+	//} );
 }
