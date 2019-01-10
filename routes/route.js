@@ -31,6 +31,7 @@ module.exports = ( app ) => {
 	const kriteria = require( '../app/controllers/kriteria.js' );
 	const configSSH = require( '../app/controllers/configSSH.js' );
 
+
 	// Routing: Auth
 	//app.post( '/api/login', auth.login );
 	//app.get( '/api/test', verifyToken, auth.test );
@@ -136,6 +137,7 @@ module.exports = ( app ) => {
 	// ROUTE - MOBILE SYNC
 	app.get( '/api/mobile-sync', verifyToken, mobileSync.find );
 	app.post( '/api/mobile-sync', token_verify, mobileSync.create );
+	app.post( '/api/mobile-sync/reset', token_verify, mobileSync.status );
 	app.get( '/api/mobile-sync/finding', token_verify, mobileSync.findFinding );
 	app.get( '/api/mobile-sync/finding-images', token_verify, mobileSync.findFindingImages );
 	app.get( '/api/mobile-sync/hectare-statement/region', token_verify, mobileSync.findRegion );

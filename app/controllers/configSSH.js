@@ -18,6 +18,6 @@ exports.init = ( req, res ) => {
 	//})
 
 	res.json( {
-		message: "Success! Config database berhasil dirubah.s"
+		message: "Success! Config database berhasil dirubah"
 	} );
 }

@@ -1,4 +1,6 @@
 const mobileSyncModel = require( '../models/mobileSync.js' );
+const mobileSyncLogModel = require( '../models/mobileSyncLog.js' );
+
 const kriteriaModel = require( '../models/kriteria.js' );
 
 const querystring = require('querystring');
@@ -198,11 +200,37 @@ exports.create = ( req, res ) => {
 			} );
 		}
 
-		res.send({
-			status: true,
-			message: 'Success',
-			data: {}
+		const set_log = new mobileSyncLogModel({
+			TGL_MOBILE_SYNC: date.convert( req.body.TGL_MOBILE_SYNC, 'YYYYMMDDhhmmss' ),
+			TABEL_UPDATE: req.body.TABEL_UPDATE || "",
+			IMEI: auth.IMEI,
+			INSERT_USER: auth.USER_AUTH_CODE,
+			INSERT_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
 		});
+
+		set_log.save()
+		.then( data_log => {
+			res.send({
+				status: true,
+				message: 'Success',
+				data: {}
+			});
+		} )
+		.catch( err => {
+			if( err.kind === 'ObjectId' ) {
+				return res.send( {
+					status: false,
+					message: 'ObjectId error',
+					data: {}
+				} );
+			}
+			return res.send( {
+				status: false,
+				message: 'Error retrieving data',
+				data: {}
+			} );
+		} );
+		
 	} ).catch( err => {
 		if( err.kind === 'ObjectId' ) {
 			return res.send( {
@@ -217,6 +245,57 @@ exports.create = ( req, res ) => {
 			data: {}
 		} );
 	} );
+};
+
+// Status
+exports.status = ( req, res ) => {
+	if ( !req.body ) {
+		return res.send({
+			status: false,
+			message: 'Invalid inputz',
+			data: {}
+		});
+	}
+
+	var auth = req.auth;
+	if ( req.body.RESET_SYNC == 1 ) {
+		mobileSyncModel.findOneAndRemove( { USER_AUTH_CODE : auth.USER_AUTH_CODE } )
+		.then( data => {
+			if( !data ) {
+				return res.status( 404 ).send( {
+					status: false,
+					message: "Data not found 2 with id " + req.params.id,
+					data: {}
+				} );
+			}
+			res.send( {
+				status: true,
+				message: 'Success! Sync berhasil direset',
+				data: {}
+			} );
+		}).catch( err => {
+			if( err.kind === 'ObjectId' || err.name === 'NotFound' ) {
+				return res.status(404).send({
+					status: false,
+					message: "Data not found 1 with id " + req.params.id,
+					data: {}
+				} );
+			}
+			return res.status( 500 ).send( {
+				status: false,
+				message: "Could not delete data with id " + req.params.id,
+				data: {}
+			} );
+		} );
+	}
+	else if ( req.body.RESET_SYNC == 0 ) {
+		res.send( {
+			status: true,
+			message: 'Success! Sync tidak direset',
+			data: {}
+		} );
+	}
+
 };
 
 /*
