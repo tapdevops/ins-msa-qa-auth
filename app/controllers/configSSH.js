@@ -16,14 +16,14 @@ exports.init = ( req, res ) => {
 	//		console.log( err )
 	//	}
 	//})
-
+	/*
 	scp2.scp( {
 		host: '149.129.245.230',
 		username: 'root',
 		password: 'T4pagri123',
 		path: '/Database-Config.txt'
 	},
-	
+
 	, function( err ) {
 		if ( err ) {
 			return res.send({
@@ -38,8 +38,8 @@ exports.init = ( req, res ) => {
 			data: {}
 		} );
 		
-	});
-	//res.json( {
-	//	message: "Success! Config database berhasil dirubah"
-	//} );
+	});*/
+	res.json( {
+		message: "Success! Config database berhasil dirubah"
+	} );
 }
