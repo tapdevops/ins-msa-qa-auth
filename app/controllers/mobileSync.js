@@ -249,6 +249,7 @@ exports.create = ( req, res ) => {
 
 // Status
 exports.status = ( req, res ) => {
+
 	if ( !req.body ) {
 		return res.send({
 			status: false,
@@ -259,7 +260,7 @@ exports.status = ( req, res ) => {
 
 	var auth = req.auth;
 	if ( req.body.RESET_SYNC == 1 ) {
-		mobileSyncModel.findOneAndRemove( { USER_AUTH_CODE : auth.USER_AUTH_CODE } )
+		mobileSyncModel.deleteMany( { INSERT_USER : auth.USER_AUTH_CODE } )
 		.then( data => {
 			if( !data ) {
 				return res.status( 404 ).send( {
