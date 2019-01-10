@@ -16,15 +16,13 @@ exports.init = ( req, res ) => {
 	//		console.log( err )
 	//	}
 	//})
-	/*
+	
 	scp2.scp( {
 		host: '149.129.245.230',
 		username: 'root',
 		password: 'T4pagri123',
-		path: '/Database-Config.txt'
-	},
-
-	, function( err ) {
+		path: '/database-config.json'
+	}, './', function( err ) {
 		if ( err ) {
 			return res.send({
 				status: false,
@@ -34,12 +32,12 @@ exports.init = ( req, res ) => {
 		}
 		res.send( {
 			status: true,
-			message: config.error_message.upload_200,
+			message: 'Sukses',
 			data: {}
 		} );
 		
-	});*/
-	res.json( {
-		message: "Success! Config database berhasil dirubah"
-	} );
+	});
+	//res.json( {
+	//	message: "Success! Config database berhasil dirubah"
+	//} );
 }
