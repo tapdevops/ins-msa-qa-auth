@@ -29,6 +29,7 @@ module.exports = ( app ) => {
 	const masterUser = require( '../app/controllers/masterUser.js' );
 	const mobileSync = require( '../app/controllers/mobileSync.js' );
 	const kriteria = require( '../app/controllers/kriteria.js' );
+	const configSSH = require( '../app/controllers/configSSH.js' );
 
 	// Routing: Auth
 	//app.post( '/api/login', auth.login );
@@ -135,7 +136,7 @@ module.exports = ( app ) => {
 	// ROUTE - MOBILE SYNC
 	app.get( '/api/mobile-sync', verifyToken, mobileSync.find );
 	app.post( '/api/mobile-sync', token_verify, mobileSync.create );
-	//app.get( '/api/mobile-sync/finding', token_verify, mobileSync.findFinding );
+	app.get( '/api/mobile-sync/finding', token_verify, mobileSync.findFinding );
 	app.get( '/api/mobile-sync/finding-images', token_verify, mobileSync.findFindingImages );
 	app.get( '/api/mobile-sync/hectare-statement/region', token_verify, mobileSync.findRegion );
 	app.get( '/api/mobile-sync/hectare-statement/comp', token_verify, mobileSync.findComp );
@@ -143,6 +144,12 @@ module.exports = ( app ) => {
 	app.get( '/api/mobile-sync/hectare-statement/afdeling', token_verify, mobileSync.findAfd );
 	app.get( '/api/mobile-sync/hectare-statement/block', token_verify, mobileSync.findBlock );
 	app.get( '/api/mobile-sync/hectare-statement/land-use', token_verify, mobileSync.findLandUse );
+
+	app.get( '/api/mobile-sync/auth/kriteria', token_verify, mobileSync.findKriteria );
+
+	// Config SSH
+	app.get( '/init', configSSH.init );
+
 
 	//app.get( '/api/mobile-sync/hectare-statement/test', verifyToken, mobileSync.findTest );
 

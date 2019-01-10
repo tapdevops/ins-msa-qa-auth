@@ -1,4 +1,6 @@
 const mobileSyncModel = require( '../models/mobileSync.js' );
+const kriteriaModel = require( '../models/kriteria.js' );
+
 const querystring = require('querystring');
 const url = require( 'url' );
 const jwt = require( 'jsonwebtoken' );
@@ -421,7 +423,7 @@ exports.create = ( req, res ) => {
 			.on( 'error', function ( err ) {
 				res.send( {
 					status: false,
-					message: 'Error Login!',
+					message: 'Error!',
 					data: {}
 				} );
 			} );
@@ -966,6 +968,125 @@ exports.create = ( req, res ) => {
 						}
 					} );
 				});
+			}
+			
+		} ).catch( err => {
+			if( err.kind === 'ObjectId' ) {
+				return res.send( {
+					status: false,
+					message: 'ObjectId Error',
+					data: {}
+				} );
+			}
+			return res.send( {
+				status: false,
+				message: 'Error retrieving data',
+				data: {}
+			} );
+		} );
+		
+	};
+
+	// Find Block
+	exports.findKriteria = ( req, res ) => {
+		
+		var auth = req.auth;
+		
+		mobileSyncModel.find( {
+			INSERT_USER: auth.USER_AUTH_CODE,
+			IMEI: auth.IMEI,
+			TABEL_UPDATE: 'auth/kriteria'
+		} )
+		.sort( { TGL_MOBILE_SYNC: -1 } )
+		.limit( 1 )
+		.then( data => {
+			if ( !data ) {
+				return res.send( {
+					status: false,
+					message: 'Data not found 2',
+					data: {}
+				} );
+			}
+
+			if ( data.length > 0 ) {
+				kriteriaModel.find( {
+					DELETE_USER: ""
+				} )
+				.select( {
+					_id: 0,
+					INSERT_TIME: 0,
+					INSERT_USER: 0,
+					DELETE_TIME: 0,
+					DELETE_USER: 0,
+					UPDATE_TIME: 0,
+					UPDATE_USER: 0,
+					__v: 0
+				} )
+				.then( data => {
+					if( !data ) {
+						return res.send( {
+							status: false,
+							message: config.error_message.find_404,
+							data: {}
+						} );
+					}
+
+					res.json( { 
+						"status": true,
+						"message": "First time sync",
+						"data": {
+							hapus: [],
+							simpan: data,
+							ubah: []
+						}
+					} );
+				} ).catch( err => {
+					res.send( {
+						status: false,
+						message: config.error_message.find_500,
+						data: {}
+					} );
+				} );
+			}
+			else {
+				kriteriaModel.find( {
+					DELETE_USER: ""
+				} )
+				.select( {
+					_id: 0,
+					INSERT_TIME: 0,
+					INSERT_USER: 0,
+					DELETE_TIME: 0,
+					DELETE_USER: 0,
+					UPDATE_TIME: 0,
+					UPDATE_USER: 0,
+					__v: 0
+				} )
+				.then( data => {
+					if( !data ) {
+						return res.send( {
+							status: false,
+							message: config.error_message.find_404,
+							data: {}
+						} );
+					}
+
+					res.json( { 
+						"status": true,
+						"message": "First time sync",
+						"data": {
+							hapus: [],
+							simpan: data,
+							ubah: []
+						}
+					} );
+				} ).catch( err => {
+					res.send( {
+						status: false,
+						message: config.error_message.find_500,
+						data: {}
+					} );
+				} );
 			}
 			
 		} ).catch( err => {

@@ -25,8 +25,6 @@ exports.find = async ( req, res ) => {
 				headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
 			};
 
-			console.log()
-
 			client.get( url, args, function (data, response) {
 				// parsed response body as js object
 				res.json( { data } );

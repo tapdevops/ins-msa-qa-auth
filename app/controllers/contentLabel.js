@@ -1,11 +1,11 @@
 /*
- |--------------------------------------------------------------------------
- | App Setup
- |--------------------------------------------------------------------------
- |
- | Untuk menghandle models, libraries, helper, node modules, dan lain-lain
- |
- */
+|--------------------------------------------------------------------------
+| App Setup
+|--------------------------------------------------------------------------
+|
+| Untuk menghandle models, libraries, helper, node modules, dan lain-lain
+|
+*/
  	// Models
 	const contentLabelModel = require( '../models/contentLabel.js' );
 
