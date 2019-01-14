@@ -38,6 +38,7 @@
 		connection.database = data.database;
 		connection.auth_source = data.auth_source;
 		connection.ssl = data.ssl;
+		
 	}
 
 /*
