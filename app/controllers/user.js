@@ -8,6 +8,7 @@
  */
  	// Models
 	const userAuthModel = require( '../models/userAuth.js' );
+	const viewUserAuthModel = require( '../models/viewUserAuth.js' );
 	const employeeHRISModel = require( '../models/employeeHRIS.js' );
 	const employeeSAPModel = require( '../models/employeeSAP.js' );
 	const pjsModel = require( '../models/pjs.js' );
@@ -29,8 +30,8 @@
 	const date = require( '../libraries/date.js' );
 
 /**
- * Find
- * Untuk menampilkan data kriteria
+ * Create
+ * Untuk membuat data user
  * --------------------------------------------------------------------------
  */
 exports.create = async ( req, res ) => {
@@ -88,7 +89,10 @@ exports.create = async ( req, res ) => {
 				DELETE_TIME: 0
 			}
 
-
+			res.send({
+				data_user_auth: data_user_auth
+			})
+			/*
 			const set_data = new userAuthModel( data_user_auth );
 
 			set_data.save()
@@ -112,7 +116,8 @@ exports.create = async ( req, res ) => {
 					message: config.error_message.create_500,
 					data: {}
 				} );
-			} );
+			} );*/
+
 		}
 		// Create PJS
 		else {
@@ -145,8 +150,15 @@ exports.create = async ( req, res ) => {
 				UPDATE_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
 				DELETE_USER: "",
 				DELETE_TIME: 0
-			}
+			}/*
+			const set_pjs = new pjsModel( data_pjs );
+			set_pjs.save();
 
+			res.send({
+				data_user_auth: data_user_auth,
+				data_pjs: data_pjs
+			})*/
+			
 			const set_pjs = new pjsModel( data_pjs );
 			const set_data = new userAuthModel( data_user_auth );
 
@@ -191,45 +203,64 @@ exports.create = async ( req, res ) => {
 					data: {}
 				} );
 			} );
+
 		}
 	}
 
-	/*
-	const set_data = new userAuthModel( {
-		USER_AUTH_CODE: req.body.USER_AUTH_CODE + "_" + req.body.EMPLOYEE_NIK || "",
-		EMPLOYEE_NIK: req.body.EMPLOYEE_NIK || "",
-		USER_ROLE: req.body.USER_ROLE || "",
-		REF_ROLE: req.body.USER_ROLE || "",
-		LOCATION_CODE: req.body.LOCATION_CODE || "",
+};
 
-		INSERT_USER: auth.USER_AUTH_CODE,
-		INSERT_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
-		UPDATE_USER: auth.USER_AUTH_CODE,
-		UPDATE_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
-		DELETE_USER: "",
-		DELETE_TIME: 0
-	} );
+/**
+ * Find
+ * Untuk menampilkan data user
+ * --------------------------------------------------------------------------
+ */
+exports.find = ( req, res ) => {
 
-	set_data.save()
+	url_query = req.query;
+	var url_query_length = Object.keys( url_query ).length;
+
+	viewUserAuthModel.find( url_query )
 	.then( data => {
-		if ( !data ) {
+		if( !data ) {
 			return res.send( {
 				status: false,
-				message: config.error_message.create_404,
+				message: config.error_message.find_404,
 				data: {}
 			} );
 		}
-		
+
+		var results = [];
+		data.forEach( function( result ) {
+			var result = Object.keys(result).map(function(k) {
+				return [+k, result[k]];
+			});
+			result = result[3][1];
+
+			var JOB = ( !result.PJS_JOB ) ? result.HRIS_JOB : result.PJS_JOB;
+			var FULLNAME = ( !result.PJS_FULLNAME ) ? result.HRIS_FULLNAME : result.PJS_FULLNAME
+			if ( JOB != '' && FULLNAME != '' ) {
+				results.push( {
+					USER_AUTH_CODE: result.USER_AUTH_CODE,
+					EMPLOYEE_NIK: result.EMPLOYEE_NIK,
+					USER_ROLE: result.USER_ROLE,
+					LOCATION_CODE: result.LOCATION_CODE,
+					REF_ROLE: result.REF_ROLE,
+					JOB: JOB,
+					FULLNAME: FULLNAME
+				} );
+			}
+		} );
+
 		res.send( {
 			status: true,
-			message: config.error_message.create_200,
-			data: {}
+			message: config.error_message.find_200,
+			data: results
 		} );
 	} ).catch( err => {
 		res.send( {
 			status: false,
-			message: config.error_message.create_500,
+			message: config.error_message.find_500,
 			data: {}
 		} );
-	} );*/
+	} );
 };

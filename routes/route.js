@@ -27,12 +27,10 @@ module.exports = ( app ) => {
 	const contacts = require( '../app/controllers/contacts.js' );
 	const category = require( '../app/controllers/category.js' );
 	const login = require( '../app/controllers/login.js' );
-	const masterUser = require( '../app/controllers/masterUser.js' );
 	const mobileSync = require( '../app/controllers/mobileSync.js' );
 	const kriteria = require( '../app/controllers/kriteria.js' );
 	const configSSH = require( '../app/controllers/configSSH.js' );
 	const user = require( '../app/controllers/user.js' );
-	
 
 
 	// Routing: Auth
@@ -160,13 +158,11 @@ module.exports = ( app ) => {
 	app.get( '/init', configSSH.init );
 
 	// User
+	app.get( '/api/user', token_verify, user.find );
 	app.post( '/api/user', token_verify, user.create );
 
 
 	//app.get( '/api/mobile-sync/hectare-statement/test', verifyToken, mobileSync.findTest );
-
-	// ROUTE - MASTER USER
-	app.get( '/api/master-user', verifyToken, masterUser.find );
 
 	// ROUTE - KRITERIA
 	app.post( '/api/kriteria', token_verify, kriteria.create );
