@@ -23,6 +23,7 @@ module.exports = ( app ) => {
 	const contentLabel = require( '../app/controllers/contentLabel.js' );
 	const parameter = require( '../app/controllers/parameter.js' );
 	const userAuthorization = require( '../app/controllers/userAuthorization.js' );
+	const userSearch = require( '../app/controllers/userSearch.js' );
 	const contacts = require( '../app/controllers/contacts.js' );
 	const category = require( '../app/controllers/category.js' );
 	const login = require( '../app/controllers/login.js' );
@@ -30,6 +31,8 @@ module.exports = ( app ) => {
 	const mobileSync = require( '../app/controllers/mobileSync.js' );
 	const kriteria = require( '../app/controllers/kriteria.js' );
 	const configSSH = require( '../app/controllers/configSSH.js' );
+	const user = require( '../app/controllers/user.js' );
+	
 
 
 	// Routing: Auth
@@ -130,6 +133,10 @@ module.exports = ( app ) => {
 	app.post( '/api/user-authorization', verifyToken, userAuthorization.createOrUpdate );
 	app.get( '/api/user-authorization', verifyToken, userAuthorization.find );
 
+	// ROUTE - USER AUTHORIZATION
+	//app.post( '/api/user-search', verifyToken, userSearch.createOrUpdate );
+	app.get( '/api/user-search', verifyToken, userSearch.find );
+
 	// ROUTE - CATEGORY
 	app.post( '/api/category', token_verify, category.create );
 	app.get( '/api/category', verifyToken, category.find );
@@ -151,6 +158,9 @@ module.exports = ( app ) => {
 
 	// Config SSH
 	app.get( '/init', configSSH.init );
+
+	// User
+	app.post( '/api/user', token_verify, user.create );
 
 
 	//app.get( '/api/mobile-sync/hectare-statement/test', verifyToken, mobileSync.findTest );

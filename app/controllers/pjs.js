@@ -30,12 +30,12 @@ exports.create = ( req, res ) => {
 				USERNAME: req.body.USERNAME || "",
 				NAMA_LENGKAP: req.body.NAMA_LENGKAP || "",
 				JOB_CODE: req.body.JOB_CODE || "",
-				INSERT_USER: req.body.INSERT_USER || "",
-				INSERT_TIME: req.body.INSERT_TIME || "",
-				UPDATE_USER: req.body.UPDATE_USER || "",
-				UPDATE_TIME: req.body.UPDATE_TIME || "",
-				DELETE_USER: req.body.DELETE_USER || "",
-				DELETE_TIME: req.body.DELETE_TIME || ""
+				INSERT_USER: auth.USER_AUTH_CODE,
+				INSERT_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
+				UPDATE_USER: auth.USER_AUTH_CODE,
+				UPDATE_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
+				DELETE_USER: "",
+				DELETE_TIME: 0
 			});
 
 			pjs.save()

@@ -48,7 +48,6 @@
 			__v: 0
 		} )
 		.then( data => {
-			console.log(data);
 			if( !data ) {
 				return res.send( {
 					status: false,
