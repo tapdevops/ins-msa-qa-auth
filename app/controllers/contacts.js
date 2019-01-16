@@ -112,17 +112,16 @@
 			}
 
 			/**
-			 * --------------------------------------------------------------------------
-			 * Check Job Code
-			 *
-			 * Note :
-			 * - ASISTEN_LAPANGAN hanya bisa assign ke sesama ASISTEN_LAPANGAN.
-			 * - ASISTEN_KEPALA hanya bisa assign ke ASISTEN_LAPANGAN sesuai USER_ROLE,
-			 *	 tidak bisa ke sesama ASISTEN_LAPANGAN.
-			 * - Selain ASISTEN_LAPANGAN dan ASISTEN_KEPALA, data tidak dimunculkan.
-			 * --------------------------------------------------------------------------
-			 */
-			console.log( auth );
+			* --------------------------------------------------------------------------
+			* Check Job Code
+			*
+			* Note :
+			* - ASISTEN_LAPANGAN hanya bisa assign ke sesama ASISTEN_LAPANGAN.
+			* - ASISTEN_KEPALA hanya bisa assign ke ASISTEN_LAPANGAN sesuai USER_ROLE,
+			*	 tidak bisa ke sesama ASISTEN_LAPANGAN.
+			* - Selain ASISTEN_LAPANGAN dan ASISTEN_KEPALA, data tidak dimunculkan.
+			* --------------------------------------------------------------------------
+			**/
 			if ( auth.USER_ROLE == 'ASISTEN_KEPALA' || auth.USER_ROLE == 'ASISTEN_LAPANGAN' ) {
 			
 				viewUserAuthModel.find( { 
