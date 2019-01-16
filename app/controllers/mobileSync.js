@@ -212,7 +212,7 @@ exports.create = ( req, res ) => {
 		.then( data_log => {
 			res.send({
 				status: true,
-				message: 'Success',
+				message: config.error_message.find_200,
 				data: {}
 			});
 		} )
