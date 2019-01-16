@@ -32,7 +32,119 @@
  * Untuk menampilkan data kriteria
  * --------------------------------------------------------------------------
  */
-	exports.find = ( req, res ) => {
+ 	exports.find = async ( req, res ) => {
+
+		if( !req.query.q || !req.query.type ) {
+			return res.send({
+				status: false,
+				message: 'Invalid parameter',
+				data: {}
+			});
+		}
+
+		var url_query = req.query;
+		var url_query_length = Object.keys( url_query ).length;
+		var q = url_query.q;
+		var type = url_query.type;
+
+		var data_hris = await employeeHRISModel.find( { 
+				EMPLOYEE_USERNAME: {
+					$exists: true
+				},
+				EMPLOYEE_NIK: {
+					$exists: true
+				},
+				$and: [
+					{
+						"EMPLOYEE_NIK": { 
+							$regex: q 
+						}
+					}
+				]
+			//	$or: [ 
+			//		{
+			//			"EMPLOYEE_NIK": { 
+			//				$regex: q 
+			//			}
+			//		}
+			//	]
+				
+			} )
+			.sort( {
+				'EMPLOYEE_NAME': 1
+			} )
+			.select( {
+				_id: 0,
+				EMPLOYEE_NIK: 1,
+				EMPLOYEE_FULLNAME: 1,
+				EMPLOYEE_POSITION: 1
+			} )
+			.limit( 20 );
+
+		var data_sap = await employeeSAPModel.find( { 
+				EMPLOYEE_NAME: {
+					$exists: true
+				},
+				$or: [ 
+					{
+						"EMPLOYEE_NIK": { 
+							$regex: q 
+						}
+					}
+				]
+				
+			} )
+			.sort( {
+				'EMPLOYEE_NAME': 1
+			} )
+			.select( {
+				_id: 0,
+				NIK: 1,
+				EMPLOYEE_NIK: 1,
+				EMPLOYEE_NAME: 1,
+				JOB_CODE: 1,
+			} )
+			.limit( 20 );
+
+		var results = [];
+
+		// Loop Data HRIS
+		if ( data_hris.length > 0 ) {
+			data_hris.forEach( function( result ) {
+				var result = Object.keys( result ).map( function( k ) {
+					return [+k, result[k]];
+				});
+				result = result[3][1];
+				results.push( {
+					NIK: result.EMPLOYEE_NIK,
+					NAMA_LENGKAP: result.EMPLOYEE_FULLNAME,
+					JOB_CODE: result.EMPLOYEE_POSITION
+				} );
+			} );
+		}
+
+		// Loop Data SAP
+		data_sap.forEach( function( result ) {
+			var result = Object.keys(result).map(function(k) {
+				return [+k, result[k]];
+			});
+			result = result[3][1];
+			results.push( {
+				NIK: result.NIK,
+				NAMA_LENGKAP: result.EMPLOYEE_NAME,
+				JOB_CODE: result.JOB_CODE
+			} );
+		} );
+
+		res.json({
+			//data_hris : data_hris,
+			//data_sap : data_sap,
+			results: results
+		})
+
+	};
+
+	exports.find2 = ( req, res ) => {
 
 		if( !req.query.q || !req.query.type ) {
 			return res.send({
@@ -115,33 +227,6 @@
 				} );
 			} );
 		}
-/*
-{
-				$and: [
-					{
-						$or: [
-							{
-								INSERT_TIME: {
-									$gte: start_date,
-									$lte: end_date
-								}
-							},
-							{
-								UPDATE_TIME: {
-									$gte: start_date,
-									$lte: end_date
-								}
-							},
-							{
-								DELETE_TIME: {
-									$gte: start_date,
-									$lte: end_date
-								}
-							}
-						]
-					}
-				]
-			}*/
 		else if ( type == 'HRIS' ) {
 			employeeHRISModel.find( { 
 				EMPLOYEE_USERNAME: {

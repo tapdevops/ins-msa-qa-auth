@@ -122,7 +122,7 @@
 			* - Selain ASISTEN_LAPANGAN dan ASISTEN_KEPALA, data tidak dimunculkan.
 			* --------------------------------------------------------------------------
 			**/
-			if ( auth.USER_ROLE == 'ASISTEN_KEPALA' || auth.USER_ROLE == 'ASISTEN_LAPANGAN' ) {
+			//if ( auth.USER_ROLE == 'ASISTEN_KEPALA' || auth.USER_ROLE == 'ASISTEN_LAPANGAN' ) {
 			
 				viewUserAuthModel.find( { 
 
@@ -198,6 +198,7 @@
 						data: []
 					} );
 				} );
+			/*
 			}
 			else {
 				res.send( {
@@ -206,7 +207,7 @@
 					data: []
 				} );
 			}
-
+			*/
 		}
 		else {
 			res.send( {
