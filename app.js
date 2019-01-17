@@ -50,7 +50,8 @@ mongoose.connect( dbConfig.url, {
 } ).then( () => {
 	console.log( 'Successfully connected to the Database' );
 } ).catch( err => {
-	console.log( 'Could not connect to the Database. Exiting application.' )
+	console.log( '---------------------------------------------- ERROR_START' );
+	console.log( err );
 } );
 
 // Parse request of content-type - application/x-www-form-urlencoded
