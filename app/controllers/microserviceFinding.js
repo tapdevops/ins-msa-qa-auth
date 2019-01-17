@@ -27,7 +27,11 @@ exports.find = async ( req, res ) => {
 
 			client.get( url, args, function (data, response) {
 				// parsed response body as js object
-				res.json( { data } );
+				res.json( { 
+					"status": data.status,
+					"message": data.message,
+					"data": data.data
+				} );
 			});
 		}
 	} );
@@ -59,7 +63,11 @@ exports.findByTokenAuthCode = async ( req, res ) => {
 
 			client.get( url, args, function (data, response) {
 				// parsed response body as js object
-				res.json( { data } );
+				res.json( { 
+					"status": data.status,
+					"message": data.message,
+					"data": data.data
+				} );
 			});
 		}
 	} );
@@ -84,7 +92,11 @@ exports.create = async ( req, res ) => {
 			};
 
 			client.post( url, args, function ( data, response ) {
-				res.json( { data } );
+				res.json( { 
+					"status": data.status,
+					"message": data.message,
+					"data": data.data
+				} );
 			});
 		}
 	} );
@@ -104,7 +116,11 @@ exports.findOne = async ( req, res ) => {
 			};
 
 			client.get( url, args, function (data, response) {
-				res.json( { data } );
+				res.json( { 
+					"status": data.status,
+					"message": data.message,
+					"data": data.data
+				} );
 			});
 		}
 	} );
@@ -125,7 +141,11 @@ exports.update = async ( req, res ) => {
 			};
 
 			client.put( url, args, function ( data, response ) {
-				res.json( { data } );
+				res.json( { 
+					"status": data.status,
+					"message": data.message,
+					"data": data.data
+				} );
 			});
 		}
 	} );
@@ -145,7 +165,11 @@ exports.delete = async ( req, res ) => {
 			};
 
 			client.delete( url, args, function (data, response) {
-				res.json( { data } );
+				res.json( { 
+					"status": data.status,
+					"message": data.message,
+					"data": data.data
+				} );
 			});
 		}
 	} );
