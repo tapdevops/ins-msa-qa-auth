@@ -34,7 +34,7 @@
  */
  	exports.find = async ( req, res ) => {
 
-		if( !req.query.q || !req.query.type ) {
+		if( !req.query.q ) {
 			return res.send({
 				status: false,
 				message: 'Invalid parameter',
@@ -136,11 +136,11 @@
 			} );
 		} );
 
-		res.json({
-			//data_hris : data_hris,
-			//data_sap : data_sap,
-			results: results
-		})
+		res.send( {
+			status: true,
+			message: config.error_message.find_200,
+			data: results
+		} );
 
 	};
 
