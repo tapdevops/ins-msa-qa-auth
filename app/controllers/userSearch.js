@@ -72,7 +72,7 @@
 				]
 			} )
 			.sort( {
-				'EMPLOYEE_NAME': 1
+				EMPLOYEE_NAME : 1
 			} )
 			.select( {
 				_id: 0,
@@ -90,8 +90,8 @@
 					{
 						$or: [
 							{
-								EMPLOYEE_NIK: { 
-									$regex: new RegExp( '^' + q.toUpperCase() )
+								NIK: { 
+									$regex: new RegExp( decodeURIComponent( q ) )
 								}
 							},
 							{
@@ -105,7 +105,7 @@
 				
 			} )
 			.sort( {
-				'EMPLOYEE_NAME': 1
+				EMPLOYEE_NAME: 1
 			} )
 			.select( {
 				_id: 0,
