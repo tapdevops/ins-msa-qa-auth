@@ -59,12 +59,12 @@
 						$or: [
 							{
 								EMPLOYEE_NIK: { 
-									$regex: new RegExp( '^' + q )
+									$regex: new RegExp( '^' + q.toUpperCase() )
 								}
 							},
 							{
 								EMPLOYEE_FULLNAME: {
-									$regex: new RegExp( '^' + q )
+									$regex: new RegExp( '^' + q.toUpperCase() )
 								}
 							}
 						]
@@ -91,12 +91,12 @@
 						$or: [
 							{
 								EMPLOYEE_NIK: { 
-									$regex: new RegExp( '^' + q )
+									$regex: new RegExp( '^' + q.toUpperCase() )
 								}
 							},
 							{
 								EMPLOYEE_NAME: {
-									$regex: new RegExp( '^' + q )
+									$regex: new RegExp( '^' + q.toUpperCase() )
 								}
 							}
 						]
