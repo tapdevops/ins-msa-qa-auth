@@ -162,6 +162,7 @@ module.exports = ( app ) => {
 
 	// User
 	app.get( '/api/user', token_verify, user.find );
+	app.get( '/api/user/:id', token_verify, user.findOne );
 	app.post( '/api/user', token_verify, user.create );
 
 

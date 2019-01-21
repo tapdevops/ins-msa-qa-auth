@@ -264,3 +264,58 @@ exports.find = ( req, res ) => {
 		} );
 	} );
 };
+
+/**
+ * FindOne
+ * Untuk menampilkan data berdasarkan primary key.
+ * --------------------------------------------------------------------------
+ */
+exports.findOne = ( req, res ) => {
+
+	viewUserAuthModel.find( {
+		USER_AUTH_CODE: req.params.id
+	} )
+	.then( data => {
+		if( !data ) {
+			return res.send( {
+				status: false,
+				message: config.error_message.find_404,
+				data: {}
+			} );
+		}
+
+		var results = [];
+		data.forEach( function( result ) {
+			var result = Object.keys(result).map(function(k) {
+				return [+k, result[k]];
+			});
+			result = result[3][1];
+
+			var JOB = ( !result.PJS_JOB ) ? result.HRIS_JOB : result.PJS_JOB;
+			var FULLNAME = ( !result.PJS_FULLNAME ) ? result.HRIS_FULLNAME : result.PJS_FULLNAME
+			if ( JOB != '' && FULLNAME != '' ) {
+				results.push( {
+					USER_AUTH_CODE: result.USER_AUTH_CODE,
+					EMPLOYEE_NIK: result.EMPLOYEE_NIK,
+					USER_ROLE: result.USER_ROLE,
+					LOCATION_CODE: result.LOCATION_CODE,
+					REF_ROLE: result.REF_ROLE,
+					JOB: JOB,
+					FULLNAME: FULLNAME
+				} );
+			}
+		} );
+
+		res.send( {
+			status: true,
+			message: config.error_message.find_200,
+			data: results[0]
+		} );
+	} ).catch( err => {
+		res.send( {
+			status: false,
+			message: config.error_message.find_500,
+			data: {}
+		} );
+	} );
+};
