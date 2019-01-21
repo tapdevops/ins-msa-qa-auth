@@ -76,7 +76,7 @@ app.get( '/', ( req, res ) => {
 } );
 
 // Login
-app.post( '/api/login', ( req, res ) => {
+app.post( '/api/logins', ( req, res ) => {
 
 	console.log(req.body.imei);
 
@@ -318,7 +318,7 @@ app.post( '/api/login', ( req, res ) => {
 } );
 
 // Login
-app.post( '/api/logins', ( req, res ) => {
+app.post( '/api/login', ( req, res ) => {
 
 	//console.log(req.body.imei);
 
@@ -725,7 +725,7 @@ function setHectareStatement() {
 		headers: { "Content-Type": "application/json" }
 	};
 
-	client.get( url, args, function (data, response) {
+	client.get( url, args, function ( data, response ) {
 		// parsed response body as js object
 		return { 
 			"status": data.status,

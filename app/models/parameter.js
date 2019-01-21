@@ -11,6 +11,20 @@ const ParameterSchema = mongoose.Schema( {
 		default: function() {
 			return null;
 		}
+	},
+	UPDATE_USER: String,
+	UPDATE_TIME: {
+		type: Date,
+		default: function() {
+			return null;
+		}
+	},
+	DELETE_USER: String,
+	DELETE_TIME: {
+		type: Date,
+		default: function() {
+			return null;
+		}
 	}
 });
 

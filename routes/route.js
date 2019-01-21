@@ -119,7 +119,10 @@ module.exports = ( app ) => {
 	app.delete( '/api/content-label/:id', token_verify, contentLabel.delete );
 
 	// ROUTE - Parameter
-	app.get( '/api/parameter', parameter.find );
+	app.post( '/api/parameter', token_verify, parameter.create );
+	app.get( '/api/parameter', token_verify, parameter.find );
+	app.get( '/api/parameter/track', token_verify, parameter.findOneTimeTrack );
+	
 
 	// ROUTE - Contacts
 	app.get( '/api/contacts', token_verify, contacts.find );

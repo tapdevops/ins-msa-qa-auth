@@ -44,3 +44,83 @@ exports.find = ( req, res ) => {
 		} );
 	} );
 };
+
+exports.findOneTimeTrack = ( req, res ) => {
+	var auth = req.token;
+
+	parameterModel.findOne( {
+		PARAMETER_GROUP: "TIME_TRACK"
+	} )
+	.select( {
+		_id: 0,
+		INSERT_TIME: 0,
+		INSERT_USER: 0,
+		DELETE_TIME: 0,
+		DELETE_USER: 0,
+		UPDATE_TIME: 0,
+		UPDATE_USER: 0,
+		__v: 0
+	} )
+	.then( data => {
+		if( !data ) {
+			return res.send( {
+				status: false,
+				message: config.error_message.find_404,
+				data: {}
+			} );
+		}
+		res.send( {
+			status: true,
+			message: config.error_message.find_200,
+			data: data
+		} );
+	} ).catch( err => {
+		res.send( {
+			status: false,
+			message: config.error_message.find_500,
+			data: {}
+		} );
+	} );
+
+};
+
+exports.create = ( req, res ) => {
+		
+	var auth = req.auth;
+	const set_data = new parameterModel( {
+		PARAMETER_GROUP: req.body.PARAMETER_GROUP || "",
+		PARAMETER_NAME: req.body.PARAMETER_NAME || "",
+		DESC: req.body.DESC || "",
+		NO_URUT: req.body.NO_URUT || "",
+		INSERT_USER: auth.USER_AUTH_CODE,
+		INSERT_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
+		UPDATE_USER: auth.USER_AUTH_CODE,
+		UPDATE_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
+		DELETE_USER: "",
+		DELETE_TIME: 0
+	} );
+
+	set_data.save()
+	.then( data => {
+		if ( !data ) {
+			return res.send( {
+				status: false,
+				message: config.error_message.create_404,
+				data: {}
+			} );
+		}
+		
+		res.send( {
+			status: true,
+			message: config.error_message.create_200,
+			data: {}
+		} );
+	} ).catch( err => {
+		res.send( {
+			status: false,
+			message: config.error_message.create_500,
+			data: {}
+		} );
+	} );
+	
+};
