@@ -89,10 +89,6 @@ exports.create = async ( req, res ) => {
 				DELETE_TIME: 0
 			}
 
-			res.send({
-				data_user_auth: data_user_auth
-			})
-			/*
 			const set_data = new userAuthModel( data_user_auth );
 
 			set_data.save()
@@ -116,7 +112,7 @@ exports.create = async ( req, res ) => {
 					message: config.error_message.create_500,
 					data: {}
 				} );
-			} );*/
+			} );
 
 		}
 		// Create PJS
@@ -325,40 +321,40 @@ exports.findOne = ( req, res ) => {
  * Untuk mengupdate data berdasarkan primary key.
  * --------------------------------------------------------------------------
  */
-exports.update = ( req, res ) => {
-	var auth = req.auth;
-	
-	userAuthModel.findOneAndUpdate( { 
-		USER_AUTH_CODE : req.params.id 
-	}, {
-		USER_ROLE: req.body.USER_ROLE,
-		REF_ROLE: req.body.REF_ROLE,
-		LOCATION_CODE: req.body.LOCATION_CODE,
-		UPDATE_USER: auth.USER_AUTH_CODE,
-		UPDATE_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
-		DELETE_USER: "",
-		DELETE_TIME: 0
-	}, { new: true } )
-	.then( data => {
-		if( !data ) {
-			return res.send( {
-				status: false,
-				message: config.error_message.put_404,
+	exports.update = ( req, res ) => {
+		var auth = req.auth;
+		
+		userAuthModel.findOneAndUpdate( { 
+			USER_AUTH_CODE : req.params.id 
+		}, {
+			USER_ROLE: req.body.USER_ROLE,
+			REF_ROLE: req.body.REF_ROLE,
+			LOCATION_CODE: req.body.LOCATION_CODE,
+			UPDATE_USER: auth.USER_AUTH_CODE,
+			UPDATE_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
+			DELETE_USER: "",
+			DELETE_TIME: 0
+		}, { new: true } )
+		.then( data => {
+			if( !data ) {
+				return res.send( {
+					status: false,
+					message: config.error_message.put_404,
+					data: {}
+				} );
+			}
+
+			res.send( {
+				status: true,
+				message: config.error_message.put_200,
 				data: {}
 			} );
-		}
 
-		res.send( {
-			status: true,
-			message: config.error_message.put_200,
-			data: {}
-		} );
-
-	}).catch( err => {
-		res.send( {
-			status: false,
-			message: config.error_message.put_500,
-			data: {}
-		} );
-	});
-}
+		}).catch( err => {
+			res.send( {
+				status: false,
+				message: config.error_message.put_500,
+				data: {}
+			} );
+		});
+	}
