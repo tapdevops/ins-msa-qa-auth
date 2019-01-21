@@ -28,6 +28,7 @@
 	// Libraries
 	const config = require( '../../config/config.js' );
 	const date = require( '../libraries/date.js' );
+	const userAuthCode = require( '../libraries/userAuthCode.js' );
 
 /**
  * Create
@@ -64,6 +65,8 @@ exports.create = async ( req, res ) => {
 		]
 	} );
 
+	
+
 	if ( query_data_auth.length > 0 ) {
 		res.send( {
 			status: false,
@@ -72,10 +75,14 @@ exports.create = async ( req, res ) => {
 		} );
 	}
 	else {
+
+		var count_user = await userAuthModel.find().count();
+		var generate_auth_code = userAuthCode.generate( count_user );
+		
 		if ( query_data_hris.length > 0 ) {
 
 			data_user_auth = {
-				USER_AUTH_CODE: String( req.body.USER_AUTH_CODE + req.body.EMPLOYEE_NIK ),
+				USER_AUTH_CODE: generate_auth_code,
 				EMPLOYEE_NIK: String( req.body.EMPLOYEE_NIK ),
 				USER_ROLE: String( req.body.USER_ROLE ),
 				LOCATION_CODE: String( req.body.LOCATION_CODE ),
@@ -119,7 +126,7 @@ exports.create = async ( req, res ) => {
 		else {
 			
 			data_user_auth = {
-				USER_AUTH_CODE: String( req.body.USER_AUTH_CODE + req.body.EMPLOYEE_NIK ),
+				USER_AUTH_CODE: generate_auth_code,
 				EMPLOYEE_NIK: String( req.body.EMPLOYEE_NIK ),
 				USER_ROLE: String( req.body.USER_ROLE ),
 				LOCATION_CODE: String( req.body.LOCATION_CODE ),
@@ -146,14 +153,8 @@ exports.create = async ( req, res ) => {
 				UPDATE_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
 				DELETE_USER: "",
 				DELETE_TIME: 0
-			}/*
-			const set_pjs = new pjsModel( data_pjs );
-			set_pjs.save();
+			}
 
-			res.send({
-				data_user_auth: data_user_auth,
-				data_pjs: data_pjs
-			})*/
 			
 			const set_pjs = new pjsModel( data_pjs );
 			const set_data = new userAuthModel( data_user_auth );
@@ -201,6 +202,7 @@ exports.create = async ( req, res ) => {
 			} );
 
 		}
+		
 	}
 
 };
