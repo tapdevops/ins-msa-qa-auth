@@ -31,7 +31,7 @@ module.exports = ( app ) => {
 	const kriteria = require( '../app/controllers/kriteria.js' );
 	const configSSH = require( '../app/controllers/configSSH.js' );
 	const user = require( '../app/controllers/user.js' );
-	const webReportFinding = require( '../app/controllers/webReportFinding.js' );
+	const webReport = require( '../app/controllers/webReport.js' );
 
 
 	// Routing: Auth
@@ -168,7 +168,7 @@ module.exports = ( app ) => {
 	app.post( '/api/user', token_verify, user.create );
 
 	// REPORT - FINDING
-	app.get( '/api/web-report/finding', token_verify, webReportFinding.find );
+	app.get( '/api/web-report/finding', token_verify, webReport.findingFind );
 
 
 

@@ -26,15 +26,42 @@
 	const date = require( '../libraries/date.js' );
 
 /**
- * Find
- * Untuk menampilkan data kriteria
+ * Find Finding
  * --------------------------------------------------------------------------
  */
-exports.find = async ( req, res ) => {
+exports.findingFind = async ( req, res ) => {
 	url_query = req.query;
 	var url_query_length = Object.keys( url_query ).length;
 	var client = new Client();
 	var url = config.url.microservices.finding + '/finding/q';
+
+	if ( url_query_length > 0 ) {
+		url = url + req._parsedUrl.search;
+	}
+	
+	var args = {
+		headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
+	};
+
+	client.get( url, args, function (data, response) {
+		// parsed response body as js object
+		res.json( { 
+			"status": data.status,
+			"message": data.message,
+			"data": data.data
+		} );
+	});
+}
+
+/**
+ * Find Inspeksi Header
+ * --------------------------------------------------------------------------
+ */
+exports.findingInspectionH = async ( req, res ) => {
+	url_query = req.query;
+	var url_query_length = Object.keys( url_query ).length;
+	var client = new Client();
+	var url = config.url.microservices.inspection + '/inspection-header/q';
 
 	if ( url_query_length > 0 ) {
 		url = url + req._parsedUrl.search;
