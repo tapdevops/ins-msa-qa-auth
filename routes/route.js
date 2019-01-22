@@ -31,6 +31,7 @@ module.exports = ( app ) => {
 	const kriteria = require( '../app/controllers/kriteria.js' );
 	const configSSH = require( '../app/controllers/configSSH.js' );
 	const user = require( '../app/controllers/user.js' );
+	const webReportFinding = require( '../app/controllers/webReportFinding.js' );
 
 
 	// Routing: Auth
@@ -165,6 +166,10 @@ module.exports = ( app ) => {
 	app.get( '/api/user/:id', token_verify, user.findOne );
 	app.put( '/api/user/:id', token_verify, user.update );
 	app.post( '/api/user', token_verify, user.create );
+
+	// REPORT - FINDING
+	app.get( '/api/web-report/finding', token_verify, webReportFinding.find );
+
 
 
 	//app.get( '/api/mobile-sync/hectare-statement/test', verifyToken, mobileSync.findTest );

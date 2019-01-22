@@ -14,6 +14,9 @@ module.exports.generate = function( value ) {
 	else if ( String( up_value ).length == 4 ) {
 		user_auth_code = String( up_value );
 	}
-	
+	else if ( String( up_value ).length > 4 ) {
+		user_auth_code = String( up_value );
+	}
+
 	return String( user_auth_code );
 }
