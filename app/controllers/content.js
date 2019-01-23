@@ -30,12 +30,15 @@
  * --------------------------------------------------------------------------
  */
 	exports.find = ( req, res ) => {
+
+		
 		var auth = req.token;
 		var url_query = req.query;
 		var url_query_length = Object.keys( url_query ).length;
 			url_query.DELETE_USER = "";
+		
 
-		contentModel.find( {} )
+		contentModel.find( url_query )
 		.select( {
 			_id: 0,
 			INSERT_TIME: 0,
