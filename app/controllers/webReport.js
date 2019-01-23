@@ -57,11 +57,11 @@ exports.findingFind = async ( req, res ) => {
  * Find Inspeksi Header
  * --------------------------------------------------------------------------
  */
-exports.findingInspectionH = async ( req, res ) => {
+exports.findingInspectionReport = async ( req, res ) => {
 	url_query = req.query;
 	var url_query_length = Object.keys( url_query ).length;
 	var client = new Client();
-	var url = config.url.microservices.inspection + '/inspection-header/q';
+	var url = config.url.microservices.inspection + '/inspection-report/q';
 
 	if ( url_query_length > 0 ) {
 		url = url + req._parsedUrl.search;
