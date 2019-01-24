@@ -8,7 +8,12 @@
  */
  	// Models
 	const categoryModel = require( '../models/category.js' );
-	const ViewContentInspeksiModel = require( '../models/ViewContentInspeksi.js' );
+	const ViewContentInspeksiModel = require( '../models/viewContentInspeksi.js' );
+
+
+
+
+
 
 	// Node Modules
 	const querystring = require( 'querystring' );
