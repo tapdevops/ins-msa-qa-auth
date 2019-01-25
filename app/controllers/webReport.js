@@ -9,6 +9,7 @@
  	// Models
 	const categoryModel = require( '../models/category.js' );
 	const ViewContentInspeksiModel = require( '../models/viewContentInspeksi.js' );
+	const kriteriaModel = require( '../models/kriteria.js' );
 
 
 
@@ -58,6 +59,61 @@
 				data: {}
 			} );
 		} );
+ 	};
+
+/**
+ * Inspection - Content Code
+ * --------------------------------------------------------------------------
+ */
+ 	exports.findInspectionKriteria = async( req, res ) => {
+ 		var auth = req.token;
+ 		var value = req.params.id;
+
+ 		if ( req.params.id ) {
+			kriteriaModel.find({
+				BATAS_ATAS: {
+					$gte: parseFloat( value )
+				},
+				BATAS_BAWAH: {
+					$lte: parseFloat( value )
+				}
+			})
+			.select({
+				_id: 0,
+				KRITERIA_CODE: 1,
+				COLOR: 1,
+				GRADE: 1,
+				BATAS_ATAS: 1,
+				BATAS_BAWAH: 1
+			})
+			.then( data => {
+				if( !data ) {
+					return res.send( {
+						status: false,
+						message: config.error_message.find_404,
+						data: {}
+					} );
+				}
+				res.send( {
+					status: true,
+					message: config.error_message.find_200,
+					data: data
+				} );
+			} ).catch( err => {
+				res.send( {
+					status: false,
+					message: config.error_message.find_500,
+					data: {}
+				} );
+			} );
+		}
+		else {
+			res.send( {
+				status: false,
+				message: config.error_message.find_404,
+				data: {}
+			} );
+		}
  	};
 
 /**
