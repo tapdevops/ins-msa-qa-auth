@@ -70,7 +70,7 @@
  		var value = req.params.id;
 
  		if ( req.params.id ) {
-			kriteriaModel.find({
+			kriteriaModel.findOne({
 				BATAS_ATAS: {
 					$gte: parseFloat( value )
 				},
