@@ -105,8 +105,8 @@
 				case 'AFD_CODE':
 					location_code_final.forEach( function( q ) {
 						query_search.push( {
-							LOCATION_CODE_AFD: q
-						} )
+							LOCATION_CODE_BA: new RegExp( '^' + q.substr( 0, 4 ) )
+						} );
 					} );
 				break;
 			}
