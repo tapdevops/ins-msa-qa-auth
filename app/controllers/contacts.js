@@ -29,9 +29,6 @@
  * Untuk mengambil data contact berdasarkan location code
  * --------------------------------------------------------------------------
  */
-
-
-
 	exports.find = ( req, res ) => {
 		// Auth Data
 		var auth = req.auth;
@@ -105,8 +102,8 @@
 				case 'AFD_CODE':
 					location_code_final.forEach( function( q ) {
 						query_search.push( {
-							LOCATION_CODE_BA: new RegExp( '^' + q.substr( 0, 4 ) )
-						} );
+							LOCATION_CODE_AFD: q
+						} )
 					} );
 				break;
 			}
@@ -129,10 +126,10 @@
 					$and : [
 						{ 
 							$or : query_search
-						},
-						{
-							USER_ROLE : "ASISTEN_LAPANGAN"
-						}
+						}//,
+						//{
+						//	USER_ROLE : "ASISTEN_LAPANGAN"
+						//}
 					]
 
 					// Backup
