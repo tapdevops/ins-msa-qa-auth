@@ -168,7 +168,7 @@ module.exports = ( app ) => {
 	app.post( '/api/user', token_verify, user.create );
 
 	// REPORT - FINDING
-	app.get( '/api/web-report/finding', token_verify, webReport.findingFind );
+	app.get( '/api/web-report/finding', token_verify, webReport.findingFindReport );
 	app.get( '/api/web-report/inspection', token_verify, webReport.findingInspectionReport );
 	app.get( '/api/web-report/inspection/content-code', token_verify, webReport.findInspectionContent );
 	app.get( '/api/web-report/inspection/kriteria/:id', token_verify, webReport.findInspectionKriteria );

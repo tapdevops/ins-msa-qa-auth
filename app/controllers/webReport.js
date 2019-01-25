@@ -120,11 +120,11 @@
  * Find Finding
  * --------------------------------------------------------------------------
  */
-	exports.findingFind = async ( req, res ) => {
+	exports.findingFindReport = async ( req, res ) => {
 		url_query = req.query;
 		var url_query_length = Object.keys( url_query ).length;
 		var client = new Client();
-		var url = config.url.microservices.finding + '/finding/q';
+		var url = config.url.microservices.finding + '/finding-report/q';
 
 		if ( url_query_length > 0 ) {
 			url = url + req._parsedUrl.search;
