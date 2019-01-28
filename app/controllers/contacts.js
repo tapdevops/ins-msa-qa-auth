@@ -68,7 +68,7 @@
 					USER_AUTH_CODE: result.USER_AUTH_CODE,
 					EMPLOYEE_NIK: result.EMPLOYEE_NIK,
 					USER_ROLE: result.USER_ROLE,
-					LOCATION_CODE: result.LOCATION_CODE,
+					LOCATION_CODE: String( result.LOCATION_CODE ),
 					REF_ROLE: result.REF_ROLE,
 					JOB: ( !result.PJS_JOB ) ? result.HRIS_JOB : result.PJS_JOB,
 					FULLNAME: ( !result.PJS_FULLNAME ) ? result.HRIS_FULLNAME : result.PJS_FULLNAME
