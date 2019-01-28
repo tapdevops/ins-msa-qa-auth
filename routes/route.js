@@ -173,7 +173,6 @@ module.exports = ( app ) => {
 	app.get( '/api/web-report/inspection/content-code', token_verify, webReport.findInspectionContent );
 	app.get( '/api/web-report/inspection/kriteria/:id', token_verify, webReport.findInspectionKriteria );
 
-
 	//app.get( '/api/mobile-sync/hectare-statement/test', verifyToken, mobileSync.findTest );
 
 	// ROUTE - KRITERIA
