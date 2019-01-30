@@ -19,7 +19,7 @@ const app = express(); 											// Define App
 const config = require( './config/config.js' ); 				// Config
 const dbConfig = require( './config/database.js' ); 			// Database Config
 const tokenLib = require( './app/libraries/token.js' ); 		// Token Config
-let db = mongoose.connection;
+global.db = mongoose.connection;
 
 const uuid = require( 'uuid' );
 const nJwt = require( 'njwt' );

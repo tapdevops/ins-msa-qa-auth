@@ -99,7 +99,8 @@ module.exports = ( app ) => {
 	app.post( '/api/sync-db-log', syncDBLog.create );
 
 	// ROUTE - Web Menu
-	app.post( '/api/modules', verifyToken, modules.create );
+	app.get( '/api/modules/by-job', token_verify, modules.findByJob );
+	app.post( '/api/modules', token_verify, modules.createOrUpdate );
 	app.get( '/api/modules', verifyToken, modules.find );
 	app.get( '/api/modules/:id', verifyToken, modules.findOne );
 	app.put( '/api/modules/:id', verifyToken, modules.update );

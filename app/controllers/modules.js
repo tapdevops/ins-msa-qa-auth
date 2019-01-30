@@ -8,6 +8,8 @@
  */
  	// Models
 	const modulesModel = require( '../models/modules.js' );
+	const userAuthorizationModel = require( '../models/userAuthorization.js' );
+
 
 	// Node Modules
 	const querystring = require( 'querystring' );
@@ -28,6 +30,274 @@
 	// Calon di delete
 	const dateFormat = require( 'dateformat' );
 	const dateAndTimes = require( 'date-and-time' );
+
+/*
+ |--------------------------------------------------------------------------
+ | Find By Job
+ |--------------------------------------------------------------------------
+ |
+ | Fungsi untuk mengambil data berdasarkan Job user yang sedang login.
+ |
+ */
+exports.findByJob = async ( req, res ) => {
+
+	/*═════════════════════════════════════════════════════════════════╗
+	║ Set Variabel           										   ║
+	╚═════════════════════════════════════════════════════════════════*/
+	var auth = req.auth;
+
+	/*═════════════════════════════════════════════════════════════════╗
+	║ Query 	               										   ║
+	╚═════════════════════════════════════════════════════════════════*/
+	userAuthorizationModel.aggregate([
+		{
+			"$lookup": {
+				"from": "T_MODULE",
+				"localField": "MODULE_CODE",
+				"foreignField": "MODULE_CODE",
+				"as": "MODULE"
+			}
+		},
+		{
+			"$addFields": {
+				"MODULE_NAME": {
+					"$arrayElemAt": [
+						"$MODULE.MODULE_NAME",
+						0
+					]
+				},
+				"PARENT_MODULE": {
+					"$arrayElemAt": [
+						"$MODULE.PARENT_MODULE",
+						0
+					]
+				},
+				"ITEM_NAME": {
+					"$arrayElemAt": [
+						"$MODULE.ITEM_NAME",
+						0
+					]
+				},
+				"ICON": {
+					"$arrayElemAt": [
+						"$MODULE.ICON",
+						0
+					]
+				},
+			}
+		},
+		{
+		    "$match": {
+		    	"PARAMETER_NAME": auth.USER_ROLE,
+		        "DELETE_USER": ""
+		    }
+		},
+		{
+		    "$project": {
+		        "_id": 0,
+		        "PARAMETER_NAME": 1,
+		        "STATUS": 1,
+		        "MODULE_CODE": 1,
+		        "MODULE_NAME": 1,
+		        "PARENT_MODULE": 1,
+		        "ITEM_NAME": 1,
+		        "ICON": 1
+		    }
+		},
+	])
+	.then( data => {
+		if( !data ) {
+			return res.send( {
+				status: false,
+				message: config.error_message.find_404,
+				data: {}
+			} );
+		}
+		res.send( {
+			status: true,
+			message: config.error_message.find_200,
+			data: data
+		} );
+	} ).catch( err => {
+		res.send( {
+			status: false,
+			message: config.error_message.find_500,
+			data: {}
+		} );
+	} );
+
+	
+	/*
+	res.json({
+		status: true,
+		message: auth,
+		x: x
+	})*/
+	
+/*
+	contentModel.find( url_query )
+	.select( {
+		_id: 0,
+		INSERT_TIME: 0,
+		INSERT_USER: 0,
+		DELETE_TIME: 0,
+		DELETE_USER: 0,
+		UPDATE_TIME: 0,
+		UPDATE_USER: 0,
+		__v: 0
+	} )
+	.then( data => {
+		if( !data ) {
+			return res.send( {
+				status: false,
+				message: config.error_message.find_404,
+				data: {}
+			} );
+		}
+		res.send( {
+			status: true,
+			message: config.error_message.find_200,
+			data: data
+		} );
+	} ).catch( err => {
+		res.send( {
+			status: false,
+			message: config.error_message.find_500,
+			data: {}
+		} );
+	} );*/
+}
+
+/*
+ |--------------------------------------------------------------------------
+ | Create Or Update
+ |--------------------------------------------------------------------------
+ |
+ | Fungsi untuk mengupdate data lama atau menambahkan data baru jika ID 
+ | sudah ada.
+ |
+ */
+exports.createOrUpdate = async ( req, res ) => {
+
+	/*═════════════════════════════════════════════════════════════════╗
+	║ Validasi Input                                                   ║
+	╠══════════════════════════════════════════════════════════════════╣
+	║ MODULE_CODE	   												   ║
+	║ MODULE_NAME	          										   ║
+	║ ITEM_NAME	        											   ║
+	╚═════════════════════════════════════════════════════════════════*/
+	if ( !req.body.MODULE_CODE ) { res.json( { status: false, message: config.error_message.invalid_request + "Module Code.", data: [] } ) }
+	if ( !req.body.MODULE_NAME ) { res.json( { status: false, message: config.error_message.invalid_request + "Module Name.", data: [] } ) }
+	if ( !req.body.ITEM_NAME ) { res.json( { status: false, message: config.error_message.invalid_request + "Item Name.", data: [] } ) }
+
+	/*═════════════════════════════════════════════════════════════════╗
+	║ Check Parent Module                                              ║
+	╠══════════════════════════════════════════════════════════════════╣
+	║ Jika value parent module tidak kosong, maka akan di check. 	   ║
+	║ Jika tidak ada maka akan di keluarkan notif error.               ║
+	╚═════════════════════════════════════════════════════════════════*/
+	if ( req.body.PARENT_MODULE != '' ) {
+		var check_parent_code = await modulesModel.findOne( {
+			MODULE_CODE: req.body.PARENT_MODULE,
+			DELETE_USER: ""
+		} ).count();
+		if ( check_parent_code == 0 ) {
+			res.json( {
+				status: false,
+				message: config.error_message.create_404 + "Parent Module tidak ditemukan.",
+				data: []
+			} )
+		}
+	}
+
+	/*═════════════════════════════════════════════════════════════════╗
+	║ Set Variabel           										   ║
+	╚═════════════════════════════════════════════════════════════════*/
+	var auth = req.auth;
+	var check_module_code = await modulesModel.findOne( {
+		MODULE_CODE: req.body.MODULE_CODE,
+		DELETE_USER: ""
+	} ).count();
+
+	/*═════════════════════════════════════════════════════════════════╗
+	║ Jika Module Code yang diinputkan belum ada di database, maka 	   ║
+	║ akan di create. Jika belum maka akan dibuat data baru.       	   ║
+	╚═════════════════════════════════════════════════════════════════*/
+	if ( check_module_code == 0 ) {
+		const set = new modulesModel({
+			MODULE_CODE: req.body.MODULE_CODE,
+			MODULE_NAME: req.body.MODULE_NAME,
+			PARENT_MODULE: req.body.PARENT_MODULE,
+			ITEM_NAME: req.body.ITEM_NAME,
+			ICON: req.body.ICON,
+			STATUS: req.body.STATUS,
+			INSERT_USER: auth.USER_AUTH_CODE,
+			INSERT_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
+			UPDATE_USER: auth.USER_AUTH_CODE,
+			UPDATE_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
+			DELETE_USER: "",
+			DELETE_TIME: 0
+		});
+
+		set.save()
+		.then( data => {
+			if ( !data ) {
+				return res.send( {
+					status: false,
+					message: config.error_message.create_404,
+					data: {}
+				} );
+			}
+			
+			res.send( {
+				status: true,
+				message: config.error_message.create_200 + 'Insert.',
+				data: {}
+			} );
+		} ).catch( err => {
+			res.send( {
+				status: false,
+				message: config.error_message.create_500,
+				data: {}
+			} );
+		} );
+	}
+	else {
+		modulesModel.findOneAndUpdate( { 
+			MODULE_CODE: req.body.MODULE_CODE
+		}, {
+			MODULE_NAME: req.body.MODULE_NAME,
+			PARENT_MODULE: req.body.PARENT_MODULE,
+			ITEM_NAME: req.body.ITEM_NAME,
+			ICON: req.body.ICON,
+			STATUS: req.body.STATUS,
+			UPDATE_USER: auth.USER_AUTH_CODE,
+			UPDATE_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' )
+		}, { new: true } )
+		.then( data => {
+			if ( !data ) {
+				return res.send( {
+					status: false,
+					message: config.error_message.put_404,
+					data: {}
+				} );
+			}
+			
+			res.send( {
+				status: true,
+				message: config.error_message.put_200 + 'Update.',
+				data: {}
+			} );
+		} ).catch( err => {
+			res.send( {
+				status: false,
+				message: config.error_message.put_500,
+				data: {}
+			} );
+		} );
+	}
+}
+
 
 // Create and Save new Data
 exports.create = ( req, res ) => {
