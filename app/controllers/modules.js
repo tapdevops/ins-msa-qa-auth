@@ -10,7 +10,6 @@
 	const modulesModel = require( '../models/modules.js' );
 	const userAuthorizationModel = require( '../models/userAuthorization.js' );
 
-
 	// Node Modules
 	const querystring = require( 'querystring' );
 	const url = require( 'url' );
@@ -27,10 +26,6 @@
 	const config = require( '../../config/config.js' );
 	const date = require( '../libraries/date.js' );
 
-	// Calon di delete
-	const dateFormat = require( 'dateformat' );
-	const dateAndTimes = require( 'date-and-time' );
-
 /*
  |--------------------------------------------------------------------------
  | Find By Job
@@ -39,134 +34,94 @@
  | Fungsi untuk mengambil data berdasarkan Job user yang sedang login.
  |
  */
-exports.findByJob = async ( req, res ) => {
+	exports.findByJob = async ( req, res ) => {
 
-	/*═════════════════════════════════════════════════════════════════╗
-	║ Set Variabel           										   ║
-	╚═════════════════════════════════════════════════════════════════*/
-	var auth = req.auth;
+		/*═════════════════════════════════════════════════════════════════╗
+		║ Set Variabel           										   ║
+		╚═════════════════════════════════════════════════════════════════*/
+		var auth = req.auth;
 
-	/*═════════════════════════════════════════════════════════════════╗
-	║ Query 	               										   ║
-	╚═════════════════════════════════════════════════════════════════*/
-	userAuthorizationModel.aggregate([
-		{
-			"$lookup": {
-				"from": "T_MODULE",
-				"localField": "MODULE_CODE",
-				"foreignField": "MODULE_CODE",
-				"as": "MODULE"
+		/*═════════════════════════════════════════════════════════════════╗
+		║ Query 	               										   ║
+		╚═════════════════════════════════════════════════════════════════*/
+		userAuthorizationModel.aggregate([
+			{
+				"$lookup": {
+					"from": "T_MODULE",
+					"localField": "MODULE_CODE",
+					"foreignField": "MODULE_CODE",
+					"as": "MODULE"
+				}
+			},
+			{
+				"$addFields": {
+					"MODULE_NAME": {
+						"$arrayElemAt": [
+							"$MODULE.MODULE_NAME",
+							0
+						]
+					},
+					"PARENT_MODULE": {
+						"$arrayElemAt": [
+							"$MODULE.PARENT_MODULE",
+							0
+						]
+					},
+					"ITEM_NAME": {
+						"$arrayElemAt": [
+							"$MODULE.ITEM_NAME",
+							0
+						]
+					},
+					"ICON": {
+						"$arrayElemAt": [
+							"$MODULE.ICON",
+							0
+						]
+					},
+				}
+			},
+			{
+				"$match": {
+					"PARAMETER_NAME": auth.USER_ROLE,
+					"STATUS": "1",
+					"DELETE_USER": ""
+				}
+			},
+			{
+				"$project": {
+					"_id": 0,
+					"PARAMETER_NAME": 1,
+					"STATUS": 1,
+					"MODULE_CODE": 1,
+					"MODULE_NAME": 1,
+					"PARENT_MODULE": 1,
+					"ITEM_NAME": 1,
+					"ICON": 1
+				}
+			},
+		])
+		.then( data => {
+			if( !data ) {
+				return res.send( {
+					status: false,
+					message: config.error_message.find_404,
+					data: {}
+				} );
 			}
-		},
-		{
-			"$addFields": {
-				"MODULE_NAME": {
-					"$arrayElemAt": [
-						"$MODULE.MODULE_NAME",
-						0
-					]
-				},
-				"PARENT_MODULE": {
-					"$arrayElemAt": [
-						"$MODULE.PARENT_MODULE",
-						0
-					]
-				},
-				"ITEM_NAME": {
-					"$arrayElemAt": [
-						"$MODULE.ITEM_NAME",
-						0
-					]
-				},
-				"ICON": {
-					"$arrayElemAt": [
-						"$MODULE.ICON",
-						0
-					]
-				},
-			}
-		},
-		{
-		    "$match": {
-		    	"PARAMETER_NAME": auth.USER_ROLE,
-		        "DELETE_USER": ""
-		    }
-		},
-		{
-		    "$project": {
-		        "_id": 0,
-		        "PARAMETER_NAME": 1,
-		        "STATUS": 1,
-		        "MODULE_CODE": 1,
-		        "MODULE_NAME": 1,
-		        "PARENT_MODULE": 1,
-		        "ITEM_NAME": 1,
-		        "ICON": 1
-		    }
-		},
-	])
-	.then( data => {
-		if( !data ) {
-			return res.send( {
+			res.send( {
+				status: true,
+				message: config.error_message.find_200,
+				data: data
+			} );
+		} ).catch( err => {
+			res.send( {
 				status: false,
-				message: config.error_message.find_404,
+				message: config.error_message.find_500,
 				data: {}
 			} );
-		}
-		res.send( {
-			status: true,
-			message: config.error_message.find_200,
-			data: data
 		} );
-	} ).catch( err => {
-		res.send( {
-			status: false,
-			message: config.error_message.find_500,
-			data: {}
-		} );
-	} );
-
-	
-	/*
-	res.json({
-		status: true,
-		message: auth,
-		x: x
-	})*/
-	
-/*
-	contentModel.find( url_query )
-	.select( {
-		_id: 0,
-		INSERT_TIME: 0,
-		INSERT_USER: 0,
-		DELETE_TIME: 0,
-		DELETE_USER: 0,
-		UPDATE_TIME: 0,
-		UPDATE_USER: 0,
-		__v: 0
-	} )
-	.then( data => {
-		if( !data ) {
-			return res.send( {
-				status: false,
-				message: config.error_message.find_404,
-				data: {}
-			} );
-		}
-		res.send( {
-			status: true,
-			message: config.error_message.find_200,
-			data: data
-		} );
-	} ).catch( err => {
-		res.send( {
-			status: false,
-			message: config.error_message.find_500,
-			data: {}
-		} );
-	} );*/
-}
+	}
 
 /*
  |--------------------------------------------------------------------------
