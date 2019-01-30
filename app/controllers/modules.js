@@ -40,11 +40,20 @@
 		║ Set Variabel           										   ║
 		╚═════════════════════════════════════════════════════════════════*/
 		var auth = req.auth;
+		var job = auth.USER_ROLE;
+
+		/*═════════════════════════════════════════════════════════════════╗
+		║ Check Params 													   ║
+		║ Jika ada Params ID, maka akan mencari berdasakan Params ID 	   ║
+		╚═════════════════════════════════════════════════════════════════*/
+		if ( req.params.id ) {
+			job = req.params.id;
+		}
 
 		/*═════════════════════════════════════════════════════════════════╗
 		║ Query 	               										   ║
 		╚═════════════════════════════════════════════════════════════════*/
-		userAuthorizationModel.aggregate([
+		userAuthorizationModel.aggregate( [
 			{
 				"$lookup": {
 					"from": "T_MODULE",
@@ -83,7 +92,7 @@
 			},
 			{
 				"$match": {
-					"PARAMETER_NAME": auth.USER_ROLE,
+					"PARAMETER_NAME": job,
 					"STATUS": 1,
 					"DELETE_USER": ""
 				}
@@ -100,7 +109,7 @@
 					"ICON": 1
 				}
 			},
-		])
+		] )
 		.then( data => {
 			if( !data ) {
 				return res.send( {

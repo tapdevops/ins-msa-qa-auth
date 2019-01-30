@@ -100,6 +100,7 @@ module.exports = ( app ) => {
 
 	// ROUTE - Web Menu
 	app.get( '/api/modules/by-job', token_verify, modules.findByJob );
+	app.get( '/api/modules/by-job/:id', token_verify, modules.findByJob );
 	app.post( '/api/modules', token_verify, modules.createOrUpdate );
 	app.get( '/api/modules', verifyToken, modules.find );
 	app.get( '/api/modules/:id', verifyToken, modules.findOne );
@@ -133,7 +134,7 @@ module.exports = ( app ) => {
 	app.get( '/api/login', verifyToken, login.find );
 
 	// ROUTE - USER AUTHORIZATION
-	app.post( '/api/user-authorization', verifyToken, userAuthorization.createOrUpdate );
+	app.post( '/api/user-authorization', token_verify, userAuthorization.createOrUpdate );
 	app.get( '/api/user-authorization', verifyToken, userAuthorization.find );
 
 	// ROUTE - USER AUTHORIZATION

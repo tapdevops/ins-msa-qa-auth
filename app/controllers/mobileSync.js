@@ -64,6 +64,7 @@ exports.findRegion = ( req, res ) => {
 		else {
 			// Tidak ada data yang ditemukan, baru pertama kali sync
 			var url = config.url.microservices.hectare_statement + '/region';
+			console.log(url);
 			//var url = config.url.microservices.masterdata_region;
 			var client = new Client();
 			var args = {
