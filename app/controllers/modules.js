@@ -84,7 +84,7 @@
 			{
 				"$match": {
 					"PARAMETER_NAME": auth.USER_ROLE,
-					"STATUS": "1",
+					"STATUS": 1,
 					"DELETE_USER": ""
 				}
 			},
