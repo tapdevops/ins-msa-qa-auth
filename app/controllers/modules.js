@@ -1,14 +1,33 @@
-const modulesModel = require( '../models/modules.js' );
-const dateFormat = require( 'dateformat' );
-var querystring = require('querystring');
-var url = require( 'url' );
-const date = require( '../libraries/date.js' );
-const dateAndTimes = require( 'date-and-time' );
-let jwt = require( 'jsonwebtoken' );
-const config = require( '../../config/config.js' );
-const uuid = require( 'uuid' );
-const nJwt = require( 'njwt' );
-const jwtDecode = require( 'jwt-decode' );
+/*
+ |--------------------------------------------------------------------------
+ | App Setup
+ |--------------------------------------------------------------------------
+ |
+ | Untuk menghandle models, libraries, helper, node modules, dan lain-lain
+ |
+ */
+ 	// Models
+	const modulesModel = require( '../models/modules.js' );
+
+	// Node Modules
+	const querystring = require( 'querystring' );
+	const url = require( 'url' );
+	const jwt = require( 'jsonwebtoken' );
+	const uuid = require( 'uuid' );
+	const nJwt = require( 'njwt' );
+	const jwtDecode = require( 'jwt-decode' );
+	const Client = require( 'node-rest-client' ).Client; 
+	const moment_pure = require( 'moment' );
+	const moment = require( 'moment-timezone' );
+	const fServer = require( 'fs' );
+
+	// Libraries
+	const config = require( '../../config/config.js' );
+	const date = require( '../libraries/date.js' );
+
+	// Calon di delete
+	const dateFormat = require( 'dateformat' );
+	const dateAndTimes = require( 'date-and-time' );
 
 // Create and Save new Data
 exports.create = ( req, res ) => {
@@ -38,13 +57,12 @@ exports.create = ( req, res ) => {
 				ITEM_NAME: req.body.ITEM_NAME,
 				ICON: req.body.ICON,
 				STATUS: req.body.STATUS,
-				INSERT_USER: auth.USER_AUTH_CODE || "",
-				INSERT_TIME: new Date().getTime(),
-				UPDATE_USER: auth.USER_AUTH_CODE || "",
-				UPDATE_TIME: new Date().getTime(),
-
+				INSERT_USER: auth.USER_AUTH_CODE,
+				INSERT_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
+				UPDATE_USER: auth.USER_AUTH_CODE,
+				UPDATE_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
 				DELETE_USER: "",
-				DELETE_TIME: ""
+				DELETE_TIME: 0
 			});
 
 			set.save()
