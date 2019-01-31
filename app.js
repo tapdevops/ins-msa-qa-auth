@@ -339,7 +339,7 @@ app.post( '/api/login', ( req, res ) => {
 			},
 			headers: { "Content-Type": "application/json" },
 			requestConfig: {
-				timeout: 10000, //request timeout in milliseconds
+				timeout: 3000, //request timeout in milliseconds
 				noDelay: true, //Enable/disable the Nagle algorithm
 				keepAlive: true, //Enable/disable keep-alive functionalityidle socket
 			},

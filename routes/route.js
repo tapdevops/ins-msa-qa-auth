@@ -8,7 +8,7 @@ module.exports = ( app ) => {
 
 	// Declare Controllers
 	//const auth = require( '../app/controllers/auth.js' );
-	const microserviceInspection = require( '../app/controllers/microserviceInspection.js' );
+	
 	const microserviceMasterdata = require( '../app/controllers/microserviceMasterdata.js' );
 	const microserviceImages = require( '../app/controllers/microserviceImages.js' );
 	const microserviceFinding = require( '../app/controllers/microserviceFinding.js' );
@@ -40,6 +40,34 @@ module.exports = ( app ) => {
 
 	// ROUTE - INSPECTION
 	//app.get( '/api/inspection', verifyToken, microserviceInspection.find );
+
+	/*══════════════════════════════════════════════════════════════════════════════╗
+	║                                                                               ║
+	║ Route      : Inspeksi                                                         ║
+	║ Keterangan :                                                                  ║
+	║                                                                               ║
+	╠═══════════════════════════════════════════════════════════════════════════════╣
+	║ Untuk mengambil, menyimpan, menampilkan, dan menghapus data dari MSA Inspeksi ║
+	╟──────────────────────────╥────────────────────────────────────────────────────╢
+	║ Function                 ║ Keterangan                                         ║
+	╟──────────────────────────╫────────────────────────────────────────────────────╢
+	║ createH                  ║ Untuk membuat data inspeksi header                 ║
+	╟──────────────────────────╫────────────────────────────────────────────────────╢
+	║ findH                    ║ Untuk menampilkan data Inspeksi                    ║
+	╟──────────────────────────╫────────────────────────────────────────────────────╢
+	║ findOneH                 ║ Untuk menampilkan data Inspeksi berdasarkan ID     ║
+	╟──────────────────────────╫────────────────────────────────────────────────────╢
+	║ updateH                  ║ Untuk mengupdate data inspeksi header              ║
+	╟──────────────────────────╫────────────────────────────────────────────────────╢
+	║ createH                  ║ Untuk membuat data inspeksi header                 ║
+	╟──────────────────────────╫────────────────────────────────────────────────────╢
+	║ createH                  ║ Untuk membuat data inspeksi header                 ║
+	╟──────────────────────────╫────────────────────────────────────────────────────╢
+	║ findH                    ║ Untuk menampilkan data Inspeksi                    ║
+	╚══════════════════════════╩═══════════════════════════════════════════════════*/
+
+	const microserviceInspection = require( '../app/controllers/microserviceInspection.js' );
+
 	app.post( '/api/inspection', verifyToken, microserviceInspection.create );
 	app.post( '/api/inspection-header', verifyToken, microserviceInspection.createH );
 	app.get( '/api/inspection-header', verifyToken, microserviceInspection.findH );
@@ -51,8 +79,9 @@ module.exports = ( app ) => {
 	app.get( '/api/inspection-detail/:id', verifyToken, microserviceInspection.findOneD );
 	app.put( '/api/inspection-detail/:id', verifyToken, microserviceInspection.updateD );
 	app.delete( '/api/inspection-detail/:id', verifyToken, microserviceInspection.deleteD );
-
 	app.post( '/api/inspection-tracking', verifyToken, microserviceInspection.createTracking );
+
+
 
 	// ROUTE - MASTERDATA BLOCK
 	app.get( '/api/hectare-statement/block', verifyToken, microserviceMasterdata.blockFind );
@@ -139,7 +168,10 @@ module.exports = ( app ) => {
 
 	// ROUTE - USER AUTHORIZATION
 	//app.post( '/api/user-search', verifyToken, userSearch.createOrUpdate );
-	app.get( '/api/user-search', verifyToken, userSearch.find );
+	app.get( '/api/user-search', token_verify, userSearch.findAtHRISSAP ); // Delete
+	app.get( '/api/user-search/hris-sap', token_verify, userSearch.findAtHRISSAP );
+	app.get( '/api/user-search/user-auth', token_verify, userSearch.findAtUserAuth );
+
 
 	// ROUTE - CATEGORY
 	app.post( '/api/category', token_verify, category.create );
