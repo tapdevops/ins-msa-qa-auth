@@ -216,6 +216,8 @@ app.post( '/api/logins', ( req, res ) => {
 
 			// LOGIN via Employee HRIS
 			else {
+
+				console.log( data );
 				var data_hris = data;
 				userAuth.findOne( { 
 					EMPLOYEE_NIK: data_hris.EMPLOYEE_NIK
@@ -353,10 +355,10 @@ app.post( '/api/login', ( req, res ) => {
 			// 2.1. Kondisi data terdapat pada LDAP
 
 			//console.log( data );
-			console.log( data );
+			//console.log( data );
 
 			if ( data.status == true ) {
-
+				
 				const loginModel = require( './app/models/login.js' );
 				const loginLib = require( './app/libraries/login.js' );
 				const loginData = {};

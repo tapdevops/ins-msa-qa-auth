@@ -379,12 +379,12 @@ exports.status = ( req, res ) => {
 							"Authorization": req.headers.authorization
 						},
 						requestConfig: {
-							timeout: 500, //request timeout in milliseconds
+							timeout: 10000, //request timeout in milliseconds
 							noDelay: true, //Enable/disable the Nagle algorithm
 							keepAlive: true, //Enable/disable keep-alive functionalityidle socket
 						},
 						responseConfig: {
-							timeout: 500
+							timeout: 10000
 						}
 					};
 					console.log( finding_images_args );
@@ -530,7 +530,7 @@ exports.status = ( req, res ) => {
 	exports.findFinding = ( req, res ) => {
 		
 		var auth = req.auth;
-		
+
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
 			IMEI: auth.IMEI,
@@ -539,6 +539,7 @@ exports.status = ( req, res ) => {
 		.sort( { TGL_MOBILE_SYNC: -1 } )
 		.limit( 1 )
 		.then( data => {
+
 			if ( !data ) {
 				return res.send( {
 					status: false,
@@ -546,9 +547,8 @@ exports.status = ( req, res ) => {
 					data: {}
 				} );
 			}
-			console.log(auth);
-			if ( data.length > 0 ) {
 
+			if ( data.length > 0 ) {
 				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 				var dt = data[0];
 				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
@@ -563,8 +563,8 @@ exports.status = ( req, res ) => {
 				var target_ms = '';
 				var url = config.url.microservices.finding + '/sync-mobile/finding' + target_ms + '/';
 				var url_final = url + start_date + '/' + end_date;
-				
-				console.log(url_final);
+
+				console.log( url_final );
 
 				client.get( url_final, args, function ( data, response ) {
 					res.json( {
