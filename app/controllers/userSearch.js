@@ -125,11 +125,13 @@
 					return [+k, result[k]];
 				});
 				result = result[3][1];
-				results.push( {
-					NIK: 'HRIS-' + result.EMPLOYEE_NIK,
-					NAMA_LENGKAP: result.EMPLOYEE_FULLNAME,
-					JOB_CODE: result.EMPLOYEE_POSITION
-				} );
+				if ( result.EMPLOYEE_NIK != null ) {
+					results.push( {
+						NIK: 'HRIS-' + result.EMPLOYEE_NIK,
+						NAMA_LENGKAP: result.EMPLOYEE_FULLNAME,
+						JOB_CODE: result.EMPLOYEE_POSITION
+					} );
+				}
 			} );
 		}
 
@@ -140,11 +142,13 @@
 					return [+k, result[k]];
 				});
 				result = result[3][1];
-				results.push( {
-					NIK: 'SAP-' + result.NIK,
-					NAMA_LENGKAP: result.EMPLOYEE_NAME,
-					JOB_CODE: result.JOB_CODE
-				} );
+				if ( result.NIK != null ) {
+					results.push( {
+						NIK: 'SAP-' + result.NIK,
+						NAMA_LENGKAP: result.EMPLOYEE_NAME,
+						JOB_CODE: result.JOB_CODE
+					} );
+				}
 			} );
 		}
 
