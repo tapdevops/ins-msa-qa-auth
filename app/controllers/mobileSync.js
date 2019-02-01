@@ -184,7 +184,7 @@ exports.create = ( req, res ) => {
 
 	var auth = req.auth;
 	const set = new mobileSyncModel({
-		TGL_MOBILE_SYNC: date.convert( req.body.TGL_MOBILE_SYNC, 'YYYYMMDD' ),
+		TGL_MOBILE_SYNC: date.convert( req.body.TGL_MOBILE_SYNC, 'YYYYMMDDhhmmss' ),
 		TABEL_UPDATE: req.body.TABEL_UPDATE || "",
 		IMEI: auth.IMEI,
 		INSERT_USER: auth.USER_AUTH_CODE,
@@ -551,7 +551,7 @@ exports.status = ( req, res ) => {
 			if ( data.length > 0 ) {
 				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 				var dt = data[0];
-				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
+				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDD' );
 				var end_date = date.convert( 'now', 'YYYYMMDDhhmmss' );
 				
 				// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
