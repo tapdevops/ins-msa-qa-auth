@@ -86,9 +86,12 @@ exports.create = async ( req, res ) => {
 		}
 		// Data user yang diinutkan berada di TM_EMPLOYEE_SAP
 		else {
+
+
+
 			data_user_auth = {
 				USER_AUTH_CODE: generate_auth_code,
-				EMPLOYEE_NIK: String( req.body.EMPLOYEE_NIK ),
+				EMPLOYEE_NIK: req.body.EMPLOYEE_NIK,
 				USER_ROLE: String( req.body.USER_ROLE ),
 				LOCATION_CODE: String( req.body.LOCATION_CODE ),
 				REF_ROLE: String( req.body.REF_ROLE ),
@@ -101,10 +104,13 @@ exports.create = async ( req, res ) => {
 				DELETE_TIME: 0
 			}
 
+
+			console.log(query_data_sap[3][1]);
+/*
 			data_pjs = {
 
-				EMPLOYEE_NIK: String( query_data_sap[0].EMPLOYEE_NIK ),
-				USERNAME: String( query_data_sap[0].EMPLOYEE_NIK ),
+				EMPLOYEE_NIK: String( req.body.EMPLOYEE_NIK ),
+				USERNAME: String( req.body.EMPLOYEE_NIK ),
 				NAMA_LENGKAP: String( query_data_sap[0].EMPLOYEE_NAME ),
 				JOB_CODE: String( query_data_sap[0].JOB_CODE ),
 
@@ -126,7 +132,7 @@ exports.create = async ( req, res ) => {
 				status: true,
 				message: 'SAP',
 				data: []
-			} );
+			} );*/
 		}
 		
 		/*

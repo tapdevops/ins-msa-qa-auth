@@ -64,8 +64,7 @@
 					return [+k, result[k]];
 				});
 				result = result[3][1];
-
-				console.log( result );
+				
 				var JOB = '';
 				var FULLNAME = '';
 				if ( result.PJS_JOB ) {

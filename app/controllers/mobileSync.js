@@ -645,7 +645,8 @@ exports.status = ( req, res ) => {
 
 				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 				var dt = data[0];
-				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
+				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
+				//var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
 				var end_date = date.convert( 'now', 'YYYYMMDDhhmmss' );
 				
 				// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
@@ -735,7 +736,8 @@ exports.status = ( req, res ) => {
 
 				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 				var dt = data[0];
-				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
+				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
+				//var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
 				var end_date = date.convert( 'now', 'YYYYMMDDhhmmss' );
 				
 				// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
@@ -827,7 +829,8 @@ exports.status = ( req, res ) => {
 
 				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 				var dt = data[0];
-				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
+				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
+				//var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
 				var end_date = date.convert( 'now', 'YYYYMMDDhhmmss' );
 				
 				// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
@@ -917,7 +920,8 @@ exports.status = ( req, res ) => {
 
 				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 				var dt = data[0];
-				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
+				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
+				//var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
 				var end_date = date.convert( 'now', 'YYYYMMDDhhmmss' );
 				
 				// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
@@ -991,7 +995,7 @@ exports.status = ( req, res ) => {
 		
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			//IMEI: auth.IMEI,
+			IMEI: auth.IMEI,
 			TABEL_UPDATE: 'hectare-statement/land-use'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -1009,7 +1013,8 @@ exports.status = ( req, res ) => {
 
 				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 				var dt = data[0];
-				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
+				//var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
+				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
 				var end_date = date.convert( 'now', 'YYYYMMDDhhmmss' );
 				
 				// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
