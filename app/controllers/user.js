@@ -39,9 +39,11 @@ exports.create = async ( req, res ) => {
 
 	var auth = req.auth;
 	var create_pjs = false;
-	var NIK = req.body.EMPLOYEE_NIK;
+	var split = String( req.body.EMPLOYEE_NIK ).split( '-' );
+	var TYPE = split[0];
+	var NIK = split[1];
 	var USER_AUTH_CODE = 'TAC' + NIK;
-
+	
 	// Validasi EMPLOYEE_NIK
 
 	var query_data_hris = await employeeHRISModel.find( {
@@ -143,7 +145,7 @@ exports.create = async ( req, res ) => {
 			data_pjs = {
 
 				EMPLOYEE_NIK: String( query_data_sap[0].NIK ),
-				USERNAME: String( query_data_sap[0].NIK ),
+				USERNAME: req.body.USERNAME,
 				NAMA_LENGKAP: String( query_data_sap[0].EMPLOYEE_NAME ),
 				JOB_CODE: String( query_data_sap[0].JOB_CODE ),
 
@@ -167,7 +169,6 @@ exports.create = async ( req, res ) => {
 						data: {}
 					} );
 				}
-				
 				
 				set_pjs.save()
 				.then( data => {
@@ -203,7 +204,6 @@ exports.create = async ( req, res ) => {
 		}
 		
 	}
-
 };
 
 /**
