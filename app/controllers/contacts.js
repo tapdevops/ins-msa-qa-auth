@@ -64,14 +64,32 @@
 					return [+k, result[k]];
 				});
 				result = result[3][1];
+
+				console.log( result );
+				var JOB = '';
+				var FULLNAME = '';
+				if ( result.PJS_JOB ) {
+					JOB = String( result.PJS_JOB );
+				}
+				else if( result.HRIS_JOB ) {
+					JOB = String( result.HRIS_JOB );
+				}
+
+				if ( result.PJS_FULLNAME ) {
+					JOB = String( result.PJS_FULLNAME );
+				}
+				else if( result.HRIS_FULLNAME ) {
+					JOB = String( result.HRIS_FULLNAME );
+				}
+
 				results.push( {
 					USER_AUTH_CODE: result.USER_AUTH_CODE,
 					EMPLOYEE_NIK: result.EMPLOYEE_NIK,
 					USER_ROLE: result.USER_ROLE,
 					LOCATION_CODE: String( result.LOCATION_CODE ),
 					REF_ROLE: result.REF_ROLE,
-					JOB: ( !result.PJS_JOB ) ? result.HRIS_JOB : result.PJS_JOB,
-					FULLNAME: ( !result.PJS_FULLNAME ) ? result.HRIS_FULLNAME : result.PJS_FULLNAME
+					JOB: JOB,
+					FULLNAME: FULLNAME
 				} );
 			} );
 
