@@ -330,7 +330,8 @@ exports.status = ( req, res ) => {
 			if ( data.length > 0 ) {
 				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 				var dt = data[0];
-				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
+				//var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
+				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
 			}
 			else {
 				var start_date = 0;

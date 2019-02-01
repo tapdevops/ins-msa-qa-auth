@@ -65,20 +65,71 @@ exports.create = async ( req, res ) => {
 		]
 	} );
 
-	
-
 	if ( query_data_auth.length > 0 ) {
 		res.send( {
 			status: false,
 			message: "Error! User gagal dibuat, tidak dapat memasukkan USER_AUTH_CODE/NIK yang sama",
-			data: {}
+			data: []
 		} );
 	}
 	else {
-
 		var count_user = await userAuthModel.find().count();
 		var generate_auth_code = userAuthCode.generate( count_user );
+
+		// Data user yang diinputkan berada di TM_EMPLOYEE_HRIS
+		if ( query_data_hris.length > 0 ) {
+			res.json( {
+				status: true,
+				message: 'HRIS',
+				data: []
+			} );
+		}
+		// Data user yang diinutkan berada di TM_EMPLOYEE_SAP
+		else {
+			data_user_auth = {
+				USER_AUTH_CODE: generate_auth_code,
+				EMPLOYEE_NIK: String( req.body.EMPLOYEE_NIK ),
+				USER_ROLE: String( req.body.USER_ROLE ),
+				LOCATION_CODE: String( req.body.LOCATION_CODE ),
+				REF_ROLE: String( req.body.REF_ROLE ),
+
+				INSERT_USER: auth.USER_AUTH_CODE,
+				INSERT_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
+				UPDATE_USER: auth.USER_AUTH_CODE,
+				UPDATE_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
+				DELETE_USER: "",
+				DELETE_TIME: 0
+			}
+
+			data_pjs = {
+
+				EMPLOYEE_NIK: String( query_data_sap[0].EMPLOYEE_NIK ),
+				USERNAME: String( query_data_sap[0].EMPLOYEE_NIK ),
+				NAMA_LENGKAP: String( query_data_sap[0].EMPLOYEE_NAME ),
+				JOB_CODE: String( query_data_sap[0].JOB_CODE ),
+
+				INSERT_USER: auth.USER_AUTH_CODE,
+				INSERT_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
+				UPDATE_USER: auth.USER_AUTH_CODE,
+				UPDATE_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
+				DELETE_USER: "",
+				DELETE_TIME: 0
+			}
+
+			console.log( 'DATA USER AUTH' );
+			console.log( data_user_auth );
+
+			console.log( 'DATA PJS' );
+			console.log( data_user_auth );
+
+			res.json( {
+				status: true,
+				message: 'SAP',
+				data: []
+			} );
+		}
 		
+		/*
 		if ( query_data_hris.length > 0 ) {
 
 			data_user_auth = {
@@ -202,6 +253,7 @@ exports.create = async ( req, res ) => {
 			} );
 
 		}
+		*/
 		
 	}
 
