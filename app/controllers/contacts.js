@@ -60,26 +60,32 @@
 
 			var results = [];
 			data.forEach( function( result ) {
+
 				var result = Object.keys(result).map(function(k) {
 					return [+k, result[k]];
 				});
-				result = result[3][1];
-				
 				var JOB = '';
 				var FULLNAME = '';
+
+				result = result[3][1];
+				
 				if ( result.PJS_JOB ) {
-					JOB = String( result.PJS_JOB );
+					JOB = result.PJS_JOB;
 				}
 				else if( result.HRIS_JOB ) {
 					JOB = String( result.HRIS_JOB );
 				}
 
 				if ( result.PJS_FULLNAME ) {
-					JOB = String( result.PJS_FULLNAME );
+					FULLNAME = result.PJS_FULLNAME;
 				}
 				else if( result.HRIS_FULLNAME ) {
-					JOB = String( result.HRIS_FULLNAME );
+					FULLNAME = result.HRIS_FULLNAME;
 				}
+
+				console.log( result );
+
+				//console.log( JOB + ' / ' + FULLNAME );
 
 				results.push( {
 					USER_AUTH_CODE: result.USER_AUTH_CODE,
