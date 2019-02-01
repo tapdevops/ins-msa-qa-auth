@@ -126,7 +126,7 @@
 				});
 				result = result[3][1];
 				results.push( {
-					NIK: 'HRIS.' + result.EMPLOYEE_NIK,
+					NIK: 'HRIS-' + result.EMPLOYEE_NIK,
 					NAMA_LENGKAP: result.EMPLOYEE_FULLNAME,
 					JOB_CODE: result.EMPLOYEE_POSITION
 				} );
@@ -141,7 +141,7 @@
 				});
 				result = result[3][1];
 				results.push( {
-					NIK: 'SAP.' + result.NIK,
+					NIK: 'SAP-' + result.NIK,
 					NAMA_LENGKAP: result.EMPLOYEE_NAME,
 					JOB_CODE: result.JOB_CODE
 				} );

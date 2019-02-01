@@ -75,17 +75,13 @@
 				else if( result.HRIS_JOB ) {
 					JOB = String( result.HRIS_JOB );
 				}
-
+				
 				if ( result.PJS_FULLNAME ) {
 					FULLNAME = result.PJS_FULLNAME;
 				}
 				else if( result.HRIS_FULLNAME ) {
 					FULLNAME = result.HRIS_FULLNAME;
 				}
-
-				console.log( result );
-
-				//console.log( JOB + ' / ' + FULLNAME );
 
 				results.push( {
 					USER_AUTH_CODE: result.USER_AUTH_CODE,
@@ -97,7 +93,7 @@
 					FULLNAME: FULLNAME
 				} );
 			} );
-
+			
 			res.send( {
 				status: true,
 				message: config.error_message.find_200,
