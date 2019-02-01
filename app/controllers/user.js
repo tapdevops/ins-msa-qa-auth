@@ -85,7 +85,7 @@ exports.create = async ( req, res ) => {
 
 			data_user_auth = {
 				USER_AUTH_CODE: generate_auth_code,
-				EMPLOYEE_NIK: String( req.body.EMPLOYEE_NIK ),
+				EMPLOYEE_NIK: NIK,
 				USER_ROLE: String( req.body.USER_ROLE ),
 				LOCATION_CODE: String( req.body.LOCATION_CODE ),
 				REF_ROLE: String( req.body.REF_ROLE ),
@@ -200,9 +200,7 @@ exports.create = async ( req, res ) => {
 					data: {}
 				} );
 			} );
-
 		}
-		
 	}
 };
 
