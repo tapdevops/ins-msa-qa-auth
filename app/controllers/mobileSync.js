@@ -184,7 +184,7 @@ exports.create = ( req, res ) => {
 
 	var auth = req.auth;
 	const set = new mobileSyncModel({
-		TGL_MOBILE_SYNC: date.convert( req.body.TGL_MOBILE_SYNC, 'YYYYMMDDhhmmss' ),
+		TGL_MOBILE_SYNC: date.convert( req.body.TGL_MOBILE_SYNC, 'YYYYMMDD' ),
 		TABEL_UPDATE: req.body.TABEL_UPDATE || "",
 		IMEI: auth.IMEI,
 		INSERT_USER: auth.USER_AUTH_CODE,
