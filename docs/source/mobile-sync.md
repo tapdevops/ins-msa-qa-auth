@@ -19,12 +19,12 @@ No | Parameter 					     | Deskripsi 		 				 | MSA
  4 | auth/category        		     | Untuk sync tabel TM_CATEGORY      | Auth
  5 | auth/kriteria        		     | Untuk sync tabel TM_KRITERIA      | Auth
  6 | finding     				     | Untuk sync tabel TR_FINDING 		 | Finding
- 10| hectare-statement/afdeling      | Untuk sync tabel TM_AFD 			 | Hectare Statement
- 11| hectare-statement/block         | Untuk sync tabel TM_BLOCK 		 | Hectare Statement
- 12| hectare-statement/comp          | Untuk sync tabel TM_COMP 		 | Hectare Statement
- 13| hectare-statement/est           | Untuk sync tabel TM_EST 			 | Hectare Statement
- 14| hectare-statement/land-use 	 | Untuk sync tabel TR_HS_LAND_USE   | Hectare Statement
- 15| hectare-statement/region  		 | Untuk sync tabel TM_REGION		 | Hectare Statement
+ 7 | hectare-statement/afdeling      | Untuk sync tabel TM_AFD 			 | Hectare Statement
+ 8 | hectare-statement/block         | Untuk sync tabel TM_BLOCK 		 | Hectare Statement
+ 9 | hectare-statement/comp          | Untuk sync tabel TM_COMP 		 | Hectare Statement
+ 10| hectare-statement/est           | Untuk sync tabel TM_EST 			 | Hectare Statement
+ 11| hectare-statement/land-use 	 | Untuk sync tabel TR_HS_LAND_USE   | Hectare Statement
+ 12| hectare-statement/region  		 | Untuk sync tabel TM_REGION		 | Hectare Statement
 
 ## Mobile Sync List [/api/mobile-sync]
 
