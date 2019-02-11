@@ -30,8 +30,9 @@ exports.findContact = async ( req, res ) => {
 		.limit( 1 );
 
 	if ( mobileSync.length > 0 ) {
-		var start_date = 20181201000000;
-		var end_date = 20190401000000;
+		
+		var start_date = date.convert( String( mobileSync.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
+		var end_date = date.convert( 'now', 'YYYYMMDDhhmmss' );
 		var query = await viewUserAuthModel
 			.find({
 				$or: [
@@ -71,8 +72,8 @@ exports.findContact = async ( req, res ) => {
 			} );
 	}
 	else {
-		var start_date = 20181201000000;
-		var end_date = 20190401000000;
+		var start_date = 0;
+		var end_date = date.convert( 'now', 'YYYYMMDDhhmmss' );
 		var query = await viewUserAuthModel
 			.find({})
 			.select( {
