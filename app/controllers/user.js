@@ -143,7 +143,6 @@ exports.create = async ( req, res ) => {
 			}
 			
 			data_pjs = {
-
 				EMPLOYEE_NIK: String( query_data_sap[0].NIK ),
 				USERNAME: req.body.USERNAME,
 				NAMA_LENGKAP: String( query_data_sap[0].EMPLOYEE_NAME ),

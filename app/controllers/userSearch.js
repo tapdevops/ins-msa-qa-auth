@@ -28,6 +28,12 @@
 	const date = require( '../libraries/date.js' );
 
 /**
+ * findAtAuth
+ * Untuk mencari dan menampilkan data user dari tabel User Auth.
+ * --------------------------------------------------------------------------
+ */
+
+/**
  * findAtHRISSAP
  * Untuk mencari dan menampilkan data user dari tabel SAP dan HRIS.
  * --------------------------------------------------------------------------

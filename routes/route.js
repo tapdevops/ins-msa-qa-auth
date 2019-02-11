@@ -192,6 +192,12 @@ module.exports = ( app ) => {
 
 	app.get( '/api/mobile-sync/auth/kriteria', token_verify, mobileSync.findKriteria );
 
+
+
+
+
+	app.get( '/api/mobile-sync/auth/contact', token_verify, mobileSync.findContact );
+
 	// Config SSH
 	app.get( '/init', configSSH.init );
 
