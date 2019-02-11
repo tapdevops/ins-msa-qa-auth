@@ -53,18 +53,18 @@ module.exports = {
 			ldap: 'http://tap-ldapdev.tap-agri.com/login',
 			*/
 			
-			//hectare_statement: 'http://149.129.245.230:3009',
-			//inspection: 'http://149.129.245.230:3010',
-			//finding: 'http://149.129.245.230:3011',
-			//images: 'http://149.129.245.230:3012',
-			//ldap: 'http://tap-ldapdev.tap-agri.com/login',
-			
-			
-			hectare_statement: 'http://localhost:3009',
-			inspection: 'http://localhost:3010',
-			finding: 'http://localhost:3011',
-			images: 'http://localhost:3012',
+			hectare_statement: 'http://149.129.245.230:3009',
+			inspection: 'http://149.129.245.230:3010',
+			finding: 'http://149.129.245.230:3011',
+			images: 'http://149.129.245.230:3012',
 			ldap: 'http://tap-ldapdev.tap-agri.com/login',
+			
+			
+			//hectare_statement: 'http://localhost:3009',
+			//inspection: 'http://localhost:3010',
+			//finding: 'http://localhost:3011',
+			//images: 'http://localhost:3012',
+			//ldap: 'http://tap-ldapdev.tap-agri.com/login',
 			
 			
 		}
