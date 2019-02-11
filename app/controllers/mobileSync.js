@@ -157,14 +157,27 @@ exports.findContact = async ( req, res ) => {
 		}
 	} );
 	
-	res.json( {
-		status: true,
-		data: {
-			"hapus": temp_delete,
-			"simpan": temp_insert,
-			"ubah": temp_update
-		}
-	} );
+	if ( mobileSync.length > 0 ) {
+		res.json( {
+			status: true,
+			data: {
+				"hapus": temp_delete,
+				"simpan": temp_insert,
+				"ubah": temp_update
+			}
+		} );
+	}
+	else {
+		res.json( {
+			status: true,
+			data: {
+				"hapus": [],
+				"simpan": temp_insert,
+				"ubah": []
+			}
+		} );
+	}
+	
 
 };
 
