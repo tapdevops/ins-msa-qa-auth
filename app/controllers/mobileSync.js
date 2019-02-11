@@ -19,11 +19,246 @@ const date = require( '../libraries/date.js' );
 // Find Region
 exports.findContact = async ( req, res ) => {
 
-	var x = await viewUserAuthModel.find();
+	var auth = req.auth;
+	var mobileSync = await mobileSyncModel
+		.find( {
+			INSERT_USER: auth.USER_AUTH_CODE,
+			IMEI: auth.IMEI,
+			TABEL_UPDATE: 'auth/contact'
+		} )
+		.sort( { TGL_MOBILE_SYNC: -1 } )
+		.limit( 1 );
+
+	if ( mobileSync.length > 0 ) {
+		var start_date = 20181201000000;
+		var end_date = 20190401000000;
+		var query = await viewUserAuthModel
+			.find({
+				$or: [
+					{
+						INSERT_TIME: {
+							$gte: start_date,
+							$lte: end_date
+						}
+					},
+					{
+						UPDATE_TIME: {
+							$gte: start_date,
+							$lte: end_date
+						}
+					},
+					{
+						DELETE_TIME: {
+							$gte: start_date,
+							$lte: end_date
+						}
+					}
+				]
+			})
+			.select( {
+				USER_AUTH_CODE: 1,
+				EMPLOYEE_NIK: 1,
+				USER_ROLE: 1,
+				LOCATION_CODE: 1,
+				REF_ROLE: 1,
+				PJS_JOB: 1,
+				PJS_FULLNAME: 1,
+				HRIS_JOB: 1,
+				HRIS_FULLNAME: 1,
+				INSERT_TIME: 1,
+				UPDATE_TIME: 1,
+				DELETE_TIME: 1
+			} );
+	}
+	else {
+		var start_date = 20181201000000;
+		var end_date = 20190401000000;
+		var query = await viewUserAuthModel
+			.find({})
+			.select( {
+				USER_AUTH_CODE: 1,
+				EMPLOYEE_NIK: 1,
+				USER_ROLE: 1,
+				LOCATION_CODE: 1,
+				REF_ROLE: 1,
+				PJS_JOB: 1,
+				PJS_FULLNAME: 1,
+				HRIS_JOB: 1,
+				HRIS_FULLNAME: 1,
+				INSERT_TIME: 1,
+				UPDATE_TIME: 1,
+				DELETE_TIME: 1
+			} );
+
+	}
+
+	var temp_insert = [];
+	var temp_update = [];
+	var temp_delete = [];
+	
+	query.forEach( function( result ) {
+
+		var result = Object.keys(result).map(function(k) {
+			return [+k, result[k]];
+		});
+		var JOB = '';
+		var FULLNAME = '';
+
+		result = result[3][1];
+		
+		if ( result.PJS_JOB ) {
+			JOB = result.PJS_JOB;
+		}
+		else if( result.HRIS_JOB ) {
+			JOB = String( result.HRIS_JOB );
+		}
+		
+		if ( result.PJS_FULLNAME ) {
+			FULLNAME = result.PJS_FULLNAME;
+		}
+		else if( result.HRIS_FULLNAME ) {
+			FULLNAME = result.HRIS_FULLNAME;
+		}
+
+		if ( result.DELETE_TIME >= start_date && result.DELETE_TIME <= end_date ) {
+			temp_delete.push( {
+				USER_AUTH_CODE: result.USER_AUTH_CODE,
+				EMPLOYEE_NIK: result.EMPLOYEE_NIK,
+				USER_ROLE: result.USER_ROLE,
+				LOCATION_CODE: String( result.LOCATION_CODE ),
+				REF_ROLE: result.REF_ROLE,
+				JOB: JOB,
+				FULLNAME: FULLNAME
+			} );
+		}
+
+		if ( result.INSERT_TIME >= start_date && result.INSERT_TIME <= end_date ) {
+			temp_insert.push( {
+				USER_AUTH_CODE: result.USER_AUTH_CODE,
+				EMPLOYEE_NIK: result.EMPLOYEE_NIK,
+				USER_ROLE: result.USER_ROLE,
+				LOCATION_CODE: String( result.LOCATION_CODE ),
+				REF_ROLE: result.REF_ROLE,
+				JOB: JOB,
+				FULLNAME: FULLNAME
+			} );
+		}
+
+		if ( result.UPDATE_TIME >= start_date && result.UPDATE_TIME <= end_date ) {
+			temp_update.push( {
+				USER_AUTH_CODE: result.USER_AUTH_CODE,
+				EMPLOYEE_NIK: result.EMPLOYEE_NIK,
+				USER_ROLE: result.USER_ROLE,
+				LOCATION_CODE: String( result.LOCATION_CODE ),
+				REF_ROLE: result.REF_ROLE,
+				JOB: JOB,
+				FULLNAME: FULLNAME
+			} );
+		}
+	} );
+	console.log(query)
 	res.json( {
 		status: true,
-		data: data
+		data: {
+			"hapus": temp_delete,
+			"simpan": temp_insert,
+			"ubah": temp_update
+			
+		}
 	} );
+
+	//console.log( query );
+	//mobileSyncModel.find( {
+	//	INSERT_USER: auth.USER_AUTH_CODE,
+	//	IMEI: auth.IMEI,
+	//	TABEL_UPDATE: 'auth/contact'
+	//} )
+	//.sort( { TGL_MOBILE_SYNC: -1 } )
+	//.limit( 1 )
+	//.then( data => {
+	//	if( !data ) {
+	//		return res.send( {
+	//			status: false,
+	//			message: config.error_message.find_404,
+	//			data: {}
+	//		} );
+	//	}
+		
+		/*
+		var temp_insert = [];
+		var temp_update = [];
+		var temp_delete = [];
+		query.forEach( function( result ) {
+
+			var result = Object.keys(result).map(function(k) {
+				return [+k, result[k]];
+			});
+			var JOB = '';
+			var FULLNAME = '';
+
+			result = result[3][1];
+			
+			if ( result.PJS_JOB ) {
+				JOB = result.PJS_JOB;
+			}
+			else if( result.HRIS_JOB ) {
+				JOB = String( result.HRIS_JOB );
+			}
+			
+			if ( result.PJS_FULLNAME ) {
+				FULLNAME = result.PJS_FULLNAME;
+			}
+			else if( result.HRIS_FULLNAME ) {
+				FULLNAME = result.HRIS_FULLNAME;
+			}
+
+			if ( result.DELETE_TIME >= start_date && result.DELETE_TIME <= end_date ) {
+				temp_delete.push( {
+					USER_AUTH_CODE: result.USER_AUTH_CODE,
+					EMPLOYEE_NIK: result.EMPLOYEE_NIK,
+					USER_ROLE: result.USER_ROLE,
+					LOCATION_CODE: String( result.LOCATION_CODE ),
+					REF_ROLE: result.REF_ROLE,
+					JOB: JOB,
+					FULLNAME: FULLNAME
+				} );
+			}
+
+			if ( result.INSERT_TIME >= start_date && result.INSERT_TIME <= end_date ) {
+				temp_insert.push( {
+					USER_AUTH_CODE: result.USER_AUTH_CODE,
+					EMPLOYEE_NIK: result.EMPLOYEE_NIK,
+					USER_ROLE: result.USER_ROLE,
+					LOCATION_CODE: String( result.LOCATION_CODE ),
+					REF_ROLE: result.REF_ROLE,
+					JOB: JOB,
+					FULLNAME: FULLNAME
+				} );
+			}
+
+			if ( result.UPDATE_TIME >= start_date && result.UPDATE_TIME <= end_date ) {
+				temp_update.push( {
+					USER_AUTH_CODE: result.USER_AUTH_CODE,
+					EMPLOYEE_NIK: result.EMPLOYEE_NIK,
+					USER_ROLE: result.USER_ROLE,
+					LOCATION_CODE: String( result.LOCATION_CODE ),
+					REF_ROLE: result.REF_ROLE,
+					JOB: JOB,
+					FULLNAME: FULLNAME
+				} );
+			}
+		} )*/
+	//} );
+
+	//res.json( {
+	//	statuss1s: true,
+	//	data: {
+	//		"hapus": temp_delete,
+	//		"simpan": temp_insert,
+	//		"ubah": temp_update
+	//		
+	//	}
+	//} );
 
 	//viewUserAuthModel.find({})
 	//.then( data => {
