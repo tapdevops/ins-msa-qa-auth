@@ -527,7 +527,7 @@ exports.status = ( req, res ) => {
 
 			client.get( url_final, args, function ( data, response ) {
 				
-
+				console.log(data);
 				if ( data.data.length > 0 ) {
 					var trcode = [];
 					for ( i = 0; i <= ( data.data.length - 1 ); i++ ) {

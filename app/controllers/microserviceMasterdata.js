@@ -234,3 +234,21 @@ exports.blockDelete = async ( req, res ) => {
 		}
 	} );
 }
+
+
+// SKM Design Block - Find
+exports.findSKMDesignBlockGeoJSON = async ( req, res ) => {
+	var client = new Client();
+	var url = config.url.microservices.hectare_statement + '/geom/skm-design/block/' + req.params.id;
+	var args = {
+		headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
+	};
+	client.get( url, args, function ( data, response ) {
+		// parsed response body as js object
+		res.json( { 
+			"status": data.status,
+			"message": data.message,
+			"data": data.data
+		} );
+	});
+};
