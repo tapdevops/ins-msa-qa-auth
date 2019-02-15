@@ -239,7 +239,7 @@ exports.blockDelete = async ( req, res ) => {
 // SKM Design Block - Find
 exports.findSKMDesignBlockGeoJSON = async ( req, res ) => {
 	var client = new Client();
-	var url = config.url.microservices.hectare_statement + '/geom/skm-design/block/' + req.params.id;
+	var url = config.url.microservices.hectare_statement + '/geom/design/block/' + req.params.id;
 	var args = {
 		headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
 	};

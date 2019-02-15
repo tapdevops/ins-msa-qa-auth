@@ -106,7 +106,7 @@ module.exports = ( app ) => {
 	app.delete( '/api/finding/:id', verifyToken, microserviceFinding.delete );
 
 	// ROUTE GEOM SKM DESGIN
-	app.get( '/api/geom/skm-design/block/:id', token_verify, microserviceMasterdata.findSKMDesignBlockGeoJSON );
+	app.get( '/api/geom/design/block/:id', token_verify, microserviceMasterdata.findSKMDesignBlockGeoJSON );
 
 	// ROUTE - IMAGES
 	app.post( '/api/image/description', token_verify, microserviceImages.create  );
