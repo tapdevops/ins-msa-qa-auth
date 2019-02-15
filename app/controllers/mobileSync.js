@@ -534,7 +534,6 @@ exports.status = ( req, res ) => {
 						trcode.push( String( data.data[i] ) );
 					}
 
-
 					var finding_images = new Client();
 					var finding_images_url = config.url.microservices.images + '/sync-mobile/images';
 					var finding_images_args = {
