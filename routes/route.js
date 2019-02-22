@@ -26,7 +26,6 @@ module.exports = ( app ) => {
 	const userSearch = require( '../app/controllers/userSearch.js' );
 	const contacts = require( '../app/controllers/contacts.js' );
 	const category = require( '../app/controllers/category.js' );
-	const login = require( '../app/controllers/login.js' );
 	const mobileSync = require( '../app/controllers/mobileSync.js' );
 	const kriteria = require( '../app/controllers/kriteria.js' );
 	const configSSH = require( '../app/controllers/configSSH.js' );
@@ -161,9 +160,6 @@ module.exports = ( app ) => {
 
 	// ROUTE - Contacts
 	app.get( '/api/contacts', token_verify, contacts.find );
-
-	// ROUTE - Login
-	app.get( '/api/login', verifyToken, login.find );
 
 	// ROUTE - USER AUTHORIZATION
 	app.post( '/api/user-authorization', token_verify, userAuthorization.createOrUpdate );
