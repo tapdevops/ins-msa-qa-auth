@@ -76,6 +76,250 @@ app.get( '/', ( req, res ) => {
 // Login
 app.post( '/api/login', ( req, res ) => {
 
+	console.log(req.body.imei);
+
+	if ( req.body.username && req.body.password ) {
+		
+		//if( !req.body.imei ) {
+		//	return res.status( 400 ).send({
+		//		status: false,
+		//		message: 'Invalid IMEI',
+		//		data: {}
+		//	});
+		//}
+
+		var client = new Client();
+		var url = config.url.microservices.ldap;
+		var args = {
+			data: {
+				username: req.body.username,
+				password: req.body.password
+			},
+			headers: { "Content-Type": "application/json" }
+		};
+
+		const loginModel = require( './app/models/login.js' );
+		const loginLib = require( './app/libraries/login.js' );
+		const loginData = {};
+
+		const employeeHRIS = require( './app/models/employeeHRIS.js' );
+		const userAuth = require( './app/models/userAuth.js' );
+		const pjs = require( './app/models/pjs.js' );
+
+		employeeHRIS.findOne( { 
+			EMPLOYEE_USERNAME: req.body.username
+		} ).then( data => {
+
+			// LOGIN via PJS
+			if( !data ) {
+
+				pjs.findOne( { 
+					USERNAME: req.body.username
+				} ).then( data => {
+					if ( !data ) {
+						return res.send({
+							status: false,
+							message: "User tersebut belum terdaftar (@PJS)",
+							data: {}
+						});
+					}
+
+					var data_pjs = data;
+
+					// Kondisi data ada di PJS
+					userAuth.findOne( { 
+						EMPLOYEE_NIK: data_pjs.EMPLOYEE_NIK
+					} ).then( data_auth => {
+
+						if ( !data_auth ) {
+							return res.send({
+								status: false,
+								message: "User tersebut belum terdaftar (@PJS-2)",
+								data: {}
+							});
+						}
+
+						var claims = {
+							USERNAME: req.body.username,
+							USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
+							USER_ROLE: data_auth.USER_ROLE,
+							LOCATION_CODE: data_auth.LOCATION_CODE,
+							REFFERENCE_ROLE: data_auth.REF_ROLE,
+							EMPLOYEE_NIK: data_auth.EMPLOYEE_NIK,
+							IMEI: req.body.imei
+						}
+						var token = tokenLib.generateToken( claims );
+
+						var login_request = {
+							USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
+							EMPLOYEE_NIK: data_pjs.EMPLOYEE_NIK,
+							USERNAME: data_pjs.USERNAME,
+							ACCESS_TOKEN: token,
+							LOG_LOGIN: '',
+							IMEI: req.body.imei,
+							INSERT_USER: '',
+							INSERT_TIME: '',
+							UPDATE_USER: data_pjs.USERNAME,
+							DELETE_USER: '',
+							DELETE_TIME: ''
+						};
+
+
+						loginLib.setLogin( login_request );
+
+						// Kondisi data ada di PJS
+						res.json({
+							status: true,
+							message: "Success",
+							data: {
+								USERNAME: data_pjs.USERNAME,
+								NIK: data_pjs.EMPLOYEE_NIK,
+								ACCESS_TOKEN: token,
+								JOB_CODE: data_pjs.JOB_CODE,
+								USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
+								REFFERENCE_ROLE: data_auth.REF_ROLE,
+								USER_ROLE: data_auth.USER_ROLE,
+								LOCATION_CODE: data_auth.LOCATION_CODE
+							}
+						});
+
+					} ).catch( err => {
+						if( err.kind === 'ObjectId' ) {
+							return res.send({
+								status: false,
+								message: "Error retrieving user 4zzz",
+								data: {}
+							});
+						}
+						return res.status( 500 ).send({
+							status: false,
+							message: "Error retrieving user 3zzz",
+							data: {}
+						} );
+					} );
+
+				} ).catch( err => {
+					if( err.kind === 'ObjectId' ) {
+						return res.send({
+							status: false,
+							message: "Error retrieving user 4",
+							data: {}
+						});
+					}
+					return res.send({
+						status: false,
+						message: "Error retrieving user 3",
+						data: {}
+					} );
+				} );
+			}
+
+			// LOGIN via Employee HRIS
+			else {
+
+				console.log( data );
+				var data_hris = data;
+				userAuth.findOne( { 
+					EMPLOYEE_NIK: data_hris.EMPLOYEE_NIK
+				} ).then( data_auth => {
+					if ( !data_auth ) {
+						return res.send({
+							status: false,
+							message: "User tersebut belum terdaftar (@HRIS)",
+							data: {}
+						});
+					}
+
+					var claims = {
+						USERNAME: req.body.username,
+						USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
+						USER_ROLE: data_auth.USER_ROLE,
+						LOCATION_CODE: data_auth.LOCATION_CODE,
+						REFFERENCE_ROLE: data_auth.REF_ROLE,
+						EMPLOYEE_NIK: data_auth.EMPLOYEE_NIK,
+						IMEI: req.body.imei
+					}
+					var token = tokenLib.generateToken( claims );
+
+					var login_request = {
+						USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
+						EMPLOYEE_NIK: data_hris.EMPLOYEE_NIK,
+						USERNAME: data_hris.EMPLOYEE_USERNAME,
+						ACCESS_TOKEN: token,
+						LOG_LOGIN: '',
+						IMEI: req.body.imei,
+						INSERT_USER: '',
+						INSERT_TIME: '',
+						UPDATE_USER: data_hris.EMPLOYEE_USERNAME,
+						DELETE_USER: '',
+						DELETE_TIME: ''
+					};
+
+					loginLib.setLogin( login_request );
+
+					// Kondisi data ada di HRIS
+					res.json({
+						status: true,
+						message: "Success",
+						data: {
+							USERNAME: data_hris.EMPLOYEE_USERNAME,
+							NIK: data_hris.EMPLOYEE_NIK,
+							ACCESS_TOKEN: token,
+							JOB_CODE: data_hris.EMPLOYEE_POSITION,
+							USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
+							REFFERENCE_ROLE: data_auth.REF_ROLE,
+							USER_ROLE: data_auth.USER_ROLE,
+							LOCATION_CODE: data_auth.LOCATION_CODE
+						}
+					});
+
+				} ).catch( err => {
+					if( err.kind === 'ObjectId' ) {
+						return res.send({
+							status: false,
+							message: "Error retrieving user 4zzz",
+							data: {}
+						});
+					}
+					return res.send({
+						status: false,
+						message: "Error retrieving user 3zzz",
+						data: {}
+					} );
+				} );
+
+			}
+
+		} ).catch( err => {
+			if( err.kind === 'ObjectId' ) {
+				return res.send({
+					status: false,
+					message: "Error retrieving user 2",
+					data: {}
+				});
+			}
+			return res.send( {
+				status: false,
+				message: "Error retrieving user 1",
+				data: {}
+			} );
+		} );
+		
+					
+		
+	}
+	else {
+		res.status( 400 ).send( {
+			status: false,
+			message: 'Periksa input Username/Password anda.',
+			data: {}
+		} );
+	}
+} );
+
+// Login
+app.post( '/api/logins', ( req, res ) => {
+
 	//console.log(req.body.imei);
 
 	if ( req.body.username && req.body.password ) {
