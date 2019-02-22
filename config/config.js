@@ -66,7 +66,7 @@ module.exports = {
 
 			
 			hectare_statement: 'http://app.tap-agri.com/mobileinspection/ins-msa-hectarestatement',
-			inspection: 'http://app.tap-agri.com/mobileinspection/ins-msa',
+			inspection: 'http://app.tap-agri.com/mobileinspection/ins-msa-inspection',
 			finding: 'http://app.tap-agri.com/mobileinspection/ins-msa-finding',
 			images: 'http://app.tap-agri.com/mobileinspection/ins-msa-images',
 			ldap: 'http://tap-ldapdev.tap-agri.com/login',
