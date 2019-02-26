@@ -86,6 +86,7 @@
 				BATAS_ATAS: 1,
 				BATAS_BAWAH: 1,
 				KONVERSI_ANGKA: 1
+				
 			})
 			.then( data => {
 				if( !data ) {
