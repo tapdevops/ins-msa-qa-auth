@@ -25,9 +25,9 @@ module.exports = {
 	url: {
 		microservices: {
 			
-			inspection_header: 'http://149.129.244.86:3010/inspection-header',
-			inspection_detail: 'http://149.129.244.86:3010/inspection-detail',
-			inspection_tracking: 'http://149.129.244.86:3010/inspection-tracking',
+			//inspection_header: 'http://149.129.244.86:3010/inspection-header',
+			//inspection_detail: 'http://149.129.244.86:3010/inspection-detail',
+			//inspection_tracking: 'http://149.129.244.86:3010/inspection-tracking',
 
 			masterdata_block: 'http://149.129.244.86:3009/block',
 			masterdata_afdeling: 'http://149.129.244.86:3009/afdeling',
@@ -52,40 +52,24 @@ module.exports = {
 
 
 
-
-
-
-
-			/*
-			hectare_statement: 'http://149.129.244.86:3009',
-			inspection: 'http://149.129.244.86:3010',
-			finding: 'http://149.129.244.86:3011',
-			images: 'http://149.129.244.86:3012',
-			ldap: 'http://tap-ldapdev.tap-agri.com/login',
-			*/
-
 			
-			hectare_statement: 'http://app.tap-agri.com/mobileinspection/ins-msa-hectarestatement',
-			inspection: 'http://app.tap-agri.com/mobileinspection/ins-msa-inspection',
-			finding: 'http://app.tap-agri.com/mobileinspection/ins-msa-finding',
-			images: 'http://app.tap-agri.com/mobileinspection/ins-msa-images',
-			ldap: 'http://tap-ldapdev.tap-agri.com/login',
-			
-			
-			
-			//hectare_statement: 'http://149.129.245.230:3009',
-			//inspection: 'http://149.129.245.230:3010',
-			//finding: 'http://149.129.245.230:3011',
-			//images: 'http://149.129.245.230:3012',
+			//hectare_statement: 'http://app.tap-agri.com/mobileinspection/ins-msa-hectarestatement',
+			//inspection: 'http://app.tap-agri.com/mobileinspection/ins-msa-inspection',
+			//finding: 'http://app.tap-agri.com/mobileinspection/ins-msa-finding',
+			//images: 'http://app.tap-agri.com/mobileinspection/ins-msa-images',
 			//ldap: 'http://tap-ldapdev.tap-agri.com/login',
 			
+			hectare_statement: 'http://149.129.245.230:3009',
+			inspection: 'http://149.129.245.230:3010',
+			finding: 'http://149.129.245.230:3011',
+			images: 'http://149.129.245.230:3012',
+			ldap: 'http://tap-ldapdev.tap-agri.com/login',
 			
 			//hectare_statement: 'http://localhost:3009',
 			//inspection: 'http://localhost:3010',
 			//finding: 'http://localhost:3011',
 			//images: 'http://localhost:3012',
 			//ldap: 'http://tap-ldapdev.tap-agri.com/login',
-			
 			
 		}
 	},

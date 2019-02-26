@@ -84,7 +84,8 @@
 				COLOR: 1,
 				GRADE: 1,
 				BATAS_ATAS: 1,
-				BATAS_BAWAH: 1
+				BATAS_BAWAH: 1,
+				KONVERSI_ANGKA: 1
 			})
 			.then( data => {
 				if( !data ) {
