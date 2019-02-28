@@ -745,7 +745,6 @@ exports.status = ( req, res ) => {
 			}
 			else {
 				// Tidak ada data yang ditemukan, baru pertama kali sync
-				
 				var url = config.url.microservices.finding + '/finding';
 				var client = new Client();
 				var args = {

@@ -51,33 +51,21 @@
 		if ( query.length > 0 ) {
 
 			var results = [];
-			query.forEach( function( result ) {
-				/*var pth = _directory_base + '/' + result.ICON;
-				
-				if ( fServer.existsSync( pth ) ) {
+			if ( config.app_env == 'production' ) {
+				var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.path_production + '/';
+			}
+			else {
+				var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.path_development ;
+			}
 
-					var bitmap = fServer.readFileSync( pth );
-					results.push( {
-						CATEGORY_CODE: result.CATEGORY_CODE,
-						CATEGORY_NAME: result.CATEGORY_NAME,
-						ICON: result.ICON,
-						SOURCE_IMAGE: 'data:image/png;base64,' + new Buffer( bitmap ).toString( 'base64' )
-					} );
-				}
-				else {
-					results.push( {
-						CATEGORY_CODE: result.CATEGORY_CODE,
-						CATEGORY_NAME: result.CATEGORY_NAME,
-						ICON: result.ICON,
-						SOURCE_IMAGE: ''
-					} );
-				}*/
+			
+			query.forEach( function( result ) {
 				var path = 'files/images/category/' + result.ICON;
 				results.push( {
 					CATEGORY_CODE: result.CATEGORY_CODE,
 					CATEGORY_NAME: result.CATEGORY_NAME,
 					ICON: result.ICON,
-					ICON_URL: req.protocol + '://' + req.get( 'host' ) + '/' + path
+					ICON_URL: path_global + path
 				} );
 			} );
 

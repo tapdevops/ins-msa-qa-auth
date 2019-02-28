@@ -1,5 +1,5 @@
 module.exports = {
-
+	
 	/*
 	|--------------------------------------------------------------------------
 	| App Config
@@ -7,7 +7,8 @@ module.exports = {
 	*/
 	app_port: process.env.PORT || 3008,
 	app_name: 'Microservice Auth (08-01-2019 16:26)',
-
+	app_env: 'production', // production, qa, development
+	
 	/*
 	|--------------------------------------------------------------------------
 	| Token
@@ -16,7 +17,7 @@ module.exports = {
 	secret_key: 'T4pagri123#',
 	token_expiration: 7, // Days
 	token_algorithm: 'HS256',
-
+	
 	/*
 	|--------------------------------------------------------------------------
 	| URL
@@ -28,30 +29,30 @@ module.exports = {
 			//inspection_header: 'http://149.129.244.86:3010/inspection-header',
 			//inspection_detail: 'http://149.129.244.86:3010/inspection-detail',
 			//inspection_tracking: 'http://149.129.244.86:3010/inspection-tracking',
-
+			
 			masterdata_block: 'http://149.129.244.86:3009/block',
 			masterdata_afdeling: 'http://149.129.244.86:3009/afdeling',
 			masterdata_region: 'http://149.129.244.86:3009/region',
-
+			
 			//finding: 'http://localhost:3005/finding',
 			//finding_history: 'http://localhost:3005/finding-history',
-
+			
 			sync_mobile_hectare_statement: 'http://149.129.244.86:3009/sync-mobile',
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			
 			hectare_statement: 'http://app.tap-agri.com/mobileinspection/ins-msa-hectarestatement',
 			inspection: 'http://app.tap-agri.com/mobileinspection/ins-msa-inspection',
@@ -73,7 +74,16 @@ module.exports = {
 			
 		}
 	},
-	
+
+	/*
+	|--------------------------------------------------------------------------
+	| Path
+	|--------------------------------------------------------------------------
+	| Config tambahan untuk mengatur jika ada path yang tidak sesuai dengan
+	| parameter URL.
+	*/
+	path_production: 'mobileinspection/ins-msa-auth',
+	path_development: '',
 	/*
 	|--------------------------------------------------------------------------
 	| Error Message
@@ -99,5 +109,5 @@ module.exports = {
 		delete_404: 'Error! Data gagal dihapus ',
 		delete_500: 'Error! Terjadi kesalahan dalam penghapusan data ',
 	}
-
+	
 }
