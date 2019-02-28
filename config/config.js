@@ -84,6 +84,7 @@ module.exports = {
 	*/
 	path_production: 'mobileinspection/ins-msa-auth',
 	path_development: '',
+	
 	/*
 	|--------------------------------------------------------------------------
 	| Error Message
