@@ -66,7 +66,7 @@
 					CATEGORY_CODE: result.CATEGORY_CODE,
 					CATEGORY_NAME: result.CATEGORY_NAME,
 					ICON: result.ICON,
-					ICON_URL: path_global + path
+					ICON_URL: path_global + path + '?'
 				} );
 			} );
 
