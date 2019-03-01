@@ -59,7 +59,6 @@
 				var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.path_development ;
 			}
 
-			
 			query.forEach( function( result ) {
 				var path = 'files/images/category/' + result.ICON;
 				results.push( {
@@ -73,7 +72,7 @@
 			if ( results.length > 0 ) {
 				res.send( {
 					status: true,
-					message: config.error_message.find_200,
+					message: config.error_message.find_200 + '1 Maret 2019',
 					data: results
 				} );
 			}
