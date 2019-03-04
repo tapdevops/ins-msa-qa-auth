@@ -11,11 +11,6 @@
 	const ViewContentInspeksiModel = require( '../models/viewContentInspeksi.js' );
 	const kriteriaModel = require( '../models/kriteria.js' );
 
-
-
-
-
-
 	// Node Modules
 	const querystring = require( 'querystring' );
 	const url = require( 'url' );

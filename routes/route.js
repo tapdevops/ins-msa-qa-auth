@@ -1,71 +1,56 @@
-const jwt = require( 'jsonwebtoken' );
-const config = require( '../config/config.js' );
-const uuid = require( 'uuid' );
-const nJwt = require( 'njwt' );
-const jwtDecode = require( 'jwt-decode' );
+/*
+ |--------------------------------------------------------------------------
+ | App Setup
+ |--------------------------------------------------------------------------
+ |
+ | Untuk menghandle models, libraries, helper, node modules, dan lain-lain
+ |
+ */
+ 	// Node Modules
+	const jwt = require( 'jsonwebtoken' );
+	const config = require( '../config/config.js' );
+	const uuid = require( 'uuid' );
+	const nJwt = require( 'njwt' );
+	const jwtDecode = require( 'jwt-decode' );
 
-module.exports = ( app ) => {
-
-	// Declare Controllers
-	//const auth = require( '../app/controllers/auth.js' );
-	
+/*
+ |--------------------------------------------------------------------------
+ | Controller
+ |--------------------------------------------------------------------------
+ */
 	const microserviceMasterdata = require( '../app/controllers/microserviceMasterdata.js' );
 	const microserviceImages = require( '../app/controllers/microserviceImages.js' );
 	const microserviceFinding = require( '../app/controllers/microserviceFinding.js' );
 	const employeeHRIS = require( '../app/controllers/employeeHRIS.js' );
 	const employeeSAP = require( '../app/controllers/employeeSAP.js' );
-	const pjs = require( '../app/controllers/pjs.js' );
+	
 	const pjsLog = require( '../app/controllers/pjsLog.js' );
 	const loginLog = require( '../app/controllers/loginLog.js' );
 	const syncDBLog = require( '../app/controllers/syncDBLog.js' );
 	const modules = require( '../app/controllers/modules.js' );
-	const content = require( '../app/controllers/content.js' );
+	
 	const contentLabel = require( '../app/controllers/contentLabel.js' );
 	const parameter = require( '../app/controllers/parameter.js' );
 	const userAuthorization = require( '../app/controllers/userAuthorization.js' );
 	const userSearch = require( '../app/controllers/userSearch.js' );
-	const contacts = require( '../app/controllers/contacts.js' );
-	const category = require( '../app/controllers/category.js' );
+	
 	const mobileSync = require( '../app/controllers/mobileSync.js' );
-	const kriteria = require( '../app/controllers/kriteria.js' );
-	const configSSH = require( '../app/controllers/configSSH.js' );
-	const user = require( '../app/controllers/user.js' );
+	
 	const webReport = require( '../app/controllers/webReport.js' );
-
-
-	// Routing: Auth
-	//app.post( '/api/login', auth.login );
-	//app.get( '/api/test', verifyToken, auth.test );
-
-	// ROUTE - INSPECTION
-	//app.get( '/api/inspection', verifyToken, microserviceInspection.find );
-
-	/*══════════════════════════════════════════════════════════════════════════════╗
-	║                                                                               ║
-	║ Route      : Inspeksi                                                         ║
-	║ Keterangan :                                                                  ║
-	║                                                                               ║
-	╠═══════════════════════════════════════════════════════════════════════════════╣
-	║ Untuk mengambil, menyimpan, menampilkan, dan menghapus data dari MSA Inspeksi ║
-	╟──────────────────────────╥────────────────────────────────────────────────────╢
-	║ Function                 ║ Keterangan                                         ║
-	╟──────────────────────────╫────────────────────────────────────────────────────╢
-	║ createH                  ║ Untuk membuat data inspeksi header                 ║
-	╟──────────────────────────╫────────────────────────────────────────────────────╢
-	║ findH                    ║ Untuk menampilkan data Inspeksi                    ║
-	╟──────────────────────────╫────────────────────────────────────────────────────╢
-	║ findOneH                 ║ Untuk menampilkan data Inspeksi berdasarkan ID     ║
-	╟──────────────────────────╫────────────────────────────────────────────────────╢
-	║ updateH                  ║ Untuk mengupdate data inspeksi header              ║
-	╟──────────────────────────╫────────────────────────────────────────────────────╢
-	║ createH                  ║ Untuk membuat data inspeksi header                 ║
-	╟──────────────────────────╫────────────────────────────────────────────────────╢
-	║ createH                  ║ Untuk membuat data inspeksi header                 ║
-	╟──────────────────────────╫────────────────────────────────────────────────────╢
-	║ findH                    ║ Untuk menampilkan data Inspeksi                    ║
-	╚══════════════════════════╩═══════════════════════════════════════════════════*/
-
 	const microserviceInspection = require( '../app/controllers/microserviceInspection.js' );
+
+	const CategoryController = require( '../app/controllers/CategoryController.js' );
+	const ContactsController = require( '../app/controllers/ContactsController.js' );
+	const ContentController = require( '../app/controllers/ContentController.js' );
+	const KriteriaController = require( '../app/controllers/KriteriaController.js' );
+	const PJSController = require( '../app/controllers/PJSController.js' );
+	const TokenController = require( '../app/controllers/TokenController.js' );
+	const UserController = require( '../app/controllers/UserController.js' );
+	
+
+module.exports = ( app ) => {
+
+	
 
 	app.post( '/api/inspection', verifyToken, microserviceInspection.create );
 	app.post( '/api/inspection-header', verifyToken, microserviceInspection.createH );
@@ -118,7 +103,6 @@ module.exports = ( app ) => {
 	app.post( '/sync/employee-sap', employeeSAP.createOrUpdate );
 
 	// ROUTE - PJS
-	app.post( '/api/pjs/', verifyToken, pjs.create );
 
 	// ROUTE - PJS Log
 	app.post( '/api/pjs-log', verifyToken, pjsLog.create );
@@ -138,12 +122,6 @@ module.exports = ( app ) => {
 	app.put( '/api/modules/:id', verifyToken, modules.update );
 	app.delete( '/api/modules/:id', verifyToken, modules.delete );
 
-	// ROUTE - Content
-	app.get( '/api/content', token_verify, content.find );
-	app.get( '/api/content/:id', token_verify, content.findOne );
-	app.post( '/api/content', token_verify, content.create );
-	app.put( '/api/content/:id', token_verify, content.update );
-	app.delete( '/api/content/:id', token_verify, content.delete );
 
 	// ROUTE - Content
 	app.get( '/api/content-label', token_verify, contentLabel.find );
@@ -156,10 +134,6 @@ module.exports = ( app ) => {
 	app.post( '/api/parameter', token_verify, parameter.create );
 	app.get( '/api/parameter', token_verify, parameter.find );
 	app.get( '/api/parameter/track', token_verify, parameter.findOneTimeTrack );
-	
-
-	// ROUTE - Contacts
-	app.get( '/api/contacts', token_verify, contacts.find );
 
 	// ROUTE - USER AUTHORIZATION
 	app.post( '/api/user-authorization', token_verify, userAuthorization.createOrUpdate );
@@ -171,10 +145,6 @@ module.exports = ( app ) => {
 	app.get( '/api/user-search/hris-sap', token_verify, userSearch.findAtHRISSAP );
 	app.get( '/api/user-search/user-auth', token_verify, userSearch.findAtUserAuth );
 
-
-	// ROUTE - CATEGORY
-	app.post( '/api/category', token_verify, category.create );
-	app.get( '/api/category', verifyToken, category.find );
 
 	// ROUTE - MOBILE SYNC
 	app.get( '/api/mobile-sync', verifyToken, mobileSync.find );
@@ -197,14 +167,7 @@ module.exports = ( app ) => {
 
 	app.get( '/api/mobile-sync/auth/contact', token_verify, mobileSync.findContact );
 
-	// Config SSH
-	app.get( '/init', configSSH.init );
-
-	// User
-	app.get( '/api/user', token_verify, user.find );
-	app.get( '/api/user/:id', token_verify, user.findOne );
-	app.put( '/api/user/:id', token_verify, user.update );
-	app.post( '/api/user', token_verify, user.create );
+		
 
 	// REPORT - FINDING
 	app.get( '/api/web-report/finding', token_verify, webReport.findingFindReport );
@@ -215,11 +178,67 @@ module.exports = ( app ) => {
 	//app.get( '/api/mobile-sync/hectare-statement/test', verifyToken, mobileSync.findTest );
 
 	// ROUTE - KRITERIA
-	app.post( '/api/kriteria', token_verify, kriteria.create );
-	app.get( '/api/kriteria', token_verify, kriteria.find );
 
 	const test = require( '../app/controllers/test.js' );
 	app.get( '/test', test.test );
+
+	/*
+	 |--------------------------------------------------------------------------
+	 | Category Controller
+	 |--------------------------------------------------------------------------
+	 */
+		app.post( '/api/category', token_verify, CategoryController.create );
+		app.get( '/api/category', verifyToken, CategoryController.find );
+
+	/*
+	 |--------------------------------------------------------------------------
+	 | Contacts Controller
+	 |--------------------------------------------------------------------------
+	 */
+		app.get( '/api/contacts', token_verify, ContactsController.find );
+
+	/*
+	 |--------------------------------------------------------------------------
+	 | Content Controller
+	 |--------------------------------------------------------------------------
+	 */
+		app.get( '/api/content', token_verify, ContentController.find );
+		app.get( '/api/content/:id', token_verify, ContentController.findOne );
+		app.post( '/api/content', token_verify, ContentController.create );
+		app.put( '/api/content/:id', token_verify, ContentController.update );
+		app.delete( '/api/content/:id', token_verify, ContentController.delete );
+
+	/*
+	 |--------------------------------------------------------------------------
+	 | Kriteria Controller
+	 |--------------------------------------------------------------------------
+	 */
+		app.post( '/api/kriteria', token_verify, KriteriaController.create );
+		app.get( '/api/kriteria', token_verify, KriteriaController.find );
+
+	/*
+	 |--------------------------------------------------------------------------
+	 | PJS Controller (Pejabat Sementara)
+	 |--------------------------------------------------------------------------
+	 */
+		app.post( '/api/pjs/', token_verify, PJSController.create );
+
+	/*
+	 |--------------------------------------------------------------------------
+	 | Token Controller
+	 |--------------------------------------------------------------------------
+	 */
+	 	app.get( '/api/token/generate', token_verify, TokenController.generate );
+
+	/*
+	 |--------------------------------------------------------------------------
+	 | User Controller
+	 |--------------------------------------------------------------------------
+	 */
+		app.get( '/api/user', token_verify, UserController.find );
+		app.get( '/api/user/:id', token_verify, UserController.findOne );
+		app.put( '/api/user/:id', token_verify, UserController.update );
+		app.post( '/api/user', token_verify, UserController.create );
 
 }
 
@@ -260,6 +279,7 @@ function token_verify( req, res, next ) {
 			}
 			else {
 				req.auth = jwtDecode( req.token );
+				req.auth.LOCATION_CODE = req.auth.LOCATION_CODE;
 				req.auth.LOCATION_CODE_GROUP = req.auth.LOCATION_CODE.split( ',' );
 				req.config = config;
 				next();

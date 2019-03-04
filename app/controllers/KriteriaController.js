@@ -7,18 +7,7 @@
  |
  */
  	// Models
-	const kriteriaModel = require( '../models/kriteria.js' );
-
-	// Node Modules
-	const querystring = require( 'querystring' );
-	const url = require( 'url' );
-	const jwt = require( 'jsonwebtoken' );
-	const uuid = require( 'uuid' );
-	const nJwt = require( 'njwt' );
-	const jwtDecode = require( 'jwt-decode' );
-	const Client = require( 'node-rest-client' ).Client; 
-	const moment_pure = require( 'moment' );
-	const moment = require( 'moment-timezone' );
+	const KriteriaModel = require( '../models/kriteria.js' );
 
 	// Libraries
 	const config = require( '../../config/config.js' );
@@ -35,7 +24,7 @@
 		var url_query_length = Object.keys( url_query ).length;
 			url_query.DELETE_USER = "";
 
-		kriteriaModel.find( url_query )
+		KriteriaModel.find( url_query )
 		.select( {
 			_id: 0,
 			INSERT_TIME: 0,
@@ -77,7 +66,7 @@
 	exports.create = ( req, res ) => {
 		
 		var auth = req.auth;
-		const set_data = new kriteriaModel( {
+		const set_data = new KriteriaModel( {
 			KRITERIA_CODE: req.body.KRITERIA_CODE || "",
 			CONTENT_LABEL_CODE: req.body.CONTENT_LABEL_CODE || "",
 			VALUE: req.body.VALUE || "",

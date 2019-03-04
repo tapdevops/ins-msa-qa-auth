@@ -145,7 +145,17 @@ exports.createOrUpdate = async ( req, res ) => {
 	} );
 }
 
-// Retrieve and return all notes from the database.
+/*
+ |--------------------------------------------------------------------------
+ | Find
+ |--------------------------------------------------------------------------
+ |
+ | Fungsi untuk mengambil data.
+ | Contoh :
+ | 1. api-url/ 		Mengambil seluruh data
+ | 2. api-ulr?AB=C 	Mengambil data berdasarkan parameter
+ |
+ */
 exports.find = ( req, res ) => {
 
 	url_query = req.query;
@@ -178,125 +188,5 @@ exports.find = ( req, res ) => {
 			message: 'Error retrieving data',
 			data: {}
 		} );
-	} );
-};
-
-exports.createOrUpdate2 = ( req, res ) => {
-		
-	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
-		if ( err ) {
-			res.sendStatus( 403 );
-		}
-		else {
-
-			if( !req.body.PARAMETER_NAME || !req.body.MODULE_CODE ) {
-				return res.send({
-					status: false,
-					message: 'Invalid input',
-					data: {}
-				});
-			}
-
-			var auth = jwtDecode( req.token );
-
-			userAuthorizationModel.findOne( { 
-				PARAMETER_NAME: req.body.PARAMETER_NAME,
-				MODULE_CODE: req.body.MODULE_CODE
-			} ).then( data => {
-
-				// Kondisi belum ada data, create baru dan insert ke Sync List
-				if( !data ) {
-
-					const set = new userAuthorizationModel( {
-						MODULE_CODE: req.body.MODULE_CODE,
-						PARAMETER_NAME: req.body.PARAMETER_NAME,
-						STATUS: 1,
-						INSERT_USER: auth.USER_AUTH_CODE || "",
-						INSERT_TIME: new Date().getTime(),
-						UPDATE_USER: auth.USER_AUTH_CODE || "",
-						UPDATE_TIME: new Date().getTime(),
-
-						DELETE_USER: "",
-						DELETE_TIME: ""
-					} );
-					
-					set.save()
-					.then( data => {
-						res.send({
-							status: true,
-							message: 'Success 2',
-							data: {}
-						});
-					} ).catch( err => {
-						res.send( {
-							status: false,
-							message: 'Some error occurred while creating data',
-							data: {}
-						} );
-					} );
-				}
-				// Kondisi data sudah ada, check value, jika sama tidak diupdate, jika beda diupdate dan dimasukkan ke Sync List
-				else {
-
-					var change_status_to = 0;
-					if ( data.STATUS == 0 ) {
-						change_status_to = 1;
-					}
-
-					userAuthorizationModel.findOneAndUpdate( { 
-						PARAMETER_NAME: req.body.PARAMETER_NAME,
-						MODULE_CODE: req.body.MODULE_CODE
-					}, {
-						STATUS: change_status_to,
-						UPDATE_USER: auth.USER_AUTH_CODE || "",
-						UPDATE_TIME: new Date().getTime()
-					}, { new: true } )
-					.then( dataUpdate => {
-						if( !dataUpdate ) {
-							return res.send( {
-								status: false,
-								message: "Data error updating 2",
-								data: {}
-							} );
-						}
-						else {
-							res.send({
-								status: true,
-								message: 'Success',
-								dataUpdate: {}
-							});
-						}
-					}).catch( err => {
-						if( err.kind === 'ObjectId' ) {
-							return res.send( {
-								status: false,
-								message: "Data not found 2",
-								data: {}
-							} );
-						}
-						return res.send( {
-							status: false,
-							message: "Data error updating",
-							data: {}
-						} );
-					});
-				}
-				
-			} ).catch( err => {
-				if( err.kind === 'ObjectId' ) {
-					return res.send({
-						status: false,
-						message: "Data not found 1",
-						data: {}
-					});
-				}
-
-				return res.send({
-					status: false,
-					message: "Error retrieving Data",
-					data: {}
-				} );
-			} );
-		}
 	} );
 };
