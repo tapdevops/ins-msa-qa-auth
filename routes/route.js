@@ -43,6 +43,7 @@
 	const ContactsController = require( '../app/controllers/ContactsController.js' );
 	const ContentController = require( '../app/controllers/ContentController.js' );
 	const KriteriaController = require( '../app/controllers/KriteriaController.js' );
+	const MicroserviceEBCCValidationController = require( '../app/controllers/MicroserviceEBCCValidationController.js' );
 	const PJSController = require( '../app/controllers/PJSController.js' );
 	const TokenController = require( '../app/controllers/TokenController.js' );
 	const UserController = require( '../app/controllers/UserController.js' );
@@ -216,6 +217,14 @@ module.exports = ( app ) => {
 	 */
 		app.post( '/api/kriteria', token_verify, KriteriaController.create );
 		app.get( '/api/kriteria', token_verify, KriteriaController.find );
+
+	/*
+	 |--------------------------------------------------------------------------
+	 | MSA-EBCC Validation Controller
+	 |--------------------------------------------------------------------------
+	 */
+		app.post( '/api/ebcc/validation/header', token_verify, MicroserviceEBCCValidationController.createHeader );
+		app.post( '/api/ebcc/validation/detail', token_verify, MicroserviceEBCCValidationController.createDetail );
 
 	/*
 	 |--------------------------------------------------------------------------
