@@ -15,7 +15,7 @@ const moment_pure = require( 'moment' );
 const moment = require( 'moment-timezone' );
 const date = require( '../libraries/date.js' );
 
-// Find Region
+// Find Contact
 exports.findContact = async ( req, res ) => {
 
 	var auth = req.auth;
@@ -178,6 +178,87 @@ exports.findContact = async ( req, res ) => {
 		} );
 	}
 	
+
+};
+
+// Find Region
+exports.findEBCCKualitas = ( req, res ) => {
+	
+	var auth = req.auth;
+
+	mobileSyncModel.find( {
+		INSERT_USER: auth.USER_AUTH_CODE,
+		IMEI: auth.IMEI,
+		TABEL_UPDATE: 'ebcc/kualitas'
+	} )
+	.sort( { TGL_MOBILE_SYNC: -1 } )
+	.limit( 1 )
+	.then( data => {
+		if ( !data ) {
+			return res.send( {
+				status: false,
+				message: 'Data not found 2',
+				data: {}
+			} );
+		}
+		if ( data.length > 0 ) {
+			var dt = data[0];
+			var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' ).substr( 0, 8 );
+			var end_date = date.convert( 'now', 'YYYYMMDDhhmmss' ).substr( 0, 8 );
+			var client = new Client();
+			var args = {
+				headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
+			};
+			var url = config.url.microservices.ebcc_validation + '/sync-mobile/kualitas/';
+			var url_final = url + start_date + '/' + end_date;
+			
+			client.get( url_final, args, function ( data, response ) {
+				res.json( {
+					status: data.status,
+					message: data.message,
+					data: data.data
+				} );
+			});
+		}
+		else {
+			var url = config.url.microservices.ebcc_validation + '/ebcc/kualitas';
+			var client = new Client();
+			var args = {
+				headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
+			};
+
+			client.get( url, args, function ( data, response ) {
+				var insert = [];
+				if ( data.data.length > 0 ) {
+					insert = data.data;
+				}
+				
+				res.json( { 
+					"status": data.status,
+					"message": "First time sync",
+					"data": {
+						hapus: [],
+						simpan: data.data,
+						ubah: []
+					}
+				} );
+			});
+		}
+		
+	} ).catch( err => {
+		if( err.kind === 'ObjectId' ) {
+			return res.send( {
+				status: false,
+				message: 'ObjectId Error',
+				data: {}
+			} );
+		}
+		return res.send( {
+			status: false,
+			message: 'Error retrieving data',
+			data: {}
+		} );
+	} );
 
 };
 

@@ -158,6 +158,7 @@ module.exports = ( app ) => {
 	app.get( '/api/mobile-sync/hectare-statement/afdeling', token_verify, mobileSync.findAfd );
 	app.get( '/api/mobile-sync/hectare-statement/block', token_verify, mobileSync.findBlock );
 	app.get( '/api/mobile-sync/hectare-statement/land-use', token_verify, mobileSync.findLandUse );
+	app.get( '/api/mobile-sync/ebcc/kualitas', token_verify, mobileSync.findEBCCKualitas );
 
 	app.get( '/api/mobile-sync/auth/kriteria', token_verify, mobileSync.findKriteria );
 
