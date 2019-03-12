@@ -41,18 +41,20 @@ module.exports = {
 			
 			
 			
-			//hectare_statement: 'http://app.tap-agri.com/mobileinspection/ins-msa-hectarestatement',
-			//inspection: 'http://app.tap-agri.com/mobileinspection/ins-msa-inspection',
-			//finding: 'http://app.tap-agri.com/mobileinspection/ins-msa-finding',
-			//images: 'http://app.tap-agri.com/mobileinspection/ins-msa-images',
-			//ldap: 'http://tap-ldapdev.tap-agri.com/login',
-
-			ebcc_validation: 'http://149.129.250.199:3014',
-			hectare_statement: 'http://149.129.250.199:3009',
-			inspection: 'http://149.129.250.199:3010',
-			finding: 'http://149.129.250.199:3011',
+			hectare_statement: 'http://app.tap-agri.com/mobileinspection/ins-msa-hectarestatement',
+			inspection: 'http://app.tap-agri.com/mobileinspection/ins-msa-inspection',
+			finding: 'http://app.tap-agri.com/mobileinspection/ins-msa-finding',
 			images: 'http://149.129.250.199:3012',
 			ldap: 'http://tap-ldapdev.tap-agri.com/login',
+
+			
+
+			//ebcc_validation: 'http://149.129.250.199:3014',
+			//hectare_statement: 'http://149.129.250.199:3009',
+			//inspection: 'http://149.129.250.199:3010',
+			//finding: 'http://149.129.250.199:3011',
+			//images: 'http://149.129.250.199:3012',
+			//ldap: 'http://tap-ldapdev.tap-agri.com/login',
 			
 			//ebcc_validation: 'http://localhost:3014',
 			//hectare_statement: 'http://localhost:3009',
@@ -61,6 +63,11 @@ module.exports = {
 			//images: 'http://localhost:3012',
 			//ldap: 'http://tap-ldapdev.tap-agri.com/login',
 			
+
+
+
+			// Backup
+			//images: 'http://app.tap-agri.com/mobileinspection/ins-msa-images',
 		}
 	},
 
