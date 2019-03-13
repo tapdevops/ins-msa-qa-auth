@@ -78,8 +78,9 @@ exports.create = async ( req, res ) => {
 	}
 	else {
 
-		var count_user = await userAuthModel.find().count();
-		var generate_auth_code = userAuthCode.generate( count_user );
+		var last_user = await userAuthModel.findOne().select({_id:0,USER_AUTH_CODE:1}).sort({_id:-1}).limit(1);
+		var new_user_auth_code = parseInt( ( last_user.USER_AUTH_CODE.substr( 0, 1 ) == "0" ? last_user.USER_AUTH_CODE.substr( 1, 3 ): last_user.USER_AUTH_CODE.substr( 0, 4 ) ) ) + 1;
+		var generate_auth_code = ( new_user_auth_code.toString().length == 3 ? "0" + new_user_auth_code.toString() : new_user_auth_code.toString() );
 		
 		if ( query_data_hris.length > 0 ) {
 
