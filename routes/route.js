@@ -45,6 +45,7 @@
 	const KriteriaController = require( '../app/controllers/KriteriaController.js' );
 	const MicroserviceEBCCValidationController = require( '../app/controllers/MicroserviceEBCCValidationController.js' );
 	const PJSController = require( '../app/controllers/PJSController.js' );
+	const ServerController = require( '../app/controllers/ServerController.js' );
 	const TokenController = require( '../app/controllers/TokenController.js' );
 	const UserController = require( '../app/controllers/UserController.js' );
 	
@@ -232,6 +233,13 @@ module.exports = ( app ) => {
 	 |--------------------------------------------------------------------------
 	 */
 		app.post( '/api/pjs/', token_verify, PJSController.create );
+
+	/*
+	 |--------------------------------------------------------------------------
+	 | Server Controller
+	 |--------------------------------------------------------------------------
+	 */
+		app.get( '/api/server/time', token_verify, ServerController.time );
 
 	/*
 	 |--------------------------------------------------------------------------

@@ -150,11 +150,11 @@
 		var url_query_length = Object.keys( url_query ).length;
 		var client = new Client();
 		var url = config.url.microservices.inspection + '/inspection-report/q';
-
+		
 		if ( url_query_length > 0 ) {
 			url = url + req._parsedUrl.search;
 		}
-		
+		console.log( url );
 		var args = {
 			headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
 		};
