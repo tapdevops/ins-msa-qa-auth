@@ -51,9 +51,7 @@
 	
 
 module.exports = ( app ) => {
-
 	
-
 	app.post( '/api/inspection', verifyToken, microserviceInspection.create );
 	app.post( '/api/inspection-header', verifyToken, microserviceInspection.createH );
 	app.get( '/api/inspection-header', verifyToken, microserviceInspection.findH );

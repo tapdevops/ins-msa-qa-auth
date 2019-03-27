@@ -7,7 +7,7 @@ module.exports = {
 	*/
 	app_port: process.env.PORT || 3008,
 	app_name: 'Microservice Auth',
-	app_env: 'development', // production, qa, development
+	app_env: 'production', // production, qa, development
 	
 	/*
 	|--------------------------------------------------------------------------
@@ -40,22 +40,21 @@ module.exports = {
 			sync_mobile_hectare_statement: 'http://149.129.244.86:3009/sync-mobile',
 			
 			
-			//ebcc_validation: 'http://149.129.250.199:3014',
-			//hectare_statement: 'http://app.tap-agri.com/mobileinspection/ins-msa-hectarestatement',
-			//inspection: 'http://app.tap-agri.com/mobileinspection/ins-msa-inspection',
-			//finding: 'http://app.tap-agri.com/mobileinspection/ins-msa-finding',
-			//images: 'http://149.129.245.230:3012',
-			//ldap: 'http://tap-ldapdev.tap-agri.com/login',
-
+			ebcc_validation: 'http://149.129.250.199:3014',
+			hectare_statement: 'http://app.tap-agri.com/mobileinspection/ins-msa-hectarestatement',
+			inspection: 'http://app.tap-agri.com/mobileinspection/ins-msa-inspection',
+			finding: 'http://app.tap-agri.com/mobileinspection/ins-msa-finding',
+			images: 'http://149.129.245.230:3012',
+			ldap: 'http://tap-ldap.tap-agri.com/login',
 			
-			
+			/*
 			ebcc_validation: 'http://149.129.250.199:3014',
 			hectare_statement: 'http://149.129.250.199:3009',
 			inspection: 'http://149.129.250.199:3010',
 			finding: 'http://149.129.250.199:3011',
 			images: 'http://149.129.250.199:3012',
 			ldap: 'http://tap-ldapdev.tap-agri.com/login',
-
+			*/
 			
 			//ebcc_validation: 'http://localhost:3014',
 			//hectare_statement: 'http://localhost:3009',

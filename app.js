@@ -74,7 +74,9 @@
 	app.use( expressUpload() );
 
 	// Setup Database
+
 	mongoose.Promise = global.Promise;
+	console.log(config2.database.url);
 	mongoose.connect( config2.database.url, {
 		useNewUrlParser: true,
 		ssl: config2.database.ssl
@@ -128,6 +130,7 @@
 			};
 			
 			// 1. Check ke LDAP
+			console.log(url)
 			client.post( url, args, function ( data, response ) {
 				// 2.1. Kondisi data terdapat pada LDAP
 
