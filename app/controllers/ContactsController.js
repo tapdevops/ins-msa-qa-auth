@@ -24,7 +24,7 @@ exports.find = ( req, res ) => {
 
 	var location_code_group = auth.LOCATION_CODE.split( ',' );
 	var ref_role = auth.REFFERENCE_ROLE;
-	
+	console.log("ABC");
 	ViewUserAuthModel.find({})
 	.select( {
 		USER_AUTH_CODE: 1,

@@ -160,6 +160,7 @@ exports.findContact = async ( req, res ) => {
 	if ( mobileSync.length > 0 ) {
 		res.json( {
 			status: true,
+			message: "Data Sync",
 			data: {
 				"hapus": temp_delete,
 				"simpan": temp_insert,
@@ -170,6 +171,7 @@ exports.findContact = async ( req, res ) => {
 	else {
 		res.json( {
 			status: true,
+			message: "First time sync",
 			data: {
 				"hapus": [],
 				"simpan": temp_insert,
@@ -1246,6 +1248,8 @@ exports.status = ( req, res ) => {
 		.sort( { TGL_MOBILE_SYNC: -1 } )
 		.limit( 1 )
 		.then( data => {
+
+			console.log(data);
 			if ( !data ) {
 				return res.send( {
 					status: false,
