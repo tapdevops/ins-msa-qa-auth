@@ -9,6 +9,8 @@ module.exports = {
 	name: 'Microservice Auth',
 	env: 'development', // production, qa, development
 
+
+
 	/*
 	|--------------------------------------------------------------------------
 	| Token
