@@ -174,6 +174,7 @@
 								} ).then( data_auth => {
 
 									console.log( 'Data yang dikirim :' );
+									
 									console.log( req.body );
 									console.log( 'Data Login :' );
 									console.log( data_auth );
