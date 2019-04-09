@@ -173,8 +173,9 @@
 									EMPLOYEE_NIK: data_pjs.EMPLOYEE_NIK
 								} ).then( data_auth => {
 
+									console.log( 'Mas Aris ------------------------------------------------' );
 									console.log( 'Data yang dikirim :' );
-									
+
 									console.log( req.body );
 									console.log( 'Data Login :' );
 									console.log( data_auth );
