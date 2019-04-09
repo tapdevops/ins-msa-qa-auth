@@ -175,7 +175,6 @@
 
 									console.log( 'Mas Aris ------------------------------------------------' );
 									console.log( '---------------------------------------------------------' );
-
 									console.log( 'Data yang dikirim :' );
 
 									console.log( req.body );
