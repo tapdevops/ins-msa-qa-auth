@@ -176,12 +176,14 @@
 									console.log( 'Mas Aris ------------------------------------------------' );
 
 
-									
+
 									console.log( 'Data yang dikirim :' );
 
 									console.log( req.body );
 									console.log( 'Data Login :' );
 									console.log( data_auth );
+
+
 
 									if ( !data_auth ) {
 										return res.send({
