@@ -174,6 +174,9 @@
 								} ).then( data_auth => {
 
 									console.log( 'Mas Aris ------------------------------------------------' );
+
+
+									
 									console.log( 'Data yang dikirim :' );
 
 									console.log( req.body );
