@@ -81,6 +81,7 @@
 		useNewUrlParser: true,
 		ssl: config2.database.ssl
 	} ).then( () => {
+		console.log( 'Konek ke: ' + config2.database.url );
 		console.log( 'Successfully connected to the Database' );
 	} ).catch( err => {
 		console.log( 'Could not connect to the Database. Exiting application.' )
@@ -171,6 +172,11 @@
 								userAuth.findOne( { 
 									EMPLOYEE_NIK: data_pjs.EMPLOYEE_NIK
 								} ).then( data_auth => {
+
+									console.log( 'Data yang dikirim :' );
+									console.log( req.body );
+									console.log( 'Data Login :' );
+									console.log( data_auth );
 
 									if ( !data_auth ) {
 										return res.send({
