@@ -5,7 +5,7 @@
 */
 	module.exports = {
 		production: {
-			url: 'mongodb://dbapp:dbapp123@dbapp.tap-agri.com:27017/s_auth?authSource=admin',
+			url: 'mongodb://s_auth:4uth2019@dbapp.tap-agri.com:4848/s_auth?authSource=s_auth',
 			ssl: false
 		},
 		development: {

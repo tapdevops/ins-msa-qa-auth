@@ -134,10 +134,6 @@
 			console.log(url)
 			client.post( url, args, function ( data, response ) {
 				// 2.1. Kondisi data terdapat pada LDAP
-
-				//console.log( data );
-				//console.log( data );
-
 				if ( data.status == true ) {
 					
 					const loginModel = require( './app/models/login.js' );
@@ -172,17 +168,6 @@
 								userAuth.findOne( { 
 									EMPLOYEE_NIK: data_pjs.EMPLOYEE_NIK
 								} ).then( data_auth => {
-
-									console.log( 'Mas Aris ------------------------------------------------' );
-									console.log( '---------------------------------------------------------' );
-									console.log( 'Data yang dikirim :' );
-
-									console.log( req.body );
-									console.log( 'Data Login :' );
-									console.log( data_auth );
-
-
-
 									if ( !data_auth ) {
 										return res.send({
 											status: false,
@@ -199,10 +184,8 @@
 										REFFERENCE_ROLE: data_auth.REF_ROLE,
 										EMPLOYEE_NIK: data_auth.EMPLOYEE_NIK,
 										IMEI: req.body.imei
-									}
-
+									};
 									var token = tokenLib.generateToken( claims );
-
 									var login_request = {
 										USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
 										EMPLOYEE_NIK: data_pjs.EMPLOYEE_NIK,
@@ -216,7 +199,6 @@
 										DELETE_USER: '',
 										DELETE_TIME: ''
 									};
-
 
 									loginLib.setLogin( login_request );
 
@@ -326,13 +308,13 @@
 
 							} ).catch( err => {
 								if( err.kind === 'ObjectId' ) {
-									return res.send({
+									return res.send( {
 										status: false,
 										message: "Error retrieving user 4zzz",
 										data: {}
-									});
+									} );
 								}
-								return res.send({
+								return res.send( {
 									status: false,
 									message: "Error retrieving user 3zzz",
 									data: {}

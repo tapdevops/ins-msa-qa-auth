@@ -7,9 +7,7 @@ module.exports = {
 	*/
 	port: process.env.PORT || 3008,
 	name: 'Microservice Auth',
-	env: 'development', // production, qa, development
-
-
+	env: 'production', // production, qa, development
 
 	/*
 	|--------------------------------------------------------------------------
@@ -66,14 +64,14 @@ module.exports = {
 			//images: 'http://localhost:3012',
 			//ldap: 'http://tap-ldapdev.tap-agri.com/login',
 			
-
-
-
+			
+			
+			
 			// Backup
 			//images: 'http://app.tap-agri.com/mobileinspection/ins-msa-images',
 		}
 	},
-
+	
 	/*
 	|--------------------------------------------------------------------------
 	| Path
