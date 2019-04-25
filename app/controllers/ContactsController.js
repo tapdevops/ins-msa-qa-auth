@@ -63,6 +63,37 @@ exports.find = ( req, res ) => {
 			if ( result.PJS_FULLNAME ) { FULLNAME = result.PJS_FULLNAME; }
 			else if( result.HRIS_FULLNAME ) { FULLNAME = result.HRIS_FULLNAME; }
 
+			var location_code = result.LOCATION_CODE + '';
+			var location_code_regional = '';
+			//var split_location_code = ( location_code.split( ',' ) ? location_code.split( ',' ) : location_code )
+			
+			var i = 0;
+			location_code.split( ',' ).forEach( function( lc ) {
+				var first_char = lc.substr( 0, 1 );
+				if ( lc != 'ALL' ) {
+					if ( i == 0 ) {
+						if ( first_char != '0' ) {
+							location_code_regional += '0' + lc.substr( 0, 1 );
+						}
+						else {
+							location_code_regional += lc;
+						}
+					}
+					else {
+						if ( first_char != '0' ) {
+							location_code_regional += ',0' + lc.substr( 0, 1 );
+						}
+						else {
+							location_code_regional += ',' + lc;
+						}
+					}
+				}
+				else {
+					location_code_regional = 'ALL';
+				}
+				i++;
+			} );
+
 			results.push( {
 				USER_AUTH_CODE: result.USER_AUTH_CODE,
 				EMPLOYEE_NIK: result.EMPLOYEE_NIK,
@@ -70,7 +101,8 @@ exports.find = ( req, res ) => {
 				LOCATION_CODE: String( result.LOCATION_CODE ),
 				REF_ROLE: result.REF_ROLE,
 				JOB: JOB,
-				FULLNAME: FULLNAME
+				FULLNAME: FULLNAME,
+				REGION_CODE: location_code_regional
 			} );
 		} );
 		
@@ -80,6 +112,7 @@ exports.find = ( req, res ) => {
 			data: results
 		} );
 	} ).catch( err => {
+		console.log(err);
 		res.send( {
 			status: false,
 			message: config.error_message.find_500 + ' - 2',

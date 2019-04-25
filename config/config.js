@@ -7,7 +7,7 @@ module.exports = {
 	*/
 	app_port: process.env.PORT || 3008,
 	app_name: 'Microservice Auth',
-	app_env: 'production', // production, qa, development
+	app_env: 'development', // production, qa, development
 	
 	/*
 	|--------------------------------------------------------------------------
@@ -48,11 +48,10 @@ module.exports = {
 			ldap: 'http://tap-ldap.tap-agri.com/login',
 			*/
 			
-			
 			ebcc_validation: 'http://149.129.250.199:3014',
 			hectare_statement: 'http://149.129.250.199:3009',
 			inspection: 'http://149.129.250.199:3010',
-			finding: 'http://149.129.250.199:3011',
+			finding: 'http://localhost:3011',
 			images: 'http://149.129.250.199:3012',
 			ldap: 'http://tap-ldapdev.tap-agri.com/login',
 			
@@ -64,9 +63,6 @@ module.exports = {
 			//images: 'http://localhost:3012',
 			//ldap: 'http://tap-ldapdev.tap-agri.com/login',
 			
-
-
-
 			// Backup
 			//images: 'http://app.tap-agri.com/mobileinspection/ins-msa-images',
 		}
@@ -105,7 +101,7 @@ module.exports = {
 		delete_200: 'Success! ',
 		delete_403: 'Forbidden ',
 		delete_404: 'Error! Data gagal dihapus ',
-		delete_500: 'Error! Terjadi kesalahan dalam penghapusan data ',
+		delete_500: 'Error! Terjadi kesalahan dalam penghapusan data '
 	}
 	
 }
