@@ -2,7 +2,7 @@
   "name": "app-gateway",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "server.js",
   "dependencies": {
     "async": "^2.6.1",
     "bcrypt-nodejs": "0.0.3",
