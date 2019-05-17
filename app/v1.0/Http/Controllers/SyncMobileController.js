@@ -442,6 +442,132 @@
 		};
 
 	/**
+	 * Finding Images Find
+	 * ...
+	 * --------------------------------------------------------------------------
+	 */
+		exports.finding_images_find = async ( req, res ) => {
+
+			var auth = req.auth;
+			var service_url = config.app.url[config.app.env].microservice_finding;
+			var service_url_images = config.app.url[config.app.env].microservice_images;
+			
+			Models.SyncMobile.find( {
+				INSERT_USER: auth.USER_AUTH_CODE,
+				IMEI: auth.IMEI,
+				TABEL_UPDATE: 'finding'
+			} )
+			.sort( { TGL_MOBILE_SYNC: -1 } )
+			.limit( 1 )
+			.then( data => {
+				if ( !data ) {
+					return res.send( {
+						status: false,
+						message: 'Data not found 2',
+						data: {}
+					} );
+				}
+
+				if ( data.length > 0 ) {
+					var dt = data[0];
+					var start_date = Libraries.Helper.date_format( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
+				}
+				else {
+					var start_date = 0;
+				}
+				
+				var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDD' ) + '235959';
+					
+				// Jika tanggal terakhir sync dan hari ini berbeda, maka akan dilakukan pengecekan ke database
+				var args = {
+					headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization },
+					requestConfig: {
+						timeout: 3000, //request timeout in milliseconds
+						noDelay: true, //Enable/disable the Nagle algorithm
+						keepAlive: true, //Enable/disable keep-alive functionalityidle socket
+					},
+					responseConfig: {
+						timeout: 3000
+					}
+				};
+
+				var url = service_url + '/sync-mobile/finding-images/' + start_date + '/' + end_date;
+				
+				( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					if ( data.data.length > 0 ) {
+						var trcode = [];
+						for ( i = 0; i <= ( data.data.length - 1 ); i++ ) {
+							trcode.push( String( data.data[i] ) );
+						}
+
+						var finding_images_url = service_url_images + '/sync-mobile/images';
+						var finding_images_args = {
+							data: {
+								"TR_CODE": trcode
+							},
+							headers: { 
+								"Content-Type": "application/json", 
+								"Authorization": req.headers.authorization
+							},
+							requestConfig: {
+								timeout: 10000, //request timeout in milliseconds
+								noDelay: true, //Enable/disable the Nagle algorithm
+								keepAlive: true, //Enable/disable keep-alive functionalityidle socket
+							},
+							responseConfig: {
+								timeout: 10000
+							}
+						};
+						( new NodeRestClient() ).post( finding_images_url, finding_images_args, function( data, response ) {
+							res.json( {
+								"status": data.status,
+								"message": data.message,
+								"data": {
+									hapus: [],
+									simpan: data.data,
+									ubah: []
+								}
+							} );
+						} );
+					}
+					else {
+						res.json({
+							"status": true,
+							"message": 'Tidak ada data',
+							"data": {
+								hapus: [],
+								simpan: [],
+								ubah: []
+							}
+						});
+					}
+				})
+				.on( 'error', function ( err ) {
+					res.send( {
+						status: false,
+						message: 'Error!',
+						data: {}
+					} );
+				} );
+				
+			} ).catch( err => {
+				console.log(err);
+				if( err.kind === 'ObjectId' ) {
+					return res.send( {
+						status: false,
+						message: 'ObjectId Error',
+						data: {}
+					} );
+				}
+				return res.send( {
+					status: false,
+					message: 'Error retrieving data',
+					data: {}
+				} );
+			} );
+		};
+
+	/**
 	 * Hectare Statement (HS) - Afdeling
 	 * ...
 	 * --------------------------------------------------------------------------

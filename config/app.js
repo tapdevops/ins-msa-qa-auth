@@ -13,9 +13,9 @@
 			name: 'Microservice Auth',
 			env: 'development', // production, quality_assurance, development,
 			port: {
-				development: process.env.PORT || 3008,
+				development: process.env.PORT || 4008,
 				quality_assurance: process.env.PORT || 5008,
-				production: process.env.PORT || 4008,
+				production: process.env.PORT || 3008,
 			},
 
 		/*
@@ -38,6 +38,7 @@
 					microservice_ebcc_validation: 'http://localhost:3014',
 					microservice_finding: 'http://localhost:3011',
 					microservice_hectare_statement: 'http://localhost:3009',
+					microservice_images: 'http://149.129.250.199:3012',
 				},
 				quality_assurance: {
 					ldap: 'http://tap-ldapdev.tap-agri.com/login'

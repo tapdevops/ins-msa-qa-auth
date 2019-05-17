@@ -27,11 +27,21 @@
 	 * --------------------------------------------------------------------------
 	 */
 		exports.service_list = async ( req, res ) => {
-			var data = await Models.ServiceList.find( {
-					MOBILE_VERSION: req.query.v
-				} ).select( {
-					_id: -0
-				} );
+			var data = await Models.ServiceList.aggregate( [
+				{
+					"$project": {
+						"_id": 0,
+						"MOBILE_VERSION": 1,
+						"API_NAME": 1,
+						"API_URL": {
+							"$concat": [ "$API_BASE_URL", "$PORT", "$API_URL_PARAMETER" ]
+						},
+						"METHOD": 1,
+						"KETERANGAN": 1,
+					}
+				}
+			] );
+				
 			return res.json( {
 				status: true,
 				message: "Success!",

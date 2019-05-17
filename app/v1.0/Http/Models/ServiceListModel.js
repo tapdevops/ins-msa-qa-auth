@@ -7,7 +7,9 @@
 	const ServiceListSchema = Mongoose.Schema( {
 		MOBILE_VERSION: String,
 		API_NAME: String,
-		API_URL: String,
+		API_BASE_URL: String,
+		PORT: String,
+		API_URL_PARAMETER: String,
 		KETERANGAN: String,
 		METHOD: String,
 		INSERT_USER: String,

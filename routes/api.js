@@ -77,6 +77,17 @@
 			// Sync Mobile 
 			app.post( '/api/v1.0/sync/mobile', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncMobile.create );
 			app.post( '/api/v1.0/sync/mobile/reset', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncMobile.reset );
+			app.get( '/api/v1.0/mobile-sync/finding-images', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncMobile.finding_images_find );
+			app.get( '/api/v1.0/mobile-sync/auth/contact', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncMobile.contact_find );
+			app.get( '/api/v1.0/mobile-sync/finding', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncMobile.finding_find );
+			app.get( '/api/v1.0/mobile-sync/auth/kriteria', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncMobile.kriteria_find );
+			app.get( '/api/v1.0/mobile-sync/ebcc/kualitas', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncMobile.ebcc_kualitas_find );
+			app.get( '/api/v1.0/mobile-sync/hectare-statement/afdeling', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncMobile.hs_afdeling_find );
+			app.get( '/api/v1.0/mobile-sync/hectare-statement/block', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncMobile.hs_block_find );
+			app.get( '/api/v1.0/mobile-sync/hectare-statement/comp', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncMobile.hs_comp_find );
+			app.get( '/api/v1.0/mobile-sync/hectare-statement/est', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncMobile.hs_est_find );
+			app.get( '/api/v1.0/mobile-sync/hectare-statement/land-use', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncMobile.hs_land_use_find );
+			app.get( '/api/v1.0/mobile-sync/hectare-statement/region', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncMobile.hs_region_find );
 
 			// Sync TAP
 			app.post( '/api/v1.0/sync/tap/employee-hris', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncTAP.sync_employee_hris );
@@ -118,11 +129,7 @@
 			// Sync Mobile
 			app.post( '/api/mobile-sync', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncMobile.create );
 			app.post( '/api/mobile-sync/reset', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncMobile.reset );
-
-			/*
-			app.get( '/api/mobile-sync/finding-images', Middleware.v_1_0.VerifyToken, mobileSync.findFindingImages );
-			*/
-			
+			app.get( '/api/mobile-sync/finding-images', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncMobile.finding_images_find );
 			app.get( '/api/mobile-sync/auth/contact', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncMobile.contact_find );
 			app.get( '/api/mobile-sync/finding', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncMobile.finding_find );
 			app.get( '/api/mobile-sync/auth/kriteria', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncMobile.kriteria_find );
@@ -146,7 +153,6 @@
 			app.get( '/api/server/service-list', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.Server.service_list );
 			app.get( '/api/server/time', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.Server.time );
 			
-
 			// User
 			app.post( '/api/user-authorization', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.User.user_authorization_create_or_update );
 			app.get( '/api/user-authorization', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.User.user_authorization_find );
