@@ -40,7 +40,7 @@
 					microservice_hectare_statement: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-hectarestatement',
 					microservice_images: 'http://149.129.250.199:3012',
 				},
-				quality_assurance: {
+				qa: {
 					ldap: 'http://tap-ldapdev.tap-agri.com/login',
 					microservice_ebcc_validation: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-ebccval',
 					microservice_finding: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-finding',
@@ -65,7 +65,7 @@
 		*/
 			path: {
 				development: '',
-				quality_assurance: 'mobileinspection/ins-msa-auth',
+				qa: 'mobileinspection/ins-msa-auth',
 				production: 'mobileinspection/ins-msa-auth'
 			},
 

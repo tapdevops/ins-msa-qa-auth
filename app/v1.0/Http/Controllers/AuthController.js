@@ -310,7 +310,7 @@
 	*/
 		exports.set_authentication = async ( data ) => {
 			console.log( "----------------------------------------" );
-			console.log( "Set Login Authentication :" );
+			console.log( "Set Login :" );
 
 			var result = {
 				status: false,

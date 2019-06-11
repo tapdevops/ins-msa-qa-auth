@@ -20,6 +20,7 @@
 
 	// Primary Variable
 	const app = express();
+	
 /*
 |--------------------------------------------------------------------------
 | APP Init
@@ -27,7 +28,7 @@
 */
 	// Routing Folder
 	app.use( '/files', express.static( 'public' ) );
-	
+
 	// Parse request of content-type - application/x-www-form-urlencoded
 	app.use( body_parser.urlencoded( { extended: false } ) );
 
