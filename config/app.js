@@ -11,10 +11,10 @@
 		|--------------------------------------------------------------------------
 		*/
 			name: 'Microservice Auth',
-			env: 'development', // production, quality_assurance, development,
+			env: 'development', // production, qa, development,
 			port: {
 				development: process.env.PORT || 4008,
-				quality_assurance: process.env.PORT || 5008,
+				qa: process.env.PORT || 5008,
 				production: process.env.PORT || 3008,
 			},
 
