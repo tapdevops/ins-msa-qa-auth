@@ -61,7 +61,6 @@
 			} );
 		};
 
-
 		exports.time_track_find_one = ( req, res ) => {
 			Models.Parameter.findOne( {
 				PARAMETER_GROUP: "TIME_TRACK"

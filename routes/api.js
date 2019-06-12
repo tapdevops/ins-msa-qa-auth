@@ -42,8 +42,8 @@
 				res.json( { 
 					application: {
 						name : config.app.name,
-						port : config.app.port,
-						environment : config.app.env
+						port : config.app.port[config.app.env],
+						env : config.app.env
 					} 
 				} )
 			} );
@@ -144,7 +144,7 @@
 			// TAP Sync
 			app.post( '/sync/employee-hris', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncTAP.sync_employee_hris );
 			app.post( '/sync/employee-sap', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.SyncTAP.sync_employee_sap );
-			
+
 			// Parameter
 			app.get( '/api/parameter', Middleware.v_1_0.VerifyToken,  Controllers.v_1_0.Parameter.find );
 			app.get( '/api/parameter/track', Middleware.v_1_0.VerifyToken,  Controllers.v_1_0.Parameter.time_track_find_one );
@@ -152,7 +152,7 @@
 			// Server
 			app.get( '/api/server/service-list', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.Server.service_list );
 			app.get( '/api/server/time', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.Server.time );
-			
+
 			// User
 			app.post( '/api/user-authorization', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.User.user_authorization_create_or_update );
 			app.get( '/api/user-authorization', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.User.user_authorization_find );
@@ -163,7 +163,7 @@
 			app.get( '/api/user-search', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.User.hris_sap_search ); // Delete
 			app.get( '/api/user-search/hris-sap', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.User.hris_sap_search );
 			app.get( '/api/user-search/user-auth', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.User.hris_sap_search );
-	
+
 			// Web Report
 			app.get( '/api/web-report/inspection/content-code', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.WebReport.inspection_content_find );
 			app.get( '/api/web-report/inspection/kriteria/:id', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.WebReport.inspection_kriteria_find );

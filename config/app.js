@@ -11,11 +11,11 @@
 		|--------------------------------------------------------------------------
 		*/
 			name: 'Microservice Auth',
-			env: 'development', // production, qa, development,
+			env: 'dev', // production, qa, dev,
 			port: {
-				development: process.env.PORT || 4008,
+				dev: process.env.PORT || 4008,
 				qa: process.env.PORT || 5008,
-				production: process.env.PORT || 3008,
+				prod: process.env.PORT || 3008,
 			},
 
 		/*
@@ -33,7 +33,7 @@
 		|--------------------------------------------------------------------------
 		*/
 			url: {
-				development: {
+				dev: {
 					ldap: 'http://tap-ldapdev.tap-agri.com/login',
 					microservice_ebcc_validation: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-ebccval',
 					microservice_finding: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-finding',
@@ -47,7 +47,7 @@
 					microservice_hectare_statement: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-hectarestatement',
 					microservice_images: 'http://149.129.250.199:3012',
 				},
-				production: {
+				prod: {
 					ldap: 'http://tap-ldap.tap-agri.com/login',
 					microservice_ebcc_validation: 'http://app.tap-agri.com/mobileinspection/ins-msa-ebccval',
 					microservice_finding: 'http://app.tap-agri.com/mobileinspection/ins-msa-finding',
@@ -64,9 +64,9 @@
 		| parameter URL.
 		*/
 			path: {
-				development: '',
+				dev: '',
 				qa: 'mobileinspection/ins-msa-auth',
-				production: 'mobileinspection/ins-msa-auth'
+				prod: 'mobileinspection/ins-msa-auth'
 			},
 
 		/*

@@ -331,6 +331,7 @@
 
 			if ( auth != null ) {
 				auth = JSON.parse( JSON.stringify( auth ) );
+				console.log(auth);
 				var claims = {
 					USERNAME: data.USERNAME,
 					USER_AUTH_CODE: auth.USER_AUTH_CODE,
@@ -404,7 +405,7 @@
 				result.data.USERNAME = data.USERNAME;
 				result.data.NIK = auth.EMPLOYEE_NIK;
 				result.data.ACCESS_TOKEN = token;
-				result.data.JOB_CODE = auth.JOB_CODE;
+				result.data.JOB_CODE = ( auth.PJS_JOB ? auth.PJS_JOB : auth.HRIS_JOB );
 				result.data.USER_AUTH_CODE = auth.USER_AUTH_CODE;
 				result.data.REFFERENCE_ROLE = auth.REF_ROLE;
 				result.data.USER_ROLE = auth.USER_ROLE;
