@@ -64,7 +64,7 @@
 		| parameter URL.
 		*/
 			path: {
-				dev: '',
+				dev: 'mobileinspectiondev/ins-msa-dev-auth',
 				qa: 'mobileinspection/ins-msa-auth',
 				prod: 'mobileinspection/ins-msa-auth'
 			},
