@@ -421,7 +421,7 @@
 	/** 
  	  * Generate Token
 	  * Untuk generate token baru. Fungsi ini digunakan apabila durasi token 
-	  * di mobile hampir habis.
+	  * di mobile hampir phabis.
 	  * --------------------------------------------------------------------
 	*/
 		exports.generate_token = ( req, res ) => {

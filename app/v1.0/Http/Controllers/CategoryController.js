@@ -38,11 +38,14 @@
 			if ( query.length > 0 ) {
 
 				var results = [];
-				if ( config.app.env == 'production' ) {
-					var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.production + '/';
+				if ( config.app.env == 'prod' ) {
+					var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.prod + '/';
 				}
-				else if ( config.app.env == 'development' ) {
-					var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.development ;
+				else if ( config.app.env == 'qa' ) {
+					var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.qa + '/';
+				}
+				else if ( config.app.env == 'dev' ) {
+					var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.dev ;
 				}
 
 				query.forEach( function( result ) {
