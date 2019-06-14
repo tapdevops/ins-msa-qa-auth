@@ -35,7 +35,8 @@
 			url: {
 				dev: {
 					ldap: 'http://tap-ldapdev.tap-agri.com/login',
-					microservice_ebcc_validation: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-ebccval',
+					//microservice_ebcc_validation: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-ebccval',
+					microservice_ebcc_validation: 'http://149.129.250.199:4014',
 					microservice_finding: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-finding',
 					microservice_hectare_statement: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-hectarestatement',
 					microservice_images: 'http://149.129.250.199:3012',
