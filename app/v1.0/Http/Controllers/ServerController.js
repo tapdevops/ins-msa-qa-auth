@@ -37,7 +37,7 @@
 							"$concat": [ "$API_BASE_URL", "$PORT", "$API_URL_PARAMETER" ]
 						},
 						"METHOD": 1,
-						"PARAM": 1,
+						"BODY": 1,
 						"KETERANGAN": 1,
 					}
 				}
