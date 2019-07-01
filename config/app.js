@@ -35,17 +35,16 @@
 			url: {
 				dev: {
 					ldap: 'http://tap-ldapdev.tap-agri.com/login',
-					//microservice_ebcc_validation: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-ebccval',
-					microservice_ebcc_validation: 'http://149.129.250.199:4014',
+					microservice_ebcc_validation: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-ebccval',
 					microservice_finding: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-finding',
 					microservice_hectare_statement: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-hectarestatement',
 					microservice_images: 'http://149.129.250.199:3012',
 				},
 				qa: {
 					ldap: 'http://tap-ldapdev.tap-agri.com/login',
-					microservice_ebcc_validation: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-ebccval',
-					microservice_finding: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-finding',
-					microservice_hectare_statement: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-hectarestatement',
+					microservice_ebcc_validation: 'http://app.tap-agri.com/mobileinspectionqa/ins-msa-qa-ebccval',
+					microservice_finding: 'http://app.tap-agri.com/mobileinspectionqa/ins-msa-qa-finding',
+					microservice_hectare_statement: 'http://app.tap-agri.com/mobileinspectionqa/ins-msa-qa-hectarestatement',
 					microservice_images: 'http://149.129.250.199:3012',
 				},
 				prod: {
@@ -66,7 +65,7 @@
 		*/
 			path: {
 				dev: 'mobileinspectiondev/ins-msa-dev-auth',
-				qa: 'mobileinspection/ins-msa-auth',
+				qa: 'mobileinspectionqa/ins-msa-qa-auth',
 				prod: 'mobileinspection/ins-msa-auth'
 			},
 

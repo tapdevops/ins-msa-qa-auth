@@ -45,7 +45,7 @@
 					var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.qa + '/';
 				}
 				else if ( config.app.env == 'dev' ) {
-					var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.dev ;
+					var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.dev + '/' ;
 				}
 
 				query.forEach( function( result ) {
