@@ -500,6 +500,7 @@
 							trcode.push( String( data.data[i] ) );
 						}
 
+						console.log(trcode);
 						var finding_images_url = service_url_images + '/sync-mobile/images';
 						var finding_images_args = {
 							data: {
