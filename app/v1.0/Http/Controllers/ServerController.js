@@ -27,6 +27,17 @@
 	 * --------------------------------------------------------------------------
 	 */
 		exports.service_list = async ( req, res ) => {
+			// {
+   //          "MOBILE_VERSION": "2.0",
+   //          "API_NAME": "AUTH-SYNC-FINDING",
+   //          "KETERANGAN": "Untuk sinkronisasi data Finding.",
+   //          "METHOD": "GET",
+   //          "API_URL": "http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-auth/api/v1.0/mobile-sync/finding"
+   //      }
+
+   			var env = config.app.env;
+   			var config_url = config.app.url[env];
+        	console.log(config_url);
 			var data = await Models.ServiceList.aggregate( [
 				{
 					"$project": {
