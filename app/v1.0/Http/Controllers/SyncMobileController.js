@@ -17,6 +17,7 @@
 		SyncMobile: require( _directory_base + '/app/v1.0/Http/Models/SyncMobileModel.js' ),
 		SyncMobileLog: require( _directory_base + '/app/v1.0/Http/Models/SyncMobileLogModel.js' ),
 		UserAuth: require( _directory_base + '/app/v1.0/Http/Models/UserAuthModel.js' ),
+		ViewUserAuth: require( _directory_base + '/app/v1.0/Http/Models/ViewUserAuthModel.js' ),
 	}
 
 	// Node Module
@@ -116,6 +117,54 @@
 	 */
 		exports.contact_find = async ( req, res ) => {
 
+			// var query = await Models.UserAuth.aggregate( [
+			// 	{
+			// 		"$lookup": {
+			// 			"from": "TM_EMPLOYEE_HRIS",
+			// 			"localField": "EMPLOYEE_NIK",
+			// 			"foreignField": "EMPLOYEE_NIK",
+			// 			"as": "HRIS"
+			// 		}
+			// 	},
+			// 	{
+			// 		"$lookup": {
+			// 			"from": "TM_PJS",
+			// 			"localField": "EMPLOYEE_NIK",
+			// 			"foreignField": "EMPLOYEE_NIK",
+			// 			"as": "PJS"
+			// 		}
+			// 	},
+			// 	{
+			// 		"$project": {
+			// 			USER_AUTH_CODE: 1,
+			// 			EMPLOYEE_NIK: 1,
+			// 			USER_ROLE: 1,
+			// 			LOCATION_CODE: 1,
+			// 			REF_ROLE: 1,
+			// 			PJS_JOB: 1,
+			// 			PJS_FULLNAME: 1,
+			// 			HRIS_FULLNAME: 1,
+			// 			INSERT_TIME: 1,
+			// 			UPDATE_TIME: 1,
+			// 			DELETE_TIME: 1,
+			// 			HRIS_JOB: "$HRIS[0].EMPLOYEE_POSITION",
+			// 			HRIS_FULLNAME: "$HRIS[0].EMPLOYEE_FULLNAME",
+			// 			PJS_JOB: "$PJS[0].JOB_CODE",
+			// 			PJS_JOB: "$PJS[0].NAMA_LENGKAP"
+			// 		}
+			// 	},
+			// 	{
+			// 		"$limit": 1
+			// 	}
+			// ] );
+			// return res.json( {
+			// 	query: query,
+			// 	message: "OK"
+			// } );
+
+
+
+
 			var auth = req.auth;
 			var sync_mobile = await Models.SyncMobile
 				.findOne( {
@@ -129,10 +178,12 @@
 				.limit( 1 );
 
 			if ( sync_mobile) {
+
+				console.log("AAA");
 				
 				var start_date = Libraries.Helper.date_format( String( sync_mobile.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
 				var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDD' ) + '235959';
-				var query = await Models.UserAuth
+				var query = await Models.ViewUserAuth
 					.find({
 						$or: [
 							{
@@ -171,9 +222,10 @@
 					} );
 			}
 			else {
+				console.log("BBB");
 				var start_date = 0;
 				var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' );
-				var query = await Models.UserAuth
+				var query = await Models.ViewUserAuth
 					.find({})
 					.select( {
 						USER_AUTH_CODE: 1,
@@ -197,6 +249,8 @@
 			var temp_delete = [];
 			
 			query.forEach( function( result ) {
+
+				console.log(result);
 
 				var result = Object.keys(result).map(function(k) {
 					return [+k, result[k]];

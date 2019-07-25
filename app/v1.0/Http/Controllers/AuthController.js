@@ -57,7 +57,7 @@
 						data: {}
 					} );
 				}
-
+				
 				var results = [];
 				data.forEach( function( result ) {
 					var result = Object.keys(result).map(function(k) {
