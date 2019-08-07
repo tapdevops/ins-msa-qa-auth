@@ -162,9 +162,6 @@
 			// 	message: "OK"
 			// } );
 
-
-
-
 			var auth = req.auth;
 			var sync_mobile = await Models.SyncMobile
 				.findOne( {
@@ -222,7 +219,6 @@
 					} );
 			}
 			else {
-				console.log("BBB");
 				var start_date = 0;
 				var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' );
 				var query = await Models.ViewUserAuth
