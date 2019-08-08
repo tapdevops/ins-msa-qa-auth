@@ -100,9 +100,6 @@
 			] );
 
 			if ( data.length > 0 ) {
-
-				var results = [];
-
 				return res.json( {
 					status: true,
 					message: "Success!",
