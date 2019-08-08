@@ -27,43 +27,100 @@
 	 * --------------------------------------------------------------------------
 	 */
 		exports.service_list = async ( req, res ) => {
-			// {
-   //          "MOBILE_VERSION": "2.0",
-   //          "API_NAME": "AUTH-SYNC-FINDING",
-   //          "KETERANGAN": "Untuk sinkronisasi data Finding.",
-   //          "METHOD": "GET",
-   //          "API_URL": "http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-auth/api/v1.0/mobile-sync/finding"
-   //      }
+   			if ( !req.query.v ) {
+   				return res.json( {
+					status: true,
+					message: "Versi mobile belum ditentukan.",
+					data: []
+				} );
+   			}
 
+   			var get_version = req.query.v.toString();
    			var env = config.app.env;
    			var config_url = config.app.url[env];
-        	console.log(config_url);
 			var data = await Models.ServiceList.aggregate( [
 				{
 					"$project": {
 						"_id": 0,
 						"MOBILE_VERSION": 1,
 						"API_NAME": 1,
-						"API_URL": {
-							"$concat": [ "$API_BASE_URL", "$PORT", "$API_URL_PARAMETER" ]
-						},
 						"METHOD": 1,
 						"BODY": 1,
 						"KETERANGAN": 1,
+						"API_URL": {
+							$switch: {
+								branches: [
+									{
+										case: { $eq: [ "$MICROSERVICE", "AUTH" ] }, 
+										then: {
+											"$concat": [ config_url.microservice_auth, "$API_URL_PARAMETER" ]
+										}
+									},
+									{
+										case: { $eq: [ "$MICROSERVICE", "EBCC VALIDATION" ] }, 
+										then: {
+											"$concat": [ config_url.microservice_ebcc_validation, "$API_URL_PARAMETER" ]
+										}
+									},
+									{
+										case: { $eq: [ "$MICROSERVICE", "FINDING" ] }, 
+										then: {
+											"$concat": [ config_url.microservice_finding, "$API_URL_PARAMETER" ]
+										}
+									},
+									{
+										case: { $eq: [ "$MICROSERVICE", "HECTARE STATEMENT" ] }, 
+										then: {
+											"$concat": [ config_url.microservice_hectare_statement, "$API_URL_PARAMETER" ]
+										}
+									},
+									{
+										case: { $eq: [ "$MICROSERVICE", "IMAGES" ] }, 
+										then: {
+											"$concat": [ config_url.microservice_images, "$API_URL_PARAMETER" ]
+										}
+									},
+									{
+										case: { $eq: [ "$MICROSERVICE", "INSPECTION" ] }, 
+										then: {
+											"$concat": [ config_url.microservice_inspection, "$API_URL_PARAMETER" ]
+										}
+									}
+								],
+								default: ""
+							}
+						}
+					}
+				},
+				{
+					"$match": {
+						"MOBILE_VERSION": get_version
 					}
 				}
 			] );
-				
-			return res.json( {
-				status: true,
-				message: "Success!",
-				data: data
-			} );
+
+			if ( data.length > 0 ) {
+
+				var results = [];
+
+				return res.json( {
+					status: true,
+					message: "Success!",
+					data: data
+				} );
+			}
+			else {
+				return res.json( {
+					status: false,
+					message: "Versi mobile tersebut tidak tersedia",
+					data: []
+				} );
+			}
 		};
 
  	/**
 	 * Time
-	 * Untuk menampilkan data category
+	 * Untuk menampilkan data jam server
 	 * --------------------------------------------------------------------------
 	 */
 		exports.time = ( req, res ) => {
