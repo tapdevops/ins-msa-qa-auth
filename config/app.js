@@ -11,7 +11,7 @@
 		|--------------------------------------------------------------------------
 		*/
 			name: 'Microservice Auth',
-			env: 'qa', // production, qa, dev,
+			env: 'dev', // production, qa, dev,
 			port: {
 				dev: process.env.PORT || 4008,
 				qa: process.env.PORT || 5008,
@@ -35,23 +35,29 @@
 			url: {
 				dev: {
 					ldap: 'http://tap-ldapdev.tap-agri.com/login',
+					microservice_auth: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-auth',
 					microservice_ebcc_validation: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-ebccval',
 					microservice_finding: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-finding',
 					microservice_hectare_statement: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-hectarestatement',
+					microservice_inspection: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-inspection',
 					microservice_images: 'http://149.129.250.199:3012',
 				},
 				qa: {
 					ldap: 'http://tap-ldapdev.tap-agri.com/login',
+					microservice_auth: 'http://app.tap-agri.com/mobileinspectionqa/ins-msa-qa-auth',
 					microservice_ebcc_validation: 'http://app.tap-agri.com/mobileinspectionqa/ins-msa-qa-ebccval',
 					microservice_finding: 'http://app.tap-agri.com/mobileinspectionqa/ins-msa-qa-finding',
 					microservice_hectare_statement: 'http://app.tap-agri.com/mobileinspectionqa/ins-msa-qa-hectarestatement',
+					microservice_inspection: 'http://app.tap-agri.com/mobileinspectionqa/ins-msa-qa-inspection',
 					microservice_images: 'http://149.129.246.66:5012',
 				},
 				prod: {
 					ldap: 'http://tap-ldap.tap-agri.com/login',
+					microservice_auth: 'http://app.tap-agri.com/mobileinspection/ins-msa-auth',
 					microservice_ebcc_validation: 'http://app.tap-agri.com/mobileinspection/ins-msa-ebccval',
 					microservice_finding: 'http://app.tap-agri.com/mobileinspection/ins-msa-finding',
 					microservice_hectare_statement: 'http://app.tap-agri.com/mobileinspection/ins-msa-hectarestatement',
+					microservice_inspection: 'http://app.tap-agri.com/mobileinspection/ins-msa-inspection',
 					microservice_images: 'http://149.129.245.230:3012',
 				}
 			},

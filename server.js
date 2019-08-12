@@ -21,6 +21,7 @@
 	// Primary Variable
 	const App = Express();
 
+	// Generate API Documentation
 	require( 'express-aglio' )( App,{
 		source: __dirname+ '/docs/source/index.md',
 		output: __dirname+ '/docs/html/index.html',
@@ -68,6 +69,16 @@
 		console.log( "\tPort \t\t: " + config.app.port[config.app.env] );
 	} );
 
-	// Routing
+/*
+ |--------------------------------------------------------------------------
+ | Routing
+ |--------------------------------------------------------------------------
+ */
 	require( './routes/api.js' )( App );
+
+/*
+ |--------------------------------------------------------------------------
+ | Exports
+ |--------------------------------------------------------------------------
+ */
 	module.exports = App;

@@ -29,8 +29,6 @@
 	 * --------------------------------------------------------------------------
 	 */
 	exports.sync_employee_hris = ( req, res ) => {
-		console.log('AAAA');
-	
 		if( !req.body.EMPLOYEE_NIK ) {
 			return res.send( {
 				status: false,
