@@ -132,8 +132,8 @@
 		}
 
 	/**
-	 * Time
-	 * Untuk menampilkan data jam server
+	 * APKVersion
+	 * Untuk menyimpan data versi APK
 	 * --------------------------------------------------------------------------
 	 */
 
