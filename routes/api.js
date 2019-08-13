@@ -96,6 +96,7 @@
 			// Server
 			app.get( '/api/v1.0/server/service-list', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.Server.service_list );
 			app.get( '/api/v1.0/server/time', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.Server.time );
+			app.post( '/api/v1.0/server/apk-version', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.Server.apk_version );
 			
 		/*
 		 |--------------------------------------------------------------------------

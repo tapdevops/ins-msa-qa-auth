@@ -13,7 +13,8 @@
 
 	// Models
 	const Models = {
-		ServiceList: require( _directory_base + '/app/v1.0/Http/Models/ServiceListModel.js' )
+		ServiceList: require( _directory_base + '/app/v1.0/Http/Models/ServiceListModel.js' ),
+		APKVersion: require(_directory_base + '/app/v1.0/Http/Models/APKVersionModel.js' )
 	}
 
  /*
@@ -130,3 +131,48 @@
 			})
 		}
 
+	/**
+	 * Time
+	 * Untuk menampilkan data jam server
+	 * --------------------------------------------------------------------------
+	 */
+
+		exports.apk_version = ( req, res ) => {
+			// ...
+
+			// var auth = req.auth;
+			const set = new Models.APKVersion( {
+				INSERT_USER: req.body.INSERT_USER,
+				APK_VERSION: req.body.APK_VERSION,
+				IMEI: req.body.IMEI,
+				INSERT_TIME: Libraries.Helper.date_format( req.body.INSERT_TIME, 'YYYYMMDDhhmmss'),
+			});
+			set.save()
+			.then( data => {
+				if( !data ){
+					return res.send( {
+						status: false,
+						message: 'Data error',
+						data: {}
+					})
+				}
+				return res.send({
+					status: true,
+					message: config.app.error_message.find_200,
+					data: {}
+				});
+			}). catch( err => {
+				if(err.kind === 'ObjectId' ){
+					return res.send( {
+						status: false,
+						message: 'ObjectId error',
+						data: {}
+					});
+				}
+				return res.send( {
+					status: false,
+					message: 'Error retrieving data',
+					data: {}
+				})
+			});
+		}
