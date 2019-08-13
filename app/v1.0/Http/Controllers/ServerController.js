@@ -14,7 +14,8 @@
 	// Models
 	const Models = {
 		ServiceList: require( _directory_base + '/app/v1.0/Http/Models/ServiceListModel.js' ),
-		APKVersion: require(_directory_base + '/app/v1.0/Http/Models/APKVersionModel.js' )
+		APKVersion: require(_directory_base + '/app/v1.0/Http/Models/APKVersionModel.js' ),
+		Parameter: require( _directory_base + '/app/v1.0/Http/Models/ParameterModel.js' )
 	}
 
  /*
@@ -137,7 +138,7 @@
 	 * --------------------------------------------------------------------------
 	 */
 
-		exports.apk_version = ( req, res ) => {
+		exports.apk_version = async ( req, res ) => {
 			const set = new Models.APKVersion( {
 				INSERT_USER: req.body.INSERT_USER,
 				APK_VERSION: req.body.APK_VERSION,
@@ -145,7 +146,7 @@
 				INSERT_TIME: Libraries.Helper.date_format( req.body.INSERT_TIME, 'YYYYMMDDhhmmss'),
 			});
 			set.save()
-			.then( data => {
+			.then( async data => {
 				if( !data ){
 					return res.send( {
 						status: false,
@@ -153,11 +154,43 @@
 						data: {}
 					})
 				}
+
+				Models.Parameter.findOne( {
+					PARAMETER_GROUP: "APK",
+					PARAMETER_NAME: "PERMITTED_VERSION",
+					DESC: req.body.APK_VERSION
+				} ).count().then( parameter => {
+					console.log(parameter)
+					return res.send({
+						status: true,
+						message: config.app.error_message.find_200,
+						force_update: parameter == 0? true: false,
+						data: {}
+					});
+				} );
+
+				/*
+				var check_version = await Models.Parameter.aggregate( [
+					{
+						$match: {
+							DESC: 2.2,
+							PARAMETER_GROUP: "APK",
+							PARAMETER_NAME: "PERMITTED_VERSION"
+						}
+					},
+					{
+						$count: "jumlah"
+					}
+				] );
+
+				console.log(check_version.jumlah);
+
 				return res.send({
 					status: true,
 					message: config.app.error_message.find_200,
+					force_update: check_version.jumlah == 0? true: false,
 					data: {}
-				});
+				});*/
 			}). catch( err => {
 				if(err.kind === 'ObjectId' ){
 					return res.send( {
