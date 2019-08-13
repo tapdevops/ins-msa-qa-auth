@@ -138,9 +138,6 @@
 	 */
 
 		exports.apk_version = ( req, res ) => {
-			// ...
-
-			// var auth = req.auth;
 			const set = new Models.APKVersion( {
 				INSERT_USER: req.body.INSERT_USER,
 				APK_VERSION: req.body.APK_VERSION,
