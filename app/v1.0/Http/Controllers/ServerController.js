@@ -179,8 +179,6 @@
 					}
 				] );
 
-				console.log("check_version ");
-				console.log(check_version);
 				var found = false;
 				for( var i = 0; i < check_version.length; i++){
 					if( check_version[i].APK_VERSION == req.body.APK_VERSION ){
@@ -194,42 +192,7 @@
 					force_update: found == true ? false: true,
 					data: {}
 				} );
-				// Models.Parameter.findOne( {
-				// 	PARAMETER_GROUP: "APK",
-				// 	PARAMETER_NAME: "PERMITTED_VERSION",
-				// 	DESC: req.body.APK_VERSION
-				// } ).count().then( parameter => {
-				// 	console.log(parameter)
-				// 	return res.send({
-				// 		status: true,
-				// 		message: config.app.error_message.find_200,
-				// 		force_update: parameter == 0? true: false,
-				// 		data: {}
-				// 	});
-				// } );
-
-				/*
-				var check_version = await Models.Parameter.aggregate( [
-					{
-						$match: {
-							DESC: 2.2,
-							PARAMETER_GROUP: "APK",
-							PARAMETER_NAME: "PERMITTED_VERSION"
-						}
-					},
-					{
-						$count: "jumlah"
-					}
-				] );
-
-				console.log(check_version.jumlah);
-
-				return res.send({
-					status: true,
-					message: config.app.error_message.find_200,
-					force_update: check_version.jumlah == 0? true: false,
-					data: {}
-				});*/
+				
 			}). catch( err => {
 				if(err.kind === 'ObjectId' ){
 					return res.send( {
