@@ -178,7 +178,7 @@
 						$limit: 3
 					}
 				] );
-
+				console.log(check_version)
 				var found = false;
 				for( var i = 0; i < check_version.length; i++){
 					if( check_version[i].APK_VERSION == req.body.APK_VERSION ){
