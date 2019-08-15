@@ -154,46 +154,50 @@
 						data: {}
 					})
 				}
-				var check_version = await Models.APKVersion.aggregate( [
-					{
-						$group : {
-							_id: {
-								APK_VERSION : "$APK_VERSION"
-							},
-							count: { $sum: 1 }
-						}
-					},
-					{
-						$project: {
-							_id: 0,
-							APK_VERSION: "$_id.APK_VERSION"
-						}
-					},
-					{
-						$sort: {
-							APK_VERSION: -1
-						}
-					},
-					{
-						$limit: 3
-					}
-				] );
-				console.log(check_version)
-				var found = false;
-				for( var i = 0; i < check_version.length; i++){
-					if( check_version[i].APK_VERSION == req.body.APK_VERSION ){
-						found = true;
-						break;
-					}
-				}
-				return res.send( {
-					status: true,
-					message: config.app.error_message.find_200,
-					force_update: found == true ? false: true,
-					data: {}
+
+				var limit_version = await Models.Parameter.findOne( {
+					PARAMETER_GROUP: "APK",
+					PARAMETER_NAME: "VERSION_LIMIT"
 				} );
-				
+				var check_version = await Models.APKVersion.aggregate( [
+						{
+							$group : {
+								_id: {
+									APK_VERSION : "$APK_VERSION"
+								},
+								count: { $sum: 1 }
+							}
+						},
+						{
+							$project: {
+								_id: 0,
+								APK_VERSION: "$_id.APK_VERSION"
+							}
+						},
+						{
+							$sort: {
+								APK_VERSION: -1
+							}
+						},
+						{
+							$limit: parseInt( limit_version.DESC )
+						}
+					] );
+					var found = false;
+					for( var i = 0; i < check_version.length; i++){
+						if( check_version[i].APK_VERSION == req.body.APK_VERSION ){
+							found = true;
+							break;
+						}
+					}
+					return res.send( {
+						status: true,
+						message: config.app.error_message.find_200,
+						force_update: found == true ? false: true,
+						data: {}
+					} );
 			}). catch( err => {
+				console.log(err);
 				if(err.kind === 'ObjectId' ){
 					return res.send( {
 						status: false,
