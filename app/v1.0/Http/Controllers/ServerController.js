@@ -141,7 +141,7 @@
 		exports.apk_version = async ( req, res ) => {
 			const set = new Models.APKVersion( {
 				INSERT_USER: req.body.INSERT_USER,
-				APK_VERSION: req.body.APK_VERSION,
+				APK_VERSION: parseFloat( req.body.APK_VERSION ),
 				IMEI: req.body.IMEI,
 				INSERT_TIME: Libraries.Helper.date_format( req.body.INSERT_TIME, 'YYYYMMDDhhmmss'),
 			});
