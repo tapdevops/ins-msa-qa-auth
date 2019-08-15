@@ -37,7 +37,7 @@
 				} );
    			}
 
-   			var get_version = req.query.v.toString();
+   			var get_version = req.query.v;
    			var env = config.app.env;
    			var config_url = config.app.url[env];
 			var data = await Models.ServiceList.aggregate( [
