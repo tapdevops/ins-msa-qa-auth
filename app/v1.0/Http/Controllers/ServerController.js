@@ -13,7 +13,9 @@
 
 	// Models
 	const Models = {
-		ServiceList: require( _directory_base + '/app/v1.0/Http/Models/ServiceListModel.js' )
+		ServiceList: require( _directory_base + '/app/v1.0/Http/Models/ServiceListModel.js' ),
+		APKVersion: require(_directory_base + '/app/v1.0/Http/Models/APKVersionModel.js' ),
+		Parameter: require( _directory_base + '/app/v1.0/Http/Models/ParameterModel.js' )
 	}
 
  /*
@@ -130,3 +132,79 @@
 			})
 		}
 
+	/**
+	 * APKVersion
+	 * Untuk menyimpan data versi APK
+	 * --------------------------------------------------------------------------
+	 */
+
+		exports.apk_version = async ( req, res ) => {
+			const set = new Models.APKVersion( {
+				INSERT_USER: req.body.INSERT_USER,
+				APK_VERSION: req.body.APK_VERSION,
+				IMEI: req.body.IMEI,
+				INSERT_TIME: Libraries.Helper.date_format( req.body.INSERT_TIME, 'YYYYMMDDhhmmss'),
+			});
+			set.save()
+			.then( async data => {
+				if( !data ){
+					return res.send( {
+						status: false,
+						message: 'Data error',
+						data: {}
+					})
+				}
+				var check_version = await Models.APKVersion.aggregate( [
+					{
+						$group : {
+							_id: {
+								APK_VERSION : "$APK_VERSION"
+							},
+							count: { $sum: 1 }
+						}
+					},
+					{
+						$project: {
+							_id: 0,
+							APK_VERSION: "$_id.APK_VERSION"
+						}
+					},
+					{
+						$sort: {
+							APK_VERSION: -1
+						}
+					},
+					{
+						$limit: 3
+					}
+				] );
+				console.log(check_version)
+				var found = false;
+				for( var i = 0; i < check_version.length; i++){
+					if( check_version[i].APK_VERSION == req.body.APK_VERSION ){
+						found = true;
+						break;
+					}
+				}
+				return res.send( {
+					status: true,
+					message: config.app.error_message.find_200,
+					force_update: found == true ? false: true,
+					data: {}
+				} );
+				
+			}). catch( err => {
+				if(err.kind === 'ObjectId' ){
+					return res.send( {
+						status: false,
+						message: 'ObjectId error',
+						data: {}
+					});
+				}
+				return res.send( {
+					status: false,
+					message: 'Error retrieving data',
+					data: {}
+				})
+			});
+		}
