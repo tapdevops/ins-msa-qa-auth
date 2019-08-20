@@ -185,7 +185,7 @@
 					] );
 					var found = false;
 					for( var i = 0; i < check_version.length; i++){
-						if( check_version[i].APK_VERSION == req.body.APK_VERSION ){
+						if( check_version[i].APK_VERSION == req.body.APK_VERSION ) {
 							found = true;
 							break;
 						}
@@ -193,7 +193,7 @@
 					return res.send( {
 						status: true,
 						message: config.app.error_message.find_200,
-						force_update: found == true ? false: true,
+						force_update: found == true ? false : true,
 						data: {}
 					} );
 			}). catch( err => {
@@ -212,3 +212,6 @@
 				})
 			});
 		}
+
+
+
