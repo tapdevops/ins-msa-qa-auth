@@ -270,40 +270,42 @@
 					FULLNAME = result.HRIS_FULLNAME;
 				}
 
-				if ( result.DELETE_TIME >= start_date && result.DELETE_TIME <= end_date ) {
-					temp_delete.push( {
-						USER_AUTH_CODE: result.USER_AUTH_CODE,
-						EMPLOYEE_NIK: result.EMPLOYEE_NIK,
-						USER_ROLE: result.USER_ROLE,
-						LOCATION_CODE: String( result.LOCATION_CODE ),
-						REF_ROLE: result.REF_ROLE,
-						JOB: JOB,
-						FULLNAME: FULLNAME
-					} );
-				}
+				if ( FULLNAME != '' ) {
+					if ( result.DELETE_TIME >= start_date && result.DELETE_TIME <= end_date ) {
+						temp_delete.push( {
+							USER_AUTH_CODE: result.USER_AUTH_CODE,
+							EMPLOYEE_NIK: result.EMPLOYEE_NIK,
+							USER_ROLE: result.USER_ROLE,
+							LOCATION_CODE: String( result.LOCATION_CODE ),
+							REF_ROLE: result.REF_ROLE,
+							JOB: JOB,
+							FULLNAME: FULLNAME
+						} );
+					}
 
-				if ( result.INSERT_TIME >= start_date && result.INSERT_TIME <= end_date ) {
-					temp_insert.push( {
-						USER_AUTH_CODE: result.USER_AUTH_CODE,
-						EMPLOYEE_NIK: result.EMPLOYEE_NIK,
-						USER_ROLE: result.USER_ROLE,
-						LOCATION_CODE: String( result.LOCATION_CODE ),
-						REF_ROLE: result.REF_ROLE,
-						JOB: JOB,
-						FULLNAME: FULLNAME
-					} );
-				}
+					if ( result.INSERT_TIME >= start_date && result.INSERT_TIME <= end_date ) {
+						temp_insert.push( {
+							USER_AUTH_CODE: result.USER_AUTH_CODE,
+							EMPLOYEE_NIK: result.EMPLOYEE_NIK,
+							USER_ROLE: result.USER_ROLE,
+							LOCATION_CODE: String( result.LOCATION_CODE ),
+							REF_ROLE: result.REF_ROLE,
+							JOB: JOB,
+							FULLNAME: FULLNAME
+						} );
+					}
 
-				if ( result.UPDATE_TIME >= start_date && result.UPDATE_TIME <= end_date ) {
-					temp_update.push( {
-						USER_AUTH_CODE: result.USER_AUTH_CODE,
-						EMPLOYEE_NIK: result.EMPLOYEE_NIK,
-						USER_ROLE: result.USER_ROLE,
-						LOCATION_CODE: String( result.LOCATION_CODE ),
-						REF_ROLE: result.REF_ROLE,
-						JOB: JOB,
-						FULLNAME: FULLNAME
-					} );
+					if ( result.UPDATE_TIME >= start_date && result.UPDATE_TIME <= end_date ) {
+						temp_update.push( {
+							USER_AUTH_CODE: result.USER_AUTH_CODE,
+							EMPLOYEE_NIK: result.EMPLOYEE_NIK,
+							USER_ROLE: result.USER_ROLE,
+							LOCATION_CODE: String( result.LOCATION_CODE ),
+							REF_ROLE: result.REF_ROLE,
+							JOB: JOB,
+							FULLNAME: FULLNAME
+						} );
+					}
 				}
 			} );
 			

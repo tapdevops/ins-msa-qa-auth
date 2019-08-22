@@ -102,16 +102,18 @@
 						i++;
 					} );
 
-					results.push( {
-						USER_AUTH_CODE: result.USER_AUTH_CODE,
-						EMPLOYEE_NIK: result.EMPLOYEE_NIK,
-						USER_ROLE: result.USER_ROLE,
-						LOCATION_CODE: String( result.LOCATION_CODE ),
-						REF_ROLE: result.REF_ROLE,
-						JOB: JOB,
-						FULLNAME: FULLNAME,
-						REGION_CODE: location_code_regional
-					} );
+					if ( FULLNAME != '' ) {
+						results.push( {
+							USER_AUTH_CODE: result.USER_AUTH_CODE,
+							EMPLOYEE_NIK: result.EMPLOYEE_NIK,
+							USER_ROLE: result.USER_ROLE,
+							LOCATION_CODE: String( result.LOCATION_CODE ),
+							REF_ROLE: result.REF_ROLE,
+							JOB: JOB,
+							FULLNAME: FULLNAME,
+							REGION_CODE: location_code_regional
+						} );
+					}
 				} );
 				
 				res.send( {
