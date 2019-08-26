@@ -237,12 +237,18 @@
 				}
 			},
 			{
+				$match: {
+					INSERT_USER: "0104"
+				}
+			},
+			{
 				$sort: {
 					INSERT_TIME: -1
 				}
 			}
-		]);
-		res.send( {
+		] );
+		console.log(data);
+		return res.send( {
 			status: true,
 			message: config.app.error_message.find_200,
 			apk_version: data[0].APK_VERSION
