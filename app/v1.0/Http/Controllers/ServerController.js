@@ -218,7 +218,7 @@
 			{
 				$group: {
 					_id: {
-						INSERT_USER: req.params.id
+						INSERT_USER: "$INSERT_USER"
 					},
 					APK_VERSION: {
 						$first: "$APK_VERSION"
@@ -247,10 +247,11 @@
 				}
 			}
 		] );
-		
+
+		console.log(data);
 		return res.send( {
 			status: true,
 			message: config.app.error_message.find_200,
-			apk_version: data[0].APK_VERSION
+			apk_version: ( data.length > 0 ? data[0].APK_VERSION : 0 )
 		} )
 	}
