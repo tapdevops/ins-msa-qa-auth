@@ -238,7 +238,7 @@
 			},
 			{
 				$match: {
-					INSERT_USER: "0104"
+					INSERT_USER: req.params.id
 				}
 			},
 			{
@@ -247,7 +247,7 @@
 				}
 			}
 		] );
-		console.log(data);
+		
 		return res.send( {
 			status: true,
 			message: config.app.error_message.find_200,
