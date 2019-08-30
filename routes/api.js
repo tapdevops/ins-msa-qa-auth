@@ -115,6 +115,8 @@
 			app.post( '/api/v1.1/server/apk-version', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Server.apk_version );
 			app.get( '/api/v1.1/server/apk-version/:id', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Server.current_apk_version ); 
 			
+			// User
+			app.get( '/api/v1.1/user/data', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.User.user_data );
 		/*
 		 |--------------------------------------------------------------------------
 		 | API Versi 1.0
