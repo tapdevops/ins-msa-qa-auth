@@ -22,15 +22,15 @@
 	const App = Express();
 
 	// Generate API Documentation
-	require( 'express-aglio' )( App,{
-		source: __dirname+ '/docs/source/index.md',
-		output: __dirname+ '/docs/html/index.html',
-		aglioOptions: {
-			themeCondenseNav: true,
-			themeTemplate: 'triple',
-			themeVariables: 'streak'
-		}
-	} );
+	// require( 'express-aglio' )( App,{
+	// 	source: __dirname+ '/docs/source/index.md',
+	// 	output: __dirname+ '/docs/html/index.html',
+	// 	aglioOptions: {
+	// 		themeCondenseNav: true,
+	// 		themeTemplate: 'triple',
+	// 		themeVariables: 'streak'
+	// 	}
+	// } );
 
 /*
 |--------------------------------------------------------------------------

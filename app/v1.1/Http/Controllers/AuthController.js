@@ -158,115 +158,6 @@
 					}
 				};
 
-						 
-						  // * Pengecekan User
-						  // *
-						  // * Pengecekan User apakah berasal dari TM_EMPLOYEE_SAP atau 
-						  // * TM_EMPLOYEE_HRIS. Jika berada di TM_EMPLOYEE_SAP pengecekan 
-						  // * dilakukan ke TM_PJS. TM_PJS (Pejabat Sementara) berisi 
-						  // * data-data dari TM_EMPLOYEE_SAP (Karena tidak semua yang 
-						  // * berada di TM_EMPLOYEE_SAP didaftarkan sebagai PJS).
-						
-						Models.EmployeeHRIS.findOne( { 
-							EMPLOYEE_USERNAME: req.body.username
-						} ).then( async data_hris => {
-							// Data tidak ada di TM_EMPLOYEE_HRIS, lanjut pengecekan ke TM_PJS
-							if( !data_hris ) {
-								Models.PJS.findOne( { 
-									USERNAME: req.body.username
-								} ).then( async data_pjs => {
-									if ( !data_pjs ) {
-										return res.send({
-											status: false,
-											message: "User tersebut belum terdaftar sebagai Pejabat Sementara (PJS).",
-											data: {}
-										});
-									}
-									else {
-										var options = {
-											EMPLOYEE_NIK: data_pjs.EMPLOYEE_NIK,
-											IMEI: req.body.imei,
-											USERNAME: req.body.username,
-											JOB_CODE: data_pjs.JOB_CODE
-										}
-
-										console.log( "Options" );
-										console.log( "Options" );
-
-										var setup = await exports.set_authentication( options );
-										if ( setup.status == true ) {
-											return res.json({
-												status: true,
-												message: "Success!",
-												data: setup.data
-											});
-										}
-										else {
-											return res.json({
-												status: false,
-												message: "User tidak terdaftar di otorisasi user.",
-												data: setup.data
-											});
-										}
-									}
-								} ).catch( err => {
-									if( err.kind === 'ObjectId' ) {
-										return res.send({
-											status: false,
-											message: "Error retrieving user 4",
-											data: {}
-										});
-									}
-
-									return res.send({
-										status: false,
-										message: "Error retrieving user 3",
-										data: {}
-									} );
-								} );
-							}
-							// Terdapat data di TM_EMPLOYEE_HRIS
-							else {
-								var options = {
-									EMPLOYEE_NIK: data_hris.EMPLOYEE_NIK,
-									IMEI: req.body.imei,
-									USERNAME: req.body.username,
-									JOB_CODE: data_hris.EMPLOYEE_POSITION
-								}
-								var setup = await exports.set_authentication( options );
-
-								if ( setup.status == true ) {
-									return res.json({
-										status: true,
-										message: "Success!",
-										data: setup.data
-									});
-								}
-								else {
-									return res.json({
-										status: false,
-										message: "User tidak terdaftar di otorisasi user.",
-										data: setup.data
-									});
-								}
-							}
-						} ).catch( err => {
-							if( err.kind === 'ObjectId' ) {
-								return res.send({
-									status: false,
-									message: "Error retrieving user 2",
-									data: {}
-								});
-							}
-
-							return res.send( {
-								status: false,
-								message: "Error retrieving user 1",
-								data: {}
-							} );
-						} );
-
-				/* Real Code
 				( new NodeRestClient() ).post( url, args, async function ( data, response ) {
 					// Terdapat data (terdaftar) di LDAP dan username/password sesuai
 					if ( data.status == true ) {
@@ -408,7 +299,6 @@
 						data: {}
 					} );
 				} );
-				*/
 			}
 			else {
 				return res.send( {
