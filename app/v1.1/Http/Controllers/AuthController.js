@@ -193,9 +193,6 @@
 											JOB_CODE: data_pjs.JOB_CODE
 										}
 
-										// console.log( "Options" );
-										// console.log( "Options" );
-
 										var setup = await exports.set_authentication( options );
 										if ( setup.status == true ) {
 											return res.json({
