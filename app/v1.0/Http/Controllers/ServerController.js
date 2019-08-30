@@ -242,6 +242,7 @@
 				}
 			}
 		]);
+		console.log( data )
 		res.send( {
 			status: true,
 			message: config.app.error_message.find_200,
