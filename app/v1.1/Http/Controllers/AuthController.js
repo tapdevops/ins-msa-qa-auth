@@ -193,8 +193,8 @@
 											JOB_CODE: data_pjs.JOB_CODE
 										}
 
-										console.log( "Options" );
-										console.log( "Options" );
+										// console.log( "Options" );
+										// console.log( "Options" );
 
 										var setup = await exports.set_authentication( options );
 										if ( setup.status == true ) {
@@ -313,7 +313,7 @@
  	  * Set Authentication
 	  * Untuk setup login mulai dari simpan log, dan output.
 	  * --------------------------------------------------------------------
-	
+	  */
 		exports.set_authentication = async ( data ) => {
 			console.log( "----------------------------------------" );
 			console.log( "Set Login :" );
@@ -337,7 +337,7 @@
 
 			if ( auth != null ) {
 				auth = JSON.parse( JSON.stringify( auth ) );
-				console.log(auth);
+				// console.log(auth);
 				var claims = {
 					USERNAME: data.USERNAME,
 					USER_AUTH_CODE: auth.USER_AUTH_CODE,
