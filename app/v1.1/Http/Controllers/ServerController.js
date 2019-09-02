@@ -29,13 +29,16 @@
 	 * --------------------------------------------------------------------------
 	 */
 		exports.service_list = async ( req, res ) => {
-   			if ( !req.query.v ) {
+			console.log( "REQ.QUERY.V: " )
+			console.log( req.query.v );   
+			if ( !req.query.v ) {
    				return res.json( {
 					status: true,
 					message: "Versi mobile belum ditentukan.",
 					data: []
 				} );
-   			}
+			}
+			
 
    			var get_version = req.query.v;
    			var env = config.app.env;
