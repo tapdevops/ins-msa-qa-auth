@@ -161,15 +161,15 @@
 				( new NodeRestClient() ).post( url, args, async function ( data, response ) {
 					// Terdapat data (terdaftar) di LDAP dan username/password sesuai
 					if ( data.status == true ) {
-						/** 
-						  * Pengecekan User
-						  *
-						  * Pengecekan User apakah berasal dari TM_EMPLOYEE_SAP atau 
-						  * TM_EMPLOYEE_HRIS. Jika berada di TM_EMPLOYEE_SAP pengecekan 
-						  * dilakukan ke TM_PJS. TM_PJS (Pejabat Sementara) berisi 
-						  * data-data dari TM_EMPLOYEE_SAP (Karena tidak semua yang 
-						  * berada di TM_EMPLOYEE_SAP didaftarkan sebagai PJS).
-						*/
+						 
+						  // * Pengecekan User
+						  // *
+						  // * Pengecekan User apakah berasal dari TM_EMPLOYEE_SAP atau 
+						  // * TM_EMPLOYEE_HRIS. Jika berada di TM_EMPLOYEE_SAP pengecekan 
+						  // * dilakukan ke TM_PJS. TM_PJS (Pejabat Sementara) berisi 
+						  // * data-data dari TM_EMPLOYEE_SAP (Karena tidak semua yang 
+						  // * berada di TM_EMPLOYEE_SAP didaftarkan sebagai PJS).
+						
 						Models.EmployeeHRIS.findOne( { 
 							EMPLOYEE_USERNAME: req.body.username
 						} ).then( async data_hris => {
@@ -192,6 +192,7 @@
 											USERNAME: req.body.username,
 											JOB_CODE: data_pjs.JOB_CODE
 										}
+
 										var setup = await exports.set_authentication( options );
 										if ( setup.status == true ) {
 											return res.json({
@@ -309,7 +310,7 @@
  	  * Set Authentication
 	  * Untuk setup login mulai dari simpan log, dan output.
 	  * --------------------------------------------------------------------
-	*/
+	  */
 		exports.set_authentication = async ( data ) => {
 			console.log( "----------------------------------------" );
 			console.log( "Set Login :" );
@@ -333,7 +334,7 @@
 
 			if ( auth != null ) {
 				auth = JSON.parse( JSON.stringify( auth ) );
-				console.log(auth);
+				// console.log(auth);
 				var claims = {
 					USERNAME: data.USERNAME,
 					USER_AUTH_CODE: auth.USER_AUTH_CODE,

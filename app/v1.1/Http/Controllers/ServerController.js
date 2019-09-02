@@ -29,9 +29,7 @@
 	 * --------------------------------------------------------------------------
 	 */
 		exports.service_list = async ( req, res ) => {
-			console.log( "REQ.QUERY.V: " )
-			console.log( req.query.v );   
-			if ( !req.query.v ) {
+   			if ( !req.query.v ) {
    				return res.json( {
 					status: true,
 					message: "Versi mobile belum ditentukan.",
@@ -217,7 +215,7 @@
 		}
 
 	/**
-	 * APKVersion
+	 * APK Version
 	 * Untuk mengirim versi APK 
 	 * --------------------------------------------------------------------------
 	 */
@@ -256,10 +254,9 @@
 			}
 		] );
 
-		console.log(data);
 		return res.send( {
 			status: true,
 			message: config.app.error_message.find_200,
 			apk_version: ( data.length > 0 ? data[0].APK_VERSION : 0 )
 		} )
-	}
+	};

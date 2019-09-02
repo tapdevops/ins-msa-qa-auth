@@ -27,6 +27,40 @@
  |--------------------------------------------------------------------------
  */
  	/**
+	 * Target Mingguan
+	 * Untuk mengambil data target mingguan Inspeksi, EBCC Validation, & Finding
+	 * berdasarkan roles.
+	 * --------------------------------------------------------------------------
+	 */
+		exports.user_data = ( req, res ) => {
+			Models.UserAuth.aggregate( [
+				{
+					"$match": {
+						DELETE_USER: ""
+					}
+				},
+				{
+					"$project": {
+						_id: 0,
+						USER_AUTH_CODE: 1,
+						EMPLOYEE_NIK: 1,
+						USER_ROLE: 1,
+						LOCATION_CODE: 1,
+						REF_ROLE: 1
+					}
+				}
+			] ).
+			then( data => {
+				return res.json( {
+					status: true,
+					message: "OK",
+					data: data
+				} );
+			} )
+			
+		}
+
+ 	/**
 	 * Create
 	 * Untuk membuat data user baru yang belum dibuat sebelumnya.
 	 * --------------------------------------------------------------------------

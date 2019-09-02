@@ -430,7 +430,7 @@
 			.limit( 1 )
 			.then( data => {
 				if ( data.length == 0 ) {
-					var url = service_url + '/finding';
+					var url = service_url + '/api/v1.1/finding';
 					var args = {
 						headers: {
 							"Content-Type": "application/json", 
@@ -465,7 +465,7 @@
 							"Authorization": req.headers.authorization
 						}
 					};
-					var url = service_url + '/sync-mobile/finding/' + start_date + '/' + end_date;
+					var url = service_url + '/api/v1.1/sync-mobile/finding/' + start_date + '/' + end_date;
 
 					( new NodeRestClient() ).get( url, args, function ( data, response ) {
 						res.json( {
