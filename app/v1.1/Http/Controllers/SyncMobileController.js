@@ -14,6 +14,7 @@
  	// Models
 	const Models = {
 		Kriteria: require( _directory_base + '/app/v1.1/Http/Models/KriteriaModel.js' ),
+		Content: require( _directory_base + '/app/v1.1/Http/Models/ContentModel.js' ),
 		SyncMobile: require( _directory_base + '/app/v1.1/Http/Models/SyncMobileModel.js' ),
 		SyncMobileLog: require( _directory_base + '/app/v1.1/Http/Models/SyncMobileLogModel.js' ),
 		UserAuth: require( _directory_base + '/app/v1.1/Http/Models/UserAuthModel.js' ),
@@ -1112,6 +1113,259 @@
 
 		};
 
+
+	/**
+	 * Content Find
+	 * Mengambil data Content.
+	 * --------------------------------------------------------------------------
+	 */
+		exports.content_find = ( req, res ) => {
+			
+			var auth = req.auth;
+			Models.SyncMobile.find( {
+				INSERT_USER: auth.USER_AUTH_CODE,
+				IMEI: auth.IMEI,
+				TABEL_UPDATE: 'auth/content'
+			} )
+			.sort( { TGL_MOBILE_SYNC: -1 } )
+			.limit( 1 )
+			.then( data_sync => {
+
+				console.log(data_sync);
+
+				if ( !data_sync ) {
+					Models.Content.find( {
+						DELETE_USER: ""
+					} )
+					.select( {
+						_id: 0,
+						CONTENT_CODE: 1,
+						GROUP_CATEGORY: 1,
+						CATEGORY: 1,
+						CONTENT_NAME: 1,
+						CONTENT_TYPE: 1,
+						UOM: 1,
+						FLAG_TYPE: 1,
+						BOBOT: 1,
+						URUTAN: 1,
+						INSERT_USER:1,
+						INSERT_TIME: 1,
+						UPDATE_USER: 1,
+						UPDATE_TIME: 1,
+						DELETE_USER: 1,
+						DELETE_TIME: 1,
+						TBM0: 1,
+						TBM1: 1,
+						TBM2: 1,
+						TBM3: 1,
+						TM: 1,
+						__v: 0
+					} )
+					.then( data_first_sync => {
+						if( !data_first_sync ) {
+							return res.send( {
+								status: false,
+								message: config.app.error_message.find_404,
+								data: {}
+							} );
+						}
+
+						return res.json( { 
+							"status": true,
+							"message": "First time sync",
+							"data": {
+								hapus: [],
+								simpan: data_first_sync,
+								ubah: []
+							}
+						} );
+					} ).catch( err => {
+						res.send( {
+							status: false,
+							message: config.app.error_message.find_500,
+							data: {}
+						} );
+					} );
+				}
+				else {
+					var start_date = data_sync[0].TGL_MOBILE_SYNC;
+					var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' );
+
+					Models.Content.find( 
+						{
+							$and: [
+								{
+									$or: [
+										{
+											INSERT_TIME: {
+												$gte: start_date,
+												$lte: end_date
+											}
+										},
+										{
+											UPDATE_TIME: {
+												$gte: start_date,
+												$lte: end_date
+											}
+										},
+										{
+											DELETE_TIME: {
+												$gte: start_date,
+												$lte: end_date
+											}
+										}
+									]
+								}
+							]
+						}
+						
+					).select( {
+						_id: 0,
+						CONTENT_CODE: 1,
+						GROUP_CATEGORY: 1,
+						CATEGORY: 1,
+						CONTENT_NAME: 1,
+						CONTENT_TYPE: 1,
+						UOM: 1,
+						FLAG_TYPE: 1,
+						BOBOT: 1,
+						URUTAN: 1,
+						INSERT_USER:1,
+						INSERT_TIME: 1,
+						UPDATE_USER: 1,
+						UPDATE_TIME: 1,
+						DELETE_USER: 1,
+						DELETE_TIME: 1,
+						TBM0: 1,
+						TBM1: 1,
+						TBM2: 1,
+						TBM3: 1,
+						TM: 1
+					} )
+					.then( data_insert => {
+						var temp_insert = [];
+						var temp_update = [];
+						var temp_delete = [];
+						console.log( data_insert );
+						data_insert.forEach( function( data ) {
+							if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
+								temp_delete.push( {
+									CONTENT_CODE: data.CONTENT_CODE,
+									GROUP_CATEGORY: data.GROUP_CATEGORY,
+									CATEGORY: data.CATEGORY,
+									CONTENT_NAME: data.CONTENT_NAME,
+									CONTENT_TYPE: data.CONTENT_TYPE,
+									UOM: data.UON,
+									FLAG_TYPE: data.FLAG_TYPE,
+									BOBOT: data.BOBOT,
+									URUTAN: data.URUTAN,
+									INSERT_USER: data.INSERT_USER,
+									INSERT_TIME: Libraries.Helper.date_format(data.INSERT_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+									UPDATE_USER: data.UPDATE_USER,
+									UPDATE_TIME: Libraries.Helper.date_format(data.UPDATE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+									DELETE_USER: data.DELETE_USER,
+									DELETE_TIME: Libraries.Helper.date_format(data.DELETE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+									TBM0: data.TBM0,
+									TBM1: data.TBM1,
+									TBM2: data.TBM2,
+									TBM3: data.TBM3,
+									TM: data.TM
+								} );
+							}
+
+							if ( data.INSERT_TIME >= start_date && data.INSERT_TIME <= end_date ) {
+								temp_insert.push( {
+									CONTENT_CODE: data.CONTENT_CODE,
+									GROUP_CATEGORY: data.GROUP_CATEGORY,
+									CATEGORY: data.CATEGORY,
+									CONTENT_NAME: data.CONTENT_NAME,
+									CONTENT_TYPE: data.CONTENT_TYPE,
+									UOM: data.UON,
+									FLAG_TYPE: data.FLAG_TYPE,
+									BOBOT: data.BOBOT,
+									URUTAN: data.URUTAN,
+									INSERT_USER: data.INSERT_USER,
+									INSERT_TIME: Libraries.Helper.date_format(data.INSERT_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+									UPDATE_USER: data.UPDATE_USER,
+									UPDATE_TIME: Libraries.Helper.date_format(data.UPDATE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+									DELETE_USER: data.DELETE_USER,
+									DELETE_TIME: Libraries.Helper.date_format(data.DELETE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+									TBM0: data.TBM0,
+									TBM1: data.TBM1,
+									TBM2: data.TBM2,
+									TBM3: data.TBM3,
+									TM: data.TM
+								} );
+							}
+							if ( data.UPDATE_TIME >= start_date && data.UPDATE_TIME <= end_date ) {
+								temp_update.push( {
+									CONTENT_CODE: data.CONTENT_CODE,
+									GROUP_CATEGORY: data.GROUP_CATEGORY,
+									CATEGORY: data.CATEGORY,
+									CONTENT_NAME: data.CONTENT_NAME,
+									CONTENT_TYPE: data.CONTENT_TYPE,
+									UOM: data.UON,
+									FLAG_TYPE: data.FLAG_TYPE,
+									BOBOT: data.BOBOT,
+									URUTAN: data.URUTAN,
+									INSERT_USER: data.INSERT_USER,
+									INSERT_TIME: Libraries.Helper.date_format(data.INSERT_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+									UPDATE_USER: data.UPDATE_USER,
+									UPDATE_TIME: Libraries.Helper.date_format(data.UPDATE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+									DELETE_USER: data.DELETE_USER,
+									DELETE_TIME: Libraries.Helper.date_format(data.DELETE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+									TBM0: data.TBM0,
+									TBM1: data.TBM1,
+									TBM2: data.TBM2,
+									TBM3: data.TBM3,
+									TM: data.TM
+								} );
+							}
+						} );
+						res.json({
+							status: true,
+							message: 'Data Sync tanggal ' + Libraries.Helper.date_format( start_date, 'YYYY-MM-DD' ) + ' s/d ' + Libraries.Helper.date_format( end_date, 'YYYY-MM-DD' ),
+							data: {
+								"hapus": temp_delete,
+								"simpan": temp_insert,
+								"ubah": temp_update
+							}
+						});
+					} ).catch( err => {
+						if( err.kind === 'ObjectId' ) {
+							return res.send({
+								status: false,
+								message: "ObjectId Error",
+								data: {}
+							});
+						}
+
+						return res.send({
+							status: false,
+							message: err.message,//"Error",
+							data: {}
+						} );
+					});
+				}
+				
+			} ).catch( err => {
+				if( err.kind === 'ObjectId' ) {
+					return res.send( {
+						status: false,
+						message: 'ObjectId Error',
+						data: {}
+					} );
+				}
+				return res.send( {
+					status: false,
+					message: 'Error retrieving data',
+					data: {}
+				} );
+			} );
+			
+		};
+
+
 	/**
 	 * Kriteria Find
 	 * Mengambil data Kriteria.
@@ -1127,16 +1381,8 @@
 			} )
 			.sort( { TGL_MOBILE_SYNC: -1 } )
 			.limit( 1 )
-			.then( data => {
-				if ( !data ) {
-					return res.send( {
-						status: false,
-						message: 'Data not found 2',
-						data: {}
-					} );
-				}
-
-				if ( data.length > 0 ) {
+			.then( data_sync => {
+				if ( !data_sync ) {
 					Models.Kriteria.find( {
 						DELETE_USER: ""
 					} )
@@ -1150,8 +1396,8 @@
 						UPDATE_USER: 0,
 						__v: 0
 					} )
-					.then( data => {
-						if( !data ) {
+					.then( data_first_sync => {
+						if( !data_first_sync ) {
 							return res.send( {
 								status: false,
 								message: config.app.error_message.find_404,
@@ -1159,12 +1405,12 @@
 							} );
 						}
 
-						res.json( { 
+						return res.json( { 
 							"status": true,
 							"message": "First time sync",
 							"data": {
 								hapus: [],
-								simpan: data,
+								simpan: data_first_sync,
 								ubah: []
 							}
 						} );
@@ -1177,44 +1423,134 @@
 					} );
 				}
 				else {
-					Models.Kriteria.find( {
-						DELETE_USER: ""
-					} )
-					.select( {
-						_id: 0,
-						INSERT_TIME: 0,
-						INSERT_USER: 0,
-						DELETE_TIME: 0,
-						DELETE_USER: 0,
-						UPDATE_TIME: 0,
-						UPDATE_USER: 0,
-						__v: 0
-					} )
-					.then( data => {
-						if( !data ) {
-							return res.send( {
-								status: false,
-								message: config.app.error_message.find_404,
-								data: {}
-							} );
-						}
+					var start_date = data_sync[0].TGL_MOBILE_SYNC;
+					var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' );
 
-						res.json( { 
-							"status": true,
-							"message": "First time sync",
-							"data": {
-								hapus: [],
-								simpan: data,
-								ubah: []
+					Models.Kriteria.find( 
+						{
+							$and: [
+								{
+									$or: [
+										{
+											INSERT_TIME: {
+												$gte: start_date,
+												$lte: end_date
+											}
+										},
+										{
+											UPDATE_TIME: {
+												$gte: start_date,
+												$lte: end_date
+											}
+										},
+										{
+											DELETE_TIME: {
+												$gte: start_date,
+												$lte: end_date
+											}
+										}
+									]
+								}
+							]
+						}
+					).select( {
+						_id: 0,
+						KRITERIA_CODE: 1,
+						COLOR: 1,
+						GRADE: 1,
+						BATAS_ATAS: 1,
+						BATAS_BAWAH: 1,
+						KONVERSI_ANGKA: 1,
+						INSERT_USER: 1,
+						INSERT_TIME: 1,
+						UPDATE_USER: 1,
+						UPDATE_TIME: 1,
+						DELETE_USER: 1,
+						DELETE_TIME: 1
+					} )
+					.then( data_insert => {
+						console.log(data_insert);
+
+
+						var temp_insert = [];
+						var temp_update = [];
+						var temp_delete = [];
+						console.log( data_insert );
+						data_insert.forEach( function( data ) {
+							if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
+								temp_delete.push( {
+									KRITERIA_CODE: data.KRITERIA_CODE,
+									COLOR: data.COLOR,
+									GRADE: data.GRADE,
+									BATAS_ATAS: data.BATAS_ATAS,
+									BATAS_BAWAH: data.BATAS_BAWAH,
+									KONVERSI_ANGKA: data.KONVERSI_ANGKA,
+									INSERT_USER: data.INSERT_USER,
+									INSERT_TIME: Libraries.Helper.date_format(data.INSERT_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+									UPDATE_USER: data.UPDATE_USER,
+									UPDATE_TIME: Libraries.Helper.date_format(data.UPDATE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+									DELETE_USER: data.DELETE_USER,
+									DELETE_TIME: Libraries.Helper.date_format(data.DELETE_TIME, 'YYYY-MM-DD hh:mm:ss' )
+								} );
+							}
+
+							if ( data.INSERT_TIME >= start_date && data.INSERT_TIME <= end_date ) {
+								temp_insert.push( {
+									KRITERIA_CODE: data.KRITERIA_CODE,
+									COLOR: data.COLOR,
+									GRADE: data.GRADE,
+									BATAS_ATAS: data.BATAS_ATAS,
+									BATAS_BAWAH: data.BATAS_BAWAH,
+									KONVERSI_ANGKA: data.KONVERSI_ANGKA,
+									INSERT_USER: data.INSERT_USER,
+									INSERT_TIME: Libraries.Helper.date_format(data.INSERT_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+									UPDATE_USER: data.UPDATE_USER,
+									UPDATE_TIME: Libraries.Helper.date_format(data.UPDATE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+									DELETE_USER: data.DELETE_USER,
+									DELETE_TIME: Libraries.Helper.date_format(data.DELETE_TIME, 'YYYY-MM-DD hh:mm:ss' )
+								} );
+							}
+							if ( data.UPDATE_TIME >= start_date && data.UPDATE_TIME <= end_date ) {
+								temp_update.push( {
+									KRITERIA_CODE: data.KRITERIA_CODE,
+									COLOR: data.COLOR,
+									GRADE: data.GRADE,
+									BATAS_ATAS: data.BATAS_ATAS,
+									BATAS_BAWAH: data.BATAS_BAWAH,
+									KONVERSI_ANGKA: data.KONVERSI_ANGKA,
+									INSERT_USER: data.INSERT_USER,
+									INSERT_TIME: Libraries.Helper.date_format(data.INSERT_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+									UPDATE_USER: data.UPDATE_USER,
+									UPDATE_TIME: Libraries.Helper.date_format(data.UPDATE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+									DELETE_USER: data.DELETE_USER,
+									DELETE_TIME: Libraries.Helper.date_format(data.DELETE_TIME, 'YYYY-MM-DD hh:mm:ss' )
+								} );
 							}
 						} );
+						return res.json({
+							status: true,
+							message: 'Data Sync tanggal ' + Libraries.Helper.date_format( start_date, 'YYYY-MM-DD' ) + ' s/d ' + Libraries.Helper.date_format( end_date, 'YYYY-MM-DD' ),
+							data: {
+								"hapus": temp_delete,
+								"simpan": temp_insert,
+								"ubah": temp_update
+							}
+						});
 					} ).catch( err => {
-						res.send( {
+						if( err.kind === 'ObjectId' ) {
+							return res.send({
+								status: false,
+								message: "ObjectId Error",
+								data: {}
+							});
+						}
+
+						return res.send({
 							status: false,
-							message: config.app.error_message.find_500,
+							message: err.message,
 							data: {}
 						} );
-					} );
+					});
 				}
 				
 			} ).catch( err => {
