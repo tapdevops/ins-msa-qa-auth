@@ -15,6 +15,7 @@
 	const Models = {
 		Kriteria: require( _directory_base + '/app/v1.1/Http/Models/KriteriaModel.js' ),
 		Content: require( _directory_base + '/app/v1.1/Http/Models/ContentModel.js' ),
+		ContentLabel: require( _directory_base + '/app/v1.1/Http/Models/ContentLabelModel.js' ),
 		SyncMobile: require( _directory_base + '/app/v1.1/Http/Models/SyncMobileModel.js' ),
 		SyncMobileLog: require( _directory_base + '/app/v1.1/Http/Models/SyncMobileLogModel.js' ),
 		UserAuth: require( _directory_base + '/app/v1.1/Http/Models/UserAuthModel.js' ),
@@ -1343,6 +1344,202 @@
 						return res.send({
 							status: false,
 							message: err.message,//"Error",
+							data: {}
+						} );
+					});
+				}
+				
+			} ).catch( err => {
+				if( err.kind === 'ObjectId' ) {
+					return res.send( {
+						status: false,
+						message: 'ObjectId Error',
+						data: {}
+					} );
+				}
+				return res.send( {
+					status: false,
+					message: 'Error retrieving data',
+					data: {}
+				} );
+			} );
+			
+		};
+
+	/**
+	 * Content Label Find
+	 * Mengambil data Content.
+	 * --------------------------------------------------------------------------
+	 */
+		exports.content_label_find = ( req, res ) => {
+
+			var auth = req.auth;
+
+			console.log({
+				INSERT_USER: auth.USER_AUTH_CODE,
+				IMEI: auth.IMEI,
+				TABEL_UPDATE: 'auth/content-label'
+			});
+			Models.SyncMobile.find( {
+				INSERT_USER: auth.USER_AUTH_CODE,
+				IMEI: auth.IMEI,
+				TABEL_UPDATE: 'auth/content-label'
+			} )
+			.sort( { TGL_MOBILE_SYNC: -1 } )
+			.limit( 1 )
+			.then( data_sync => {
+
+				if ( !data_sync ) {
+
+					Models.ContentLabel.find( {
+						DELETE_USER: ""
+					} )
+					.select( {
+						_id: 0,
+						CONTENT_LABEL_CODE: 1,
+						CONTENT_CODE: 1,
+						LABEL_NAME: 1,
+						LABEL_ICON: 1,
+						URUTAN_LABEL: 1,
+						LABEL_SCORE: 1,
+						WARNA_LABEL: 1
+					} )
+					.then( data_first_sync => {
+						console.log(data_first_sync);
+
+						if( !data_first_sync ) {
+							return res.send( {
+								status: false,
+								message: config.app.error_message.find_404,
+								data: {}
+							} );
+						}
+
+						return res.json( { 
+							"status": true,
+							"message": "First time sync",
+							"data": {
+								hapus: [],
+								simpan: data_first_sync,
+								ubah: []
+							}
+						} );
+					} ).catch( err => {
+						console.log(err);
+						return res.send( {
+							status: false,
+							message: config.app.error_message.find_500,
+							data: {}
+						} );
+					} );
+				}
+				else {
+					var start_date = data_sync[0].TGL_MOBILE_SYNC;
+					var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' );
+					
+					Models.Content.find( 
+						{
+							$and: [
+								{
+									$or: [
+										{
+											INSERT_TIME: {
+												$gte: start_date,
+												$lte: end_date
+											}
+										},
+										{
+											UPDATE_TIME: {
+												$gte: start_date,
+												$lte: end_date
+											}
+										},
+										{
+											DELETE_TIME: {
+												$gte: start_date,
+												$lte: end_date
+											}
+										}
+									]
+								}
+							]
+						}
+						
+					).select( {
+						_id: 0,
+						CONTENT_LABEL_CODE: 1,
+						CONTENT_CODE: 1,
+						LABEL_NAME: 1,
+						LABEL_ICON: 1,
+						URUTAN_LABEL: 1,
+						LABEL_SCORE: 1,
+						WARNA_LABEL: 1
+					} )
+					.then( data_insert => {
+						var temp_insert = [];
+						var temp_update = [];
+						var temp_delete = [];
+						console.log( data_insert );
+						data_insert.forEach( function( data ) {
+							if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
+								temp_delete.push( {
+									CONTENT_CODE: data.CONTENT_CODE,
+									CONTENT_LABEL_CODE: data.CONTENT_LABEL_CODE,
+									CONTENT_CODE: data.CONTENT_CODE,
+									LABEL_NAME: data.LABEL_NAME,
+									LABEL_ICON: data.LABEL_ICON,
+									URUTAN_LABEL: data.URUTAN_LABEL,
+									LABEL_SCORE: data.LABEL_SCORE,
+									WARNA_LABEL: data.WARNA_LABEL
+								} );
+							}
+
+							if ( data.INSERT_TIME >= start_date && data.INSERT_TIME <= end_date ) {
+								temp_insert.push( {
+									CONTENT_CODE: data.CONTENT_CODE,
+									CONTENT_LABEL_CODE: data.CONTENT_LABEL_CODE,
+									CONTENT_CODE: data.CONTENT_CODE,
+									LABEL_NAME: data.LABEL_NAME,
+									LABEL_ICON: data.LABEL_ICON,
+									URUTAN_LABEL: data.URUTAN_LABEL,
+									LABEL_SCORE: data.LABEL_SCORE,
+									WARNA_LABEL: data.WARNA_LABEL
+								} );
+							}
+							if ( data.UPDATE_TIME >= start_date && data.UPDATE_TIME <= end_date ) {
+								temp_update.push( {
+									CONTENT_CODE: data.CONTENT_CODE,
+									CONTENT_LABEL_CODE: data.CONTENT_LABEL_CODE,
+									CONTENT_CODE: data.CONTENT_CODE,
+									LABEL_NAME: data.LABEL_NAME,
+									LABEL_ICON: data.LABEL_ICON,
+									URUTAN_LABEL: data.URUTAN_LABEL,
+									LABEL_SCORE: data.LABEL_SCORE,
+									WARNA_LABEL: data.WARNA_LABEL
+								} );
+							}
+						} );
+						res.json({
+							status: true,
+							message: 'Data Sync tanggal ' + Libraries.Helper.date_format( start_date, 'YYYY-MM-DD' ) + ' s/d ' + Libraries.Helper.date_format( end_date, 'YYYY-MM-DD' ),
+							data: {
+								"hapus": temp_delete,
+								"simpan": temp_insert,
+								"ubah": temp_update
+							}
+						});
+					} ).catch( err => {
+						if( err.kind === 'ObjectId' ) {
+							return res.send({
+								status: false,
+								message: "ObjectId Error",
+								data: {}
+							});
+						}
+
+						return res.send({
+							status: false,
+							message: err.message,
 							data: {}
 						} );
 					});
