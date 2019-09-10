@@ -1612,7 +1612,8 @@
 							}
 						} );
 					} ).catch( err => {
-						res.send( {
+						console.log( err );
+						return res.send( {
 							status: false,
 							message: config.app.error_message.find_500,
 							data: {}
