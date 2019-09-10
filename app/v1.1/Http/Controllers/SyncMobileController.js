@@ -173,37 +173,43 @@
 					TGL_MOBILE_SYNC: -1 
 				} )
 				.limit( 1 );
-
+			console.log( "SYNC MOBILE: ", sync_mobile );
 			if ( sync_mobile) {
 
-				console.log("AAA");
+				// console.log("AAA");
 				
 				var start_date = Libraries.Helper.date_format( String( sync_mobile.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
-				var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDD' ) + '235959';
-				var query = await Models.ViewUserAuth
-					.find({
-						$or: [
-							{
-								INSERT_TIME: {
-									$gte: parseInt( start_date ),
-									$lte: parseInt( end_date )
+				var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDD' ); //+ '235959';
+				console.log( start_date );
+				console.log( end_date );
+				var query = await Models.ViewUserAuth.find(
+						{
+							$and: [
+								{
+									$or: [
+										{
+											INSERT_TIME: {
+												$gte: start_date,
+												$lte: end_date
+											}
+										},
+										{
+											UPDATE_TIME: {
+												$gte: start_date,
+												$lte: end_date
+											}
+										},
+										{
+											DELETE_TIME: {
+												$gte: start_date,
+												$lte: end_date
+											}
+										}
+									]
 								}
-							},
-							{
-								UPDATE_TIME: {
-									$gte: parseInt( start_date ),
-									$lte: parseInt( end_date )
-								}
-							},
-							{
-								DELETE_TIME: {
-									$gte: parseInt( start_date ),
-									$lte: parseInt( end_date )
-								}
-							}
-						]
-					})
-					.select( {
+							]
+						}
+					).select( {
 						USER_AUTH_CODE: 1,
 						EMPLOYEE_NIK: 1,
 						USER_ROLE: 1,
@@ -217,6 +223,8 @@
 						UPDATE_TIME: 1,
 						DELETE_TIME: 1
 					} );
+
+					console.log( query );
 			}
 			else {
 				var start_date = 0;
@@ -243,10 +251,9 @@
 			var temp_insert = [];
 			var temp_update = [];
 			var temp_delete = [];
-			
 			query.forEach( function( result ) {
 
-				console.log(result);
+				// console.log(result);
 
 				var result = Object.keys(result).map(function(k) {
 					return [+k, result[k]];
