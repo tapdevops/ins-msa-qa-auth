@@ -816,7 +816,7 @@
 						if ( data.data.length > 0 ) {
 							insert = data.data;
 						}
-						
+						console.log( "RES: ", res );
 						return res.json( { 
 							"status": data.status,
 							"message": "First time sync",
@@ -841,6 +841,7 @@
 					var url = service_url + '/sync-mobile/comp/' + start_date + '/' + end_date;
 
 					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+						console.log( "RES: ", res );
 						res.json( {
 							status: data.status,
 							message: data.message,

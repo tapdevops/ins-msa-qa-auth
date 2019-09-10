@@ -23,49 +23,49 @@
 	// Primary Variable
 	const App = Express();
 
-	Producer = kafka.Producer,
-	Consumer = kafka.Consumer,
-	client = new kafka.KafkaClient({kafkaHost : "149.129.252.13:9092"}),
-	producer = new Producer(client),    
-	consumer = new Consumer(
-        client,
-        [
-            { topic: 'kafkaRequestData', partition: 0 },{ topic: 'kafkaDataCollectionProgress', partition: 0 },{ topic: 'kafkaResponse', partition: 0 }
-        ],
-        {
-            autoCommit: false
-        }
-    );
-	consumer.on('message', function (message) {
-		json_message = JSON.parse(message.value);
-		if(message.topic=="kafkaRequestData"){
-			//ada yang request data ke microservices
-			let reqDataObj;
-			let responseData = false;
-			if(json_message.msa_name=="auth"){
-				const matchJSON = JSON.parse( json_message.agg );
-				const set = ViewUserAuth.aggregate( [	
-					matchJSON[0]
-				] );
-				reqDataObj = {
-					"msa_name":json_message.msa_name,
-					"model_name":json_message.model_name,
-					"requester":json_message.requester,
-					"request_id":json_message.request_id,
-					"data": set
-				}
-				responseData = true;
-			}
-			if( responseData ){
-				let payloads = [
-					{ topic: "kafkaResponseData", messages: JSON.stringify( reqDataObj ), partition: 0 }
-				];
-				producer.send( payloads, function( err, data ){
-					console.log( "Send data to kafka", data );
-				} );
-			}
-		}
-	});
+	// Producer = kafka.Producer,
+	// Consumer = kafka.Consumer,
+	// client = new kafka.KafkaClient({kafkaHost : "149.129.252.13:9092"}),
+	// producer = new Producer(client),    
+	// consumer = new Consumer(
+    //     client,
+    //     [
+    //         { topic: 'kafkaRequestData', partition: 0 },{ topic: 'kafkaDataCollectionProgress', partition: 0 },{ topic: 'kafkaResponse', partition: 0 }
+    //     ],
+    //     {
+    //         autoCommit: false
+    //     }
+    // );
+	// consumer.on('message', function (message) {
+	// 	json_message = JSON.parse(message.value);
+	// 	if(message.topic=="kafkaRequestData"){
+	// 		//ada yang request data ke microservices
+	// 		let reqDataObj;
+	// 		let responseData = false;
+	// 		if(json_message.msa_name=="auth"){
+	// 			const matchJSON = JSON.parse( json_message.agg );
+	// 			const set = ViewUserAuth.aggregate( [	
+	// 				matchJSON[0]
+	// 			] );
+	// 			reqDataObj = {
+	// 				"msa_name":json_message.msa_name,
+	// 				"model_name":json_message.model_name,
+	// 				"requester":json_message.requester,
+	// 				"request_id":json_message.request_id,
+	// 				"data": set
+	// 			}
+	// 			responseData = true;
+	// 		}
+	// 		if( responseData ){
+	// 			let payloads = [
+	// 				{ topic: "kafkaResponseData", messages: JSON.stringify( reqDataObj ), partition: 0 }
+	// 			];
+	// 			producer.send( payloads, function( err, data ){
+	// 				console.log( "Send data to kafka", data );
+	// 			} );
+	// 		}
+	// 	}
+	// });
 
 	// Generate API Documentation
 	// require( 'express-aglio' )( App,{
