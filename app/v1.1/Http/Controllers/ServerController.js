@@ -219,44 +219,45 @@
 	 * Untuk mengirim versi APK 
 	 * --------------------------------------------------------------------------
 	 */
-	exports.current_apk_version = async (req, res) => {
-		var data = await Models.APKVersion.aggregate( [
-			{
-				$group: {
-					_id: {
-						INSERT_USER: "$INSERT_USER"
-					},
-					APK_VERSION: {
-						$first: "$APK_VERSION"
-					},
-					IMEI: {
-						$first: "$IMEI"
+		exports.current_apk_version = async (req, res) => {
+			var data = await Models.APKVersion.aggregate( [
+				{
+					$group: {
+						_id: {
+							INSERT_USER: "$INSERT_USER"
+						},
+						APK_VERSION: {
+							$first: "$APK_VERSION"
+						},
+						IMEI: {
+							$first: "$IMEI"
+						}
+					}
+				},
+				{
+					$project: {
+						_id: 0,
+						INSERT_USER: "$_id.INSERT_USER",
+						APK_VERSION: 1,
+						IMEI: 1
+					}
+				},
+				{
+					$match: {
+						INSERT_USER: req.params.id
+					}
+				},
+				{
+					$sort: {
+						INSERT_TIME: -1
 					}
 				}
-			},
-			{
-				$project: {
-					_id: 0,
-					INSERT_USER: "$_id.INSERT_USER",
-					APK_VERSION: 1,
-					IMEI: 1
-				}
-			},
-			{
-				$match: {
-					INSERT_USER: req.params.id
-				}
-			},
-			{
-				$sort: {
-					INSERT_TIME: -1
-				}
-			}
-		] );
+			] );
 
-		return res.send( {
-			status: true,
-			message: config.app.error_message.find_200,
-			apk_version: ( data.length > 0 ? data[0].APK_VERSION : 0 )
-		} )
-	};
+			return res.send( {
+				status: true,
+				message: config.app.error_message.find_200,
+				apk_version: ( data.length > 0 ? data[0].APK_VERSION : 0 )
+			} )
+		};
+	

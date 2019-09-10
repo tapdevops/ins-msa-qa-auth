@@ -176,7 +176,6 @@
 
 			if ( sync_mobile) {
 
-				console.log("AAA");
 				
 				var start_date = Libraries.Helper.date_format( String( sync_mobile.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
 				var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDD' ) + '235959';
