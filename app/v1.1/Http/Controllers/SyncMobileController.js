@@ -1380,11 +1380,6 @@
 
 			var auth = req.auth;
 
-			console.log({
-				INSERT_USER: auth.USER_AUTH_CODE,
-				IMEI: auth.IMEI,
-				TABEL_UPDATE: 'auth/content-label'
-			});
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
 				IMEI: auth.IMEI,
@@ -1394,7 +1389,9 @@
 			.limit( 1 )
 			.then( data_sync => {
 
-				if ( !data_sync ) {
+				console.log(data_sync);
+
+				if ( data_sync.length == 0 ) {
 
 					Models.ContentLabel.find( {
 						DELETE_USER: ""
@@ -1410,7 +1407,6 @@
 						WARNA_LABEL: 1
 					} )
 					.then( data_first_sync => {
-						console.log(data_first_sync);
 
 						if( !data_first_sync ) {
 							return res.send( {
@@ -1534,6 +1530,7 @@
 							}
 						});
 					} ).catch( err => {
+						console.log(err);
 						if( err.kind === 'ObjectId' ) {
 							return res.send({
 								status: false,
@@ -1551,6 +1548,7 @@
 				}
 				
 			} ).catch( err => {
+				console.log(err);
 				if( err.kind === 'ObjectId' ) {
 					return res.send( {
 						status: false,
@@ -1584,7 +1582,10 @@
 			.sort( { TGL_MOBILE_SYNC: -1 } )
 			.limit( 1 )
 			.then( data_sync => {
-				if ( !data_sync ) {
+
+				console.log(data_sync);
+
+				if ( data_sync.length == 0 ) {
 					Models.Kriteria.find( {
 						DELETE_USER: ""
 					} )
@@ -1757,6 +1758,7 @@
 				}
 				
 			} ).catch( err => {
+				console.log(err);
 				if( err.kind === 'ObjectId' ) {
 					return res.send( {
 						status: false,
