@@ -8,14 +8,14 @@
  */
  	// Libraries
 	const Libraries = {
-		Helper: require( _directory_base + '/app/v1.0/Http/Libraries/Helper.js' )
+		Helper: require( _directory_base + '/app/v1.1/Http/Libraries/Helper.js' )
 	}
 
 	// Models
 	const Models = {
-		ServiceList: require( _directory_base + '/app/v1.0/Http/Models/ServiceListModel.js' ),
-		APKVersion: require(_directory_base + '/app/v1.0/Http/Models/APKVersionModel.js' ),
-		Parameter: require( _directory_base + '/app/v1.0/Http/Models/ParameterModel.js' )
+		ServiceList: require( _directory_base + '/app/v1.1/Http/Models/ServiceListModel.js' ),
+		APKVersion: require(_directory_base + '/app/v1.1/Http/Models/APKVersionModel.js' ),
+		Parameter: require( _directory_base + '/app/v1.1/Http/Models/ParameterModel.js' )
 	}
 
  /*
@@ -29,6 +29,7 @@
 	 * --------------------------------------------------------------------------
 	 */
 		exports.service_list = async ( req, res ) => {
+			
    			if ( !req.query.v ) {
    				return res.json( {
 					status: true,
@@ -214,7 +215,7 @@
 		}
 
 	/**
-	 * APKVersion
+	 * APK Version
 	 * Untuk mengirim versi APK 
 	 * --------------------------------------------------------------------------
 	 */
@@ -251,13 +252,11 @@
 					INSERT_TIME: -1
 				}
 			}
-
 		] );
 
-		console.log(data);
 		return res.send( {
 			status: true,
 			message: config.app.error_message.find_200,
 			apk_version: ( data.length > 0 ? data[0].APK_VERSION : 0 )
 		} )
-	}
+	};

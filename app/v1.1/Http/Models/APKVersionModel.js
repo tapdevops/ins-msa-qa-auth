@@ -27,4 +27,4 @@
 | Exports
 |--------------------------------------------------------------------------
 */
-	module.exports = Mongoose.model( 'APKVersion', APKVersionSchema, 'TR_APK_VERSION' );
+	module.exports = Mongoose.model( 'APKVersion_v_1_1', APKVersionSchema, 'TR_APK_VERSION' );
