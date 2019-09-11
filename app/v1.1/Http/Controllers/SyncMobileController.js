@@ -255,26 +255,19 @@
 						
 					).select( {
 						_id: 0,
-						CONTENT_CODE: 1,
-						GROUP_CATEGORY: 1,
-						CATEGORY: 1,
-						CONTENT_NAME: 1,
-						CONTENT_TYPE: 1,
-						UOM: 1,
-						FLAG_TYPE: 1,
-						BOBOT: 1,
-						URUTAN: 1,
-						INSERT_USER:1,
+						USER_AUTH_CODE: 1,
+						EMPLOYEE_NIK: 1,
+						USER_ROLE: 1,
+						LOCATION_CODE: 1,
+						REF_ROLE: 1,
+						PJS_JOB: 1,
+						PJS_FULLNAME: 1,
+						HRIS_JOB: 1,
+						HRIS_FULLNAME: 1,
 						INSERT_TIME: 1,
-						UPDATE_USER: 1,
 						UPDATE_TIME: 1,
-						DELETE_USER: 1,
 						DELETE_TIME: 1,
-						TBM0: 1,
-						TBM1: 1,
-						TBM2: 1,
-						TBM3: 1,
-						TM: 1
+						__v: 0
 					} )
 					.then( data_insert => {
 						var temp_insert = [];
@@ -284,75 +277,36 @@
 						data_insert.forEach( function( data ) {
 							if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
 								temp_delete.push( {
-									CONTENT_CODE: data.CONTENT_CODE,
-									GROUP_CATEGORY: data.GROUP_CATEGORY,
-									CATEGORY: data.CATEGORY,
-									CONTENT_NAME: data.CONTENT_NAME,
-									CONTENT_TYPE: data.CONTENT_TYPE,
-									UOM: data.UON,
-									FLAG_TYPE: data.FLAG_TYPE,
-									BOBOT: data.BOBOT,
-									URUTAN: data.URUTAN,
-									INSERT_USER: data.INSERT_USER,
-									INSERT_TIME: Libraries.Helper.date_format(data.INSERT_TIME, 'YYYY-MM-DD hh:mm:ss' ),
-									UPDATE_USER: data.UPDATE_USER,
-									UPDATE_TIME: Libraries.Helper.date_format(data.UPDATE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
-									DELETE_USER: data.DELETE_USER,
-									DELETE_TIME: Libraries.Helper.date_format(data.DELETE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
-									TBM0: data.TBM0,
-									TBM1: data.TBM1,
-									TBM2: data.TBM2,
-									TBM3: data.TBM3,
-									TM: data.TM
+									USER_AUTH_CODE: result.USER_AUTH_CODE,
+									EMPLOYEE_NIK: result.EMPLOYEE_NIK,
+									USER_ROLE: result.USER_ROLE,
+									LOCATION_CODE: String( result.LOCATION_CODE ),
+									REF_ROLE: result.REF_ROLE,
+									JOB: JOB,
+									FULLNAME: FULLNAME
 								} );
 							}
 
 							if ( data.INSERT_TIME >= start_date && data.INSERT_TIME <= end_date ) {
 								temp_insert.push( {
-									CONTENT_CODE: data.CONTENT_CODE,
-									GROUP_CATEGORY: data.GROUP_CATEGORY,
-									CATEGORY: data.CATEGORY,
-									CONTENT_NAME: data.CONTENT_NAME,
-									CONTENT_TYPE: data.CONTENT_TYPE,
-									UOM: data.UON,
-									FLAG_TYPE: data.FLAG_TYPE,
-									BOBOT: data.BOBOT,
-									URUTAN: data.URUTAN,
-									INSERT_USER: data.INSERT_USER,
-									INSERT_TIME: Libraries.Helper.date_format(data.INSERT_TIME, 'YYYY-MM-DD hh:mm:ss' ),
-									UPDATE_USER: data.UPDATE_USER,
-									UPDATE_TIME: Libraries.Helper.date_format(data.UPDATE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
-									DELETE_USER: data.DELETE_USER,
-									DELETE_TIME: Libraries.Helper.date_format(data.DELETE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
-									TBM0: data.TBM0,
-									TBM1: data.TBM1,
-									TBM2: data.TBM2,
-									TBM3: data.TBM3,
-									TM: data.TM
+									USER_AUTH_CODE: result.USER_AUTH_CODE,
+									EMPLOYEE_NIK: result.EMPLOYEE_NIK,
+									USER_ROLE: result.USER_ROLE,
+									LOCATION_CODE: String( result.LOCATION_CODE ),
+									REF_ROLE: result.REF_ROLE,
+									JOB: JOB,
+									FULLNAME: FULLNAME
 								} );
 							}
 							if ( data.UPDATE_TIME >= start_date && data.UPDATE_TIME <= end_date ) {
 								temp_update.push( {
-									CONTENT_CODE: data.CONTENT_CODE,
-									GROUP_CATEGORY: data.GROUP_CATEGORY,
-									CATEGORY: data.CATEGORY,
-									CONTENT_NAME: data.CONTENT_NAME,
-									CONTENT_TYPE: data.CONTENT_TYPE,
-									UOM: data.UON,
-									FLAG_TYPE: data.FLAG_TYPE,
-									BOBOT: data.BOBOT,
-									URUTAN: data.URUTAN,
-									INSERT_USER: data.INSERT_USER,
-									INSERT_TIME: Libraries.Helper.date_format(data.INSERT_TIME, 'YYYY-MM-DD hh:mm:ss' ),
-									UPDATE_USER: data.UPDATE_USER,
-									UPDATE_TIME: Libraries.Helper.date_format(data.UPDATE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
-									DELETE_USER: data.DELETE_USER,
-									DELETE_TIME: Libraries.Helper.date_format(data.DELETE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
-									TBM0: data.TBM0,
-									TBM1: data.TBM1,
-									TBM2: data.TBM2,
-									TBM3: data.TBM3,
-									TM: data.TM
+									USER_AUTH_CODE: result.USER_AUTH_CODE,
+									EMPLOYEE_NIK: result.EMPLOYEE_NIK,
+									USER_ROLE: result.USER_ROLE,
+									LOCATION_CODE: String( result.LOCATION_CODE ),
+									REF_ROLE: result.REF_ROLE,
+									JOB: JOB,
+									FULLNAME: FULLNAME
 								} );
 							}
 						} );
@@ -381,170 +335,8 @@
 						} );
 					});
 				}
+
 			} );
-			
-			if ( sync_mobile) {
-				var start_date = Libraries.Helper.date_format( String( sync_mobile.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
-				var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDD' ); //+ '235959';
-				console.log( start_date );
-				console.log( end_date );
-				var query = Models.ViewUserAuth.find(
-						{
-							$and: [
-								{
-									$or: [
-										{
-											INSERT_TIME: {
-												$gte: start_date,
-												$lte: end_date
-											}
-										},
-										{
-											UPDATE_TIME: {
-												$gte: start_date,
-												$lte: end_date
-											}
-										},
-										{
-											DELETE_TIME: {
-												$gte: start_date,
-												$lte: end_date
-											}
-										}
-									]
-								}
-							]
-						}
-					).select( {
-						USER_AUTH_CODE: 1,
-						EMPLOYEE_NIK: 1,
-						USER_ROLE: 1,
-						LOCATION_CODE: 1,
-						REF_ROLE: 1,
-						PJS_JOB: 1,
-						PJS_FULLNAME: 1,
-						HRIS_JOB: 1,
-						HRIS_FULLNAME: 1,
-						INSERT_TIME: 1,
-						UPDATE_TIME: 1,
-						DELETE_TIME: 1
-					} )
-					.then( data => {
-						console.log( data );
-					} );
-			}
-			else {
-				var start_date = 0;
-				var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' );
-				var query = await Models.ViewUserAuth
-					.find({})
-					.select( {
-						USER_AUTH_CODE: 1,
-						EMPLOYEE_NIK: 1,
-						USER_ROLE: 1,
-						LOCATION_CODE: 1,
-						REF_ROLE: 1,
-						PJS_JOB: 1,
-						PJS_FULLNAME: 1,
-						HRIS_JOB: 1,
-						HRIS_FULLNAME: 1,
-						INSERT_TIME: 1,
-						UPDATE_TIME: 1,
-						DELETE_TIME: 1
-					} );
-
-			}
-
-			var temp_insert = [];
-			var temp_update = [];
-			var temp_delete = [];
-			query.forEach( function( result ) {
-
-				// console.log(result);
-
-				var result = Object.keys(result).map(function(k) {
-					return [+k, result[k]];
-				});
-				var JOB = '';
-				var FULLNAME = '';
-
-				result = result[3][1];
-				
-				if ( result.PJS_JOB ) {
-					JOB = result.PJS_JOB;
-				}
-				else if( result.HRIS_JOB ) {
-					JOB = String( result.HRIS_JOB );
-				}
-				
-				if ( result.PJS_FULLNAME ) {
-					FULLNAME = result.PJS_FULLNAME;
-				}
-				else if( result.HRIS_FULLNAME ) {
-					FULLNAME = result.HRIS_FULLNAME;
-				}
-
-				if ( FULLNAME != '' ) {
-					if ( result.DELETE_TIME >= start_date && result.DELETE_TIME <= end_date ) {
-						temp_delete.push( {
-							USER_AUTH_CODE: result.USER_AUTH_CODE,
-							EMPLOYEE_NIK: result.EMPLOYEE_NIK,
-							USER_ROLE: result.USER_ROLE,
-							LOCATION_CODE: String( result.LOCATION_CODE ),
-							REF_ROLE: result.REF_ROLE,
-							JOB: JOB,
-							FULLNAME: FULLNAME
-						} );
-					}
-
-					if ( result.INSERT_TIME >= start_date && result.INSERT_TIME <= end_date ) {
-						temp_insert.push( {
-							USER_AUTH_CODE: result.USER_AUTH_CODE,
-							EMPLOYEE_NIK: result.EMPLOYEE_NIK,
-							USER_ROLE: result.USER_ROLE,
-							LOCATION_CODE: String( result.LOCATION_CODE ),
-							REF_ROLE: result.REF_ROLE,
-							JOB: JOB,
-							FULLNAME: FULLNAME
-						} );
-					}
-
-					if ( result.UPDATE_TIME >= start_date && result.UPDATE_TIME <= end_date ) {
-						temp_update.push( {
-							USER_AUTH_CODE: result.USER_AUTH_CODE,
-							EMPLOYEE_NIK: result.EMPLOYEE_NIK,
-							USER_ROLE: result.USER_ROLE,
-							LOCATION_CODE: String( result.LOCATION_CODE ),
-							REF_ROLE: result.REF_ROLE,
-							JOB: JOB,
-							FULLNAME: FULLNAME
-						} );
-					}
-				}
-			} );
-			
-			if ( sync_mobile ) {
-				res.json( {
-					status: true,
-					message: "Sync",
-					data: {
-						"hapus": temp_delete,
-						"simpan": temp_insert,
-						"ubah": temp_update
-					}
-				} );
-			}
-			else {
-				res.json( {
-					status: true,
-					message: "First time sync",
-					data: {
-						"hapus": [],
-						"simpan": temp_insert,
-						"ubah": []
-					}
-				} );
-			}
 		};
 
 	/**
@@ -1518,7 +1310,7 @@
 									CATEGORY: data.CATEGORY,
 									CONTENT_NAME: data.CONTENT_NAME,
 									CONTENT_TYPE: data.CONTENT_TYPE,
-									UOM: data.UON,
+									UOM: data.UOM,
 									FLAG_TYPE: data.FLAG_TYPE,
 									BOBOT: data.BOBOT,
 									URUTAN: data.URUTAN,
