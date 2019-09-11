@@ -106,7 +106,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message, //'Error retrieving data',
 					data: {}
 				} );
 			} );
@@ -165,7 +165,6 @@
 			// } );
 			
 			var auth = req.auth;
-			console.log( auth );
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
 				IMEI: auth.IMEI,
@@ -177,7 +176,7 @@
 			.limit( 1 )
 			.then( data_sync => {
 
-				if ( data_sync.length === 0 ) {
+				if ( !data_sync.length ) {
 					Models.ViewUserAuth.find( {
 						DELETE_TIME: 0
 					} )
@@ -195,7 +194,7 @@
 						INSERT_TIME: 1,
 						UPDATE_TIME: 1,
 						DELETE_TIME: 1,
-						__v: 1
+						__v: 0
 					} )
 					.then( data_first_sync => {
 						if( !data_first_sync ) {
@@ -274,46 +273,49 @@
 						var temp_insert = [];
 						var temp_update = [];
 						var temp_delete = [];
-						
-						data_insert.forEach( function( dataContact ) {
-							console.log( dataContact.DELETE_TIME );
-							
-							// if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
-							// 	temp_delete.push( {
-							// 		USER_AUTH_CODE: data.USER_AUTH_CODE,
-							// 		EMPLOYEE_NIK: data.EMPLOYEE_NIK,
-							// 		USER_ROLE: data.USER_ROLE,
-							// 		LOCATION_CODE: String( data.LOCATION_CODE ),
-							// 		REF_ROLE: data.REF_ROLE,
-							// 		JOB: data.JOB,
-							// 		FULLNAME: data.FULLNAME
-							// 	} );
-							// }
+						// console.log( "DATA_INSERT: ", data_insert );
 
-							// if ( data.INSERT_TIME >= start_date && data.INSERT_TIME <= end_date ) {
-							// 	console.log( "data insert nambah" );
-							// 	temp_insert.push( {
-							// 		USER_AUTH_CODE: data.USER_AUTH_CODE,
-							// 		EMPLOYEE_NIK: data.EMPLOYEE_NIK,
-							// 		USER_ROLE: data.USER_ROLE,
-							// 		LOCATION_CODE: String( data.LOCATION_CODE ),
-							// 		REF_ROLE: data.REF_ROLE,
-							// 		JOB: data.JOB,
-							// 		FULLNAME: data.FULLNAME
-							// 	} );
-							// }
-							// if ( data.UPDATE_TIME >= start_date && data.UPDATE_TIME <= end_date ) {
-							// 	console.log( "data update nambah" );
-							// 	temp_update.push( {
-							// 		USER_AUTH_CODE: data.USER_AUTH_CODE,
-							// 		EMPLOYEE_NIK: data.EMPLOYEE_NIK,
-							// 		USER_ROLE: data.USER_ROLE,
-							// 		LOCATION_CODE: String( data.LOCATION_CODE ),
-							// 		REF_ROLE: data.REF_ROLE,
-							// 		JOB: data.JOB,
-							// 		FULLNAME: data.FULLNAME
-							// 	} );
-							// }
+						data_insert.forEach( function( data ) {
+							var data2 = Object.keys(data).map(function(k) {
+								return [+k, data[k]];
+							});
+							console.log( data2.DELETE_TIME );
+							if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
+								temp_delete.push( {
+									USER_AUTH_CODE: data.USER_AUTH_CODE,
+									EMPLOYEE_NIK: data.EMPLOYEE_NIK,
+									USER_ROLE: data.USER_ROLE,
+									LOCATION_CODE: String( data.LOCATION_CODE ),
+									REF_ROLE: data.REF_ROLE,
+									JOB: data.JOB,
+									FULLNAME: data.FULLNAME
+								} );
+							}
+
+							if ( data.INSERT_TIME >= start_date && data.INSERT_TIME <= end_date ) {
+								console.log( "data insert nambah" );
+								temp_insert.push( {
+									USER_AUTH_CODE: data.USER_AUTH_CODE,
+									EMPLOYEE_NIK: data.EMPLOYEE_NIK,
+									USER_ROLE: data.USER_ROLE,
+									LOCATION_CODE: String( data.LOCATION_CODE ),
+									REF_ROLE: data.REF_ROLE,
+									JOB: data.JOB,
+									FULLNAME: data.FULLNAME
+								} );
+							}
+							if ( data.UPDATE_TIME >= start_date && data.UPDATE_TIME <= end_date ) {
+								console.log( "data update nambah" );
+								temp_update.push( {
+									USER_AUTH_CODE: data.USER_AUTH_CODE,
+									EMPLOYEE_NIK: data.EMPLOYEE_NIK,
+									USER_ROLE: data.USER_ROLE,
+									LOCATION_CODE: String( data.LOCATION_CODE ),
+									REF_ROLE: data.REF_ROLE,
+									JOB: data.JOB,
+									FULLNAME: data.FULLNAME
+								} );
+							}
 						} );
 						res.json({
 							status: true,
@@ -1259,6 +1261,7 @@
 						var temp_delete = [];
 						console.log( data_insert );
 						data_insert.forEach( function( data ) {
+							console.log( data );
 							if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
 								temp_delete.push( {
 									CONTENT_CODE: data.CONTENT_CODE,
