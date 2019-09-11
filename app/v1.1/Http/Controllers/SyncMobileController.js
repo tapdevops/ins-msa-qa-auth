@@ -165,6 +165,7 @@
 			// } );
 			
 			var auth = req.auth;
+			
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
 				IMEI: auth.IMEI,
@@ -178,7 +179,7 @@
 
 				if ( !data_sync.length ) {
 					Models.ViewUserAuth.find( {
-						DELETE_TIME: 0
+						// DELETE_TIME: 0
 					} )
 					.select( {
 						_id: 0,
@@ -194,7 +195,7 @@
 						INSERT_TIME: 1,
 						UPDATE_TIME: 1,
 						DELETE_TIME: 1,
-						__v: 0
+						__v: 1
 					} )
 					.then( data_first_sync => {
 						if( !data_first_sync ) {
@@ -254,7 +255,7 @@
 						}
 						
 					).select( {
-						_id: 0,
+						_id: 1,
 						USER_AUTH_CODE: 1,
 						EMPLOYEE_NIK: 1,
 						USER_ROLE: 1,
@@ -273,13 +274,7 @@
 						var temp_insert = [];
 						var temp_update = [];
 						var temp_delete = [];
-						// console.log( "DATA_INSERT: ", data_insert );
-
-						data_insert.forEach( function( data ) {
-							var data2 = Object.keys(data).map(function(k) {
-								return [+k, data[k]];
-							});
-							console.log( data2.DELETE_TIME );
+						data_insert.forEach( function( data ) { 
 							if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
 								temp_delete.push( {
 									USER_AUTH_CODE: data.USER_AUTH_CODE,
@@ -406,9 +401,8 @@
 						} );
 					});
 				}
-				
 			} ).catch( err => {
-				console.log(err);
+				console.log( err );
 				if( err.kind === 'ObjectId' ) {
 					return res.send( {
 						status: false,
@@ -1144,9 +1138,7 @@
 			.limit( 1 )
 			.then( data_sync => {
 
-				console.log(data_sync);
-
-				if ( !data_sync ) {
+				if ( data_sync.length === 0 ) {
 					Models.Content.find( {
 						DELETE_USER: ""
 					} )
@@ -1172,7 +1164,7 @@
 						TBM2: 1,
 						TBM3: 1,
 						TM: 1,
-						__v: 0
+						__v: 1
 					} )
 					.then( data_first_sync => {
 						if( !data_first_sync ) {
@@ -1202,7 +1194,7 @@
 				}
 				else {
 					var start_date = data_sync[0].TGL_MOBILE_SYNC;
-					var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' );
+					var end_date = parseInt(Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ));
 
 					Models.Content.find( 
 						{
@@ -1259,7 +1251,6 @@
 						var temp_insert = [];
 						var temp_update = [];
 						var temp_delete = [];
-						console.log( data_insert );
 						data_insert.forEach( function( data ) {
 							console.log( data );
 							if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
@@ -1635,7 +1626,7 @@
 				}
 				else {
 					var start_date = data_sync[0].TGL_MOBILE_SYNC;
-					var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' );
+					var end_date = parseInt(Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ));
 
 					Models.Kriteria.find( 
 						{
