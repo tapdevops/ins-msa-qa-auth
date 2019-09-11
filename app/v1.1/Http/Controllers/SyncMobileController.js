@@ -19,8 +19,7 @@
 		SyncMobile: require( _directory_base + '/app/v1.1/Http/Models/SyncMobileModel.js' ),
 		SyncMobileLog: require( _directory_base + '/app/v1.1/Http/Models/SyncMobileLogModel.js' ),
 		UserAuth: require( _directory_base + '/app/v1.1/Http/Models/UserAuthModel.js' ),
-		ViewUserAuth: require( _directory_base + '/app/v1.1/Http/Models/ViewUserAuthModel.js' ),
-		Contact: require( _directory_base + '/app/v1.1/Http/Models/ContactModel.js' )
+		ViewUserAuth: require( _directory_base + '/app/v1.1/Http/Models/ViewUserAuthModel.js' )
 	}
 
 	// Node Module
@@ -166,6 +165,7 @@
 			// } );
 			
 			var auth = req.auth;
+			console.log( auth );
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
 				IMEI: auth.IMEI,
@@ -176,7 +176,8 @@
 			} )
 			.limit( 1 )
 			.then( data_sync => {
-				if ( !data_sync ) {
+
+				if ( data_sync.length === 0 ) {
 					Models.ViewUserAuth.find( {
 						DELETE_TIME: 0
 					} )
@@ -194,7 +195,7 @@
 						INSERT_TIME: 1,
 						UPDATE_TIME: 1,
 						DELETE_TIME: 1,
-						__v: 0
+						__v: 1
 					} )
 					.then( data_first_sync => {
 						if( !data_first_sync ) {
@@ -222,9 +223,9 @@
 						} );
 					} );
 				}else {
+					console.log( data_sync[0] );
 					var start_date = data_sync[0].TGL_MOBILE_SYNC;
-					var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' );
-
+					var end_date = parseInt(Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ));
 					Models.ViewUserAuth.find( 
 						{
 							$and: [
@@ -267,48 +268,52 @@
 						INSERT_TIME: 1,
 						UPDATE_TIME: 1,
 						DELETE_TIME: 1,
-						__v: 0
+						__v: 1
 					} )
 					.then( data_insert => {
 						var temp_insert = [];
 						var temp_update = [];
 						var temp_delete = [];
-						console.log( data_insert );
-						data_insert.forEach( function( data ) {
-							if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
-								temp_delete.push( {
-									USER_AUTH_CODE: result.USER_AUTH_CODE,
-									EMPLOYEE_NIK: result.EMPLOYEE_NIK,
-									USER_ROLE: result.USER_ROLE,
-									LOCATION_CODE: String( result.LOCATION_CODE ),
-									REF_ROLE: result.REF_ROLE,
-									JOB: JOB,
-									FULLNAME: FULLNAME
-								} );
-							}
+						
+						data_insert.forEach( function( dataContact ) {
+							console.log( dataContact.DELETE_TIME );
+							
+							// if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
+							// 	temp_delete.push( {
+							// 		USER_AUTH_CODE: data.USER_AUTH_CODE,
+							// 		EMPLOYEE_NIK: data.EMPLOYEE_NIK,
+							// 		USER_ROLE: data.USER_ROLE,
+							// 		LOCATION_CODE: String( data.LOCATION_CODE ),
+							// 		REF_ROLE: data.REF_ROLE,
+							// 		JOB: data.JOB,
+							// 		FULLNAME: data.FULLNAME
+							// 	} );
+							// }
 
-							if ( data.INSERT_TIME >= start_date && data.INSERT_TIME <= end_date ) {
-								temp_insert.push( {
-									USER_AUTH_CODE: result.USER_AUTH_CODE,
-									EMPLOYEE_NIK: result.EMPLOYEE_NIK,
-									USER_ROLE: result.USER_ROLE,
-									LOCATION_CODE: String( result.LOCATION_CODE ),
-									REF_ROLE: result.REF_ROLE,
-									JOB: JOB,
-									FULLNAME: FULLNAME
-								} );
-							}
-							if ( data.UPDATE_TIME >= start_date && data.UPDATE_TIME <= end_date ) {
-								temp_update.push( {
-									USER_AUTH_CODE: result.USER_AUTH_CODE,
-									EMPLOYEE_NIK: result.EMPLOYEE_NIK,
-									USER_ROLE: result.USER_ROLE,
-									LOCATION_CODE: String( result.LOCATION_CODE ),
-									REF_ROLE: result.REF_ROLE,
-									JOB: JOB,
-									FULLNAME: FULLNAME
-								} );
-							}
+							// if ( data.INSERT_TIME >= start_date && data.INSERT_TIME <= end_date ) {
+							// 	console.log( "data insert nambah" );
+							// 	temp_insert.push( {
+							// 		USER_AUTH_CODE: data.USER_AUTH_CODE,
+							// 		EMPLOYEE_NIK: data.EMPLOYEE_NIK,
+							// 		USER_ROLE: data.USER_ROLE,
+							// 		LOCATION_CODE: String( data.LOCATION_CODE ),
+							// 		REF_ROLE: data.REF_ROLE,
+							// 		JOB: data.JOB,
+							// 		FULLNAME: data.FULLNAME
+							// 	} );
+							// }
+							// if ( data.UPDATE_TIME >= start_date && data.UPDATE_TIME <= end_date ) {
+							// 	console.log( "data update nambah" );
+							// 	temp_update.push( {
+							// 		USER_AUTH_CODE: data.USER_AUTH_CODE,
+							// 		EMPLOYEE_NIK: data.EMPLOYEE_NIK,
+							// 		USER_ROLE: data.USER_ROLE,
+							// 		LOCATION_CODE: String( data.LOCATION_CODE ),
+							// 		REF_ROLE: data.REF_ROLE,
+							// 		JOB: data.JOB,
+							// 		FULLNAME: data.FULLNAME
+							// 	} );
+							// }
 						} );
 						res.json({
 							status: true,
@@ -1261,7 +1266,7 @@
 									CATEGORY: data.CATEGORY,
 									CONTENT_NAME: data.CONTENT_NAME,
 									CONTENT_TYPE: data.CONTENT_TYPE,
-									UOM: data.UON,
+									UOM: data.UOM,
 									FLAG_TYPE: data.FLAG_TYPE,
 									BOBOT: data.BOBOT,
 									URUTAN: data.URUTAN,
@@ -1286,7 +1291,7 @@
 									CATEGORY: data.CATEGORY,
 									CONTENT_NAME: data.CONTENT_NAME,
 									CONTENT_TYPE: data.CONTENT_TYPE,
-									UOM: data.UON,
+									UOM: data.UOM,
 									FLAG_TYPE: data.FLAG_TYPE,
 									BOBOT: data.BOBOT,
 									URUTAN: data.URUTAN,
@@ -1368,7 +1373,6 @@
 					data: {}
 				} );
 			} );
-			
 		};
 
 	/**
