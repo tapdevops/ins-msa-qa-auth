@@ -76,15 +76,18 @@
 
 			// Category
 			app.get( '/api/v1.1/category', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Category.find );
+			app.get( '/api/v1.1/category/:start_date/:end_date', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Category.sync_mobile );
 
 			// Content
 			app.get( '/api/v1.1/content', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Content.find );
 			app.get( '/api/v1.1/content/:id', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Content.find_one );
+			app.get( '/api/v1.1/content/:start_date/:end_date', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Content.sync_mobile );
 			app.get( '/api/v1.1/content-label', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Content.label_find );
 			app.get( '/api/v1.1/content-label/:id', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Content.label_find_one );
 
 			// Kriteria
 			app.get( '/api/v1.1/kriteria', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Kriteria.find );
+			app.get( '/api/v1.1/kriteria/:start_date/:end_date', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Kriteria.sync_mobile );
 
 			// Parameter
 			app.get( '/api/v1.1/parameter', Middleware.v_1_1.VerifyToken,  Controllers.v_1_1.Parameter.find );
@@ -97,7 +100,10 @@
 			app.get( '/api/v1.1/mobile-sync/auth/contact', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.contact_find );
 			app.get( '/api/v1.1/mobile-sync/finding', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.finding_find );
 			app.get( '/api/v1.1/mobile-sync/auth/kriteria', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.kriteria_find );
+			app.get( '/api/v1.1/mobile-sync/auth/category', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.category_find );
 			app.get( '/api/v1.1/mobile-sync/ebcc/kualitas', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.ebcc_kualitas_find );
+			app.get( '/api/v1.1/mobile-sync/auth/content', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.content_find );
+			app.get( '/api/v1.1/mobile-sync/auth/content-label', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.content_label_find );
 			app.get( '/api/v1.1/mobile-sync/hectare-statement/afdeling', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.hs_afdeling_find );
 			app.get( '/api/v1.1/mobile-sync/hectare-statement/block', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.hs_block_find );
 			app.get( '/api/v1.1/mobile-sync/hectare-statement/comp', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.hs_comp_find );
@@ -129,7 +135,7 @@
 
 			// Category
 			app.get( '/api/v1.0/category', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.Category.find );
-
+			
 			// Content
 			app.get( '/api/v1.0/content', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.Content.find );
 			app.get( '/api/v1.0/content/:id', Middleware.v_1_0.VerifyToken, Controllers.v_1_0.Content.find_one );
