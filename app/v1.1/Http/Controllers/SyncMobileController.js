@@ -15,6 +15,7 @@
 	const Models = {
 		Kriteria: require( _directory_base + '/app/v1.1/Http/Models/KriteriaModel.js' ),
 		Content: require( _directory_base + '/app/v1.1/Http/Models/ContentModel.js' ),
+		Category: require( _directory_base + '/app/v1.1/Http/Models/CategoryModel.js' ),
 		ContentLabel: require( _directory_base + '/app/v1.1/Http/Models/ContentLabelModel.js' ),
 		SyncMobile: require( _directory_base + '/app/v1.1/Http/Models/SyncMobileModel.js' ),
 		SyncMobileLog: require( _directory_base + '/app/v1.1/Http/Models/SyncMobileLogModel.js' ),
@@ -1772,7 +1773,201 @@
 			} );
 			
 		};
+	
+		/**
+	 * Kriteria Find
+	 * Mengambil data Kriteria.
+	 * --------------------------------------------------------------------------
+	 */
+	exports.category_find = ( req, res ) => {
+			
+		var auth = req.auth;
+		Models.SyncMobile.find( {
+			INSERT_USER: auth.USER_AUTH_CODE,
+			IMEI: auth.IMEI,
+			TABEL_UPDATE: 'auth/category'
+		} )
+		.sort( { TGL_MOBILE_SYNC: -1 } )
+		.limit( 1 )
+		.then( data_sync => {
 
+			console.log(data_sync);
+
+			if ( data_sync.length == 0 ) {
+				Models.Category.find( {
+					DELETE_TIME: 0
+				} )
+				.select( {
+					_id: 0,
+					INSERT_TIME: 0,
+					INSERT_USER: 0,
+					DELETE_TIME: 0,
+					DELETE_USER: 0,
+					UPDATE_TIME: 0,
+					UPDATE_USER: 0,
+					__v: 0
+				} )
+				.then( data_first_sync => {
+					if( !data_first_sync ) {
+						return res.send( {
+							status: false,
+							message: config.app.error_message.find_404,
+							data: {}
+						} );
+					}
+
+					return res.json( { 
+						"status": true,
+						"message": "First time sync",
+						"data": {
+							hapus: [],
+							simpan: data_first_sync,
+							ubah: []
+						}
+					} );
+				} ).catch( err => {
+					console.log( err );
+					return res.send( {
+						status: false,
+						message: config.app.error_message.find_500,
+						data: {}
+					} );
+				} );
+			}
+			else {
+				var start_date = data_sync[0].TGL_MOBILE_SYNC;
+				var end_date = parseInt( Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
+
+				Models.Category.find( 
+					{
+						$and: [
+							{
+								$or: [
+									{
+										INSERT_TIME: {
+											$gte: start_date,
+											$lte: end_date
+										}
+									},
+									{
+										UPDATE_TIME: {
+											$gte: start_date,
+											$lte: end_date
+										}
+									},
+									{
+										DELETE_TIME: {
+											$gte: start_date,
+											$lte: end_date
+										}
+									}
+								]
+							}
+						]
+					}
+				).select( {
+					_id: 0,
+					CATEGORY_CODE: 1,
+					CATEGORY_NAME: 1,
+					ICON: 1,
+					INSERT_USER: 1,
+					INSERT_TIME: 1,
+					UPDATE_USER: 1,
+					UPDATE_TIME: 1,
+					DELETE_USER: 1,
+					DELETE_TIME: 1,
+					__v: 1
+				} )
+				.then( data_insert => {
+					console.log(data_insert);
+					var temp_insert = [];
+					var temp_update = [];
+					var temp_delete = [];
+					
+					data_insert.forEach( function( data ) {
+						if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
+							temp_delete.push( {
+								CATEGORY_CODE: data.CATEGORY_CODE,
+								CATEGORY_NAME: data.CATEGORY_NAME,
+								ICON: data.ICON,
+								INSERT_USER: data.INSERT_USER,
+								INSERT_TIME: Libraries.Helper.date_format(data.INSERT_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+								UPDATE_USER: data.UPDATE_USER,
+								UPDATE_TIME: Libraries.Helper.date_format(data.UPDATE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+								DELETE_USER: data.DELETE_USER,
+								DELETE_TIME: Libraries.Helper.date_format(data.DELETE_TIME, 'YYYY-MM-DD hh:mm:ss' )
+							} );
+						}
+						if ( data.INSERT_TIME >= start_date && data.INSERT_TIME <= end_date ) {
+							temp_insert.push( {
+								CATEGORY_CODE: data.CATEGORY_CODE,
+								CATEGORY_NAME: data.CATEGORY_NAME,
+								ICON: data.ICON,
+								INSERT_USER: data.INSERT_USER,
+								INSERT_TIME: Libraries.Helper.date_format(data.INSERT_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+								UPDATE_USER: data.UPDATE_USER,
+								UPDATE_TIME: Libraries.Helper.date_format(data.UPDATE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+								DELETE_USER: data.DELETE_USER,
+								DELETE_TIME: Libraries.Helper.date_format(data.DELETE_TIME, 'YYYY-MM-DD hh:mm:ss' )
+							} );
+						}
+						if ( data.UPDATE_TIME >= start_date && data.UPDATE_TIME <= end_date ) {
+							temp_update.push( {
+								CATEGORY_CODE: data.CATEGORY_CODE,
+								CATEGORY_NAME: data.CATEGORY_NAME,
+								ICON: data.ICON,
+								INSERT_USER: data.INSERT_USER,
+								INSERT_TIME: Libraries.Helper.date_format(data.INSERT_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+								UPDATE_USER: data.UPDATE_USER,
+								UPDATE_TIME: Libraries.Helper.date_format(data.UPDATE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+								DELETE_USER: data.DELETE_USER,
+								DELETE_TIME: Libraries.Helper.date_format(data.DELETE_TIME, 'YYYY-MM-DD hh:mm:ss' )
+							} );
+						}
+					} );
+					return res.json({
+						status: true,
+						message: 'Data Sync tanggal ' + Libraries.Helper.date_format( start_date, 'YYYY-MM-DD' ) + ' s/d ' + Libraries.Helper.date_format( end_date, 'YYYY-MM-DD' ),
+						data: {
+							"hapus": temp_delete,
+							"simpan": temp_insert,
+							"ubah": temp_update
+						}
+					});
+				} ).catch( err => {
+					if( err.kind === 'ObjectId' ) {
+						return res.send({
+							status: false,
+							message: "ObjectId Error",
+							data: {}
+						});
+					}
+
+					return res.send({
+						status: false,
+						message: err.message,
+						data: {}
+					} );
+				});
+			}
+			
+		} ).catch( err => {
+			console.log(err);
+			if( err.kind === 'ObjectId' ) {
+				return res.send( {
+					status: false,
+					message: 'ObjectId Error',
+					data: {}
+				} );
+			}
+			return res.send( {
+				status: false,
+				message: 'Error retrieving data',
+				data: {}
+			} );
+		} );
+		
+	};
 	/**
 	 * Reset
 	 * Untuk mereset data user sesuai token di tabel TM_MOBILE_SYNC.

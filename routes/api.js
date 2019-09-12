@@ -100,6 +100,7 @@
 			app.get( '/api/v1.1/mobile-sync/auth/contact', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.contact_find );
 			app.get( '/api/v1.1/mobile-sync/finding', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.finding_find );
 			app.get( '/api/v1.1/mobile-sync/auth/kriteria', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.kriteria_find );
+			app.get( '/api/v1.1/mobile-sync/auth/category', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.category_find );
 			app.get( '/api/v1.1/mobile-sync/ebcc/kualitas', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.ebcc_kualitas_find );
 			app.get( '/api/v1.1/mobile-sync/auth/content', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.content_find );
 			app.get( '/api/v1.1/mobile-sync/auth/content-label', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.content_label_find );
