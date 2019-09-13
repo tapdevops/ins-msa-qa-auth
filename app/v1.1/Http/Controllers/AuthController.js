@@ -37,7 +37,9 @@
 	  * --------------------------------------------------------------------
 	*/
 		exports.contacts = ( req, res ) => {
-			Models.ViewUserAuth.find()
+			Models.ViewUserAuth.find(
+
+			)
 			.select( {
 				USER_AUTH_CODE: 1,
 				EMPLOYEE_NIK: 1,
@@ -47,7 +49,10 @@
 				PJS_JOB: 1,
 				PJS_FULLNAME: 1,
 				HRIS_JOB: 1,
-				HRIS_FULLNAME: 1
+				HRIS_FULLNAME: 1,
+				INSERT_TIME: 1,
+				UPDATE_TIME: 1,
+				DELETE_TIME: 1
 			} )
 			.then( data => {
 				if( !data ) {

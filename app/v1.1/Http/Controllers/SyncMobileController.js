@@ -118,229 +118,182 @@
 	 * Untuk sync data contact.
 	 * --------------------------------------------------------------------------
 	 */
-		exports.contact_find = async ( req, res ) => {
+	exports.contact_find = async ( req, res ) => {
 
-			// var query = await Models.UserAuth.aggregate( [
-			// 	{
-			// 		"$lookup": {
-			// 			"from": "TM_EMPLOYEE_HRIS",
-			// 			"localField": "EMPLOYEE_NIK",
-			// 			"foreignField": "EMPLOYEE_NIK",
-			// 			"as": "HRIS"
-			// 		}
-			// 	},
-			// 	{
-			// 		"$lookup": {
-			// 			"from": "TM_PJS",
-			// 			"localField": "EMPLOYEE_NIK",
-			// 			"foreignField": "EMPLOYEE_NIK",
-			// 			"as": "PJS"
-			// 		}
-			// 	},
-			// 	{
-			// 		"$project": {
-			// 			USER_AUTH_CODE: 1,
-			// 			EMPLOYEE_NIK: 1,
-			// 			USER_ROLE: 1,
-			// 			LOCATION_CODE: 1,
-			// 			REF_ROLE: 1,
-			// 			PJS_JOB: 1,
-			// 			PJS_FULLNAME: 1,
-			// 			HRIS_FULLNAME: 1,
-			// 			INSERT_TIME: 1,
-			// 			UPDATE_TIME: 1,
-			// 			DELETE_TIME: 1,
-			// 			HRIS_JOB: "$HRIS[0].EMPLOYEE_POSITION",
-			// 			HRIS_FULLNAME: "$HRIS[0].EMPLOYEE_FULLNAME",
-			// 			PJS_JOB: "$PJS[0].JOB_CODE",
-			// 			PJS_JOB: "$PJS[0].NAMA_LENGKAP"
-			// 		}
-			// 	},
-			// 	{
-			// 		"$limit": 1
-			// 	}
-			// ] );
-			// return res.json( {
-			// 	query: query,
-			// 	message: "OK"
-			// } );
-			
-			var auth = req.auth;
-			
-			Models.SyncMobile.find( {
-				INSERT_USER: auth.USER_AUTH_CODE,
-				IMEI: auth.IMEI,
-				TABEL_UPDATE: 'auth/contact'
-			} )
-			.sort( { 
-				TGL_MOBILE_SYNC: -1 
-			} )
-			.limit( 1 )
-			.then( data_sync => {
+		// var query = await Models.UserAuth.aggregate( [
+		// 	{
+		// 		"$lookup": {
+		// 			"from": "TM_EMPLOYEE_HRIS",
+		// 			"localField": "EMPLOYEE_NIK",
+		// 			"foreignField": "EMPLOYEE_NIK",
+		// 			"as": "HRIS"
+		// 		}
+		// 	},
+		// 	{
+		// 		"$lookup": {
+		// 			"from": "TM_PJS",
+		// 			"localField": "EMPLOYEE_NIK",
+		// 			"foreignField": "EMPLOYEE_NIK",
+		// 			"as": "PJS"
+		// 		}
+		// 	},
+		// 	{
+		// 		"$project": {
+		// 			USER_AUTH_CODE: 1,
+		// 			EMPLOYEE_NIK: 1,
+		// 			USER_ROLE: 1,
+		// 			LOCATION_CODE: 1,
+		// 			REF_ROLE: 1,
+		// 			PJS_JOB: 1,
+		// 			PJS_FULLNAME: 1,
+		// 			HRIS_FULLNAME: 1,
+		// 			INSERT_TIME: 1,
+		// 			UPDATE_TIME: 1,
+		// 			DELETE_TIME: 1,
+		// 			HRIS_JOB: "$HRIS[0].EMPLOYEE_POSITION",
+		// 			HRIS_FULLNAME: "$HRIS[0].EMPLOYEE_FULLNAME",
+		// 			PJS_JOB: "$PJS[0].JOB_CODE",
+		// 			PJS_JOB: "$PJS[0].NAMA_LENGKAP"
+		// 		}
+		// 	},
+		// 	{
+		// 		"$limit": 1
+		// 	}
+		// ] );
+		// return res.json( {
+		// 	query: query,
+		// 	message: "OK"
+		// } );
+		
+		var auth = req.auth;
+		
+		Models.SyncMobile.find( {
+			INSERT_USER: auth.USER_AUTH_CODE,
+			IMEI: auth.IMEI,
+			TABEL_UPDATE: 'auth/contact'
+		} )
+		.sort( { 
+			TGL_MOBILE_SYNC: -1 
+		} )
+		.limit( 1 )
+		.then( data_sync => {
 
-				if ( !data_sync.length ) {
-					Models.ViewUserAuth.find( {
-						// DELETE_TIME: 0
-					} )
-					.select( {
-						_id: 0,
-						USER_AUTH_CODE: 1,
-						EMPLOYEE_NIK: 1,
-						USER_ROLE: 1,
-						LOCATION_CODE: 1,
-						REF_ROLE: 1,
-						PJS_JOB: 1,
-						PJS_FULLNAME: 1,
-						HRIS_JOB: 1,
-						HRIS_FULLNAME: 1,
-						INSERT_TIME: 1,
-						UPDATE_TIME: 1,
-						DELETE_TIME: 1,
-						__v: 1
-					} )
-					.then( data_first_sync => {
-						if( !data_first_sync ) {
-							return res.send( {
-								status: false,
-								message: config.app.error_message.find_404,
-								data: {}
-							} );
-						}
-
-						return res.json( { 
-							"status": true,
-							"message": "First time sync",
-							"data": {
-								hapus: [],
-								simpan: data_first_sync,
-								ubah: []
-							}
-						} );
-					} ).catch( err => {
-						res.send( {
-							status: false,
-							message: config.app.error_message.find_500,
-							data: {}
-						} );
-					} );
-				}else {
+			var query_aggregate = {};
+			if ( data_sync ) {
 					console.log( data_sync[0] );
 					var start_date = data_sync[0].TGL_MOBILE_SYNC;
 					var end_date = parseInt(Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ));
-					Models.ViewUserAuth.find( 
-						{
-							$and: [
-								{
-									$or: [
-										{
-											INSERT_TIME: {
-												$gte: start_date,
-												$lte: end_date
-											}
-										},
-										{
-											UPDATE_TIME: {
-												$gte: start_date,
-												$lte: end_date
-											}
-										},
-										{
-											DELETE_TIME: {
-												$gte: start_date,
-												$lte: end_date
-											}
+					query_aggregate = {
+						$and: [
+							{
+								$or: [
+									{
+										INSERT_TIME: {
+											$gte: start_date,
+											$lte: end_date
 										}
-									]
-								}
-							]
-						}
+									},
+									{
+										UPDATE_TIME: {
+											$gte: start_date,
+											$lte: end_date
+										}
+									},
+									{
+										DELETE_TIME: {
+											$gte: start_date,
+											$lte: end_date
+										}
+									}
+								]
+							}
+						]
+					};
+			}
+			Models.ViewUserAuth.find( query_aggregate ).select( {
+				_id: 1,
+				USER_AUTH_CODE: 1,
+				EMPLOYEE_NIK: 1,
+				USER_ROLE: 1,
+				LOCATION_CODE: 1,
+				REF_ROLE: 1,
+				PJS_JOB: 1,
+				PJS_FULLNAME: 1,
+				HRIS_JOB: 1,
+				HRIS_FULLNAME: 1,
+				INSERT_TIME: 1,
+				UPDATE_TIME: 1,
+				DELETE_TIME: 1,
+				__v: 1
+			} )
+			.then( data_insert => {
+				var temp_insert = [];
+				var temp_update = [];
+				var temp_delete = [];
+				data_insert.forEach( function( data ) { 
+					if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
+						temp_delete.push( {
+							USER_AUTH_CODE: data.USER_AUTH_CODE,
+							EMPLOYEE_NIK: data.EMPLOYEE_NIK,
+							USER_ROLE: data.USER_ROLE,
+							LOCATION_CODE: String( data.LOCATION_CODE ),
+							REF_ROLE: data.REF_ROLE,
+							JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
+							FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
+						} );
+					}
+
+					if ( data.INSERT_TIME >= start_date && data.INSERT_TIME <= end_date ) {
+						temp_insert.push( {
+							USER_AUTH_CODE: data.USER_AUTH_CODE,
+							EMPLOYEE_NIK: data.EMPLOYEE_NIK,
+							USER_ROLE: data.USER_ROLE,
+							LOCATION_CODE: String( data.LOCATION_CODE ),
+							REF_ROLE: data.REF_ROLE,
+							JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
+							FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
+						} );
 						
-					).select( {
-						_id: 1,
-						USER_AUTH_CODE: 1,
-						EMPLOYEE_NIK: 1,
-						USER_ROLE: 1,
-						LOCATION_CODE: 1,
-						REF_ROLE: 1,
-						PJS_JOB: 1,
-						PJS_FULLNAME: 1,
-						HRIS_JOB: 1,
-						HRIS_FULLNAME: 1,
-						INSERT_TIME: 1,
-						UPDATE_TIME: 1,
-						DELETE_TIME: 1,
-						__v: 1
-					} )
-					.then( data_insert => {
-						var temp_insert = [];
-						var temp_update = [];
-						var temp_delete = [];
-						data_insert.forEach( function( data ) { 
-							if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
-								temp_delete.push( {
-									USER_AUTH_CODE: data.USER_AUTH_CODE,
-									EMPLOYEE_NIK: data.EMPLOYEE_NIK,
-									USER_ROLE: data.USER_ROLE,
-									LOCATION_CODE: String( data.LOCATION_CODE ),
-									REF_ROLE: data.REF_ROLE,
-									JOB: data.JOB,
-									FULLNAME: data.FULLNAME
-								} );
-							}
-
-							if ( data.INSERT_TIME >= start_date && data.INSERT_TIME <= end_date ) {
-								console.log( "data insert nambah" );
-								temp_insert.push( {
-									USER_AUTH_CODE: data.USER_AUTH_CODE,
-									EMPLOYEE_NIK: data.EMPLOYEE_NIK,
-									USER_ROLE: data.USER_ROLE,
-									LOCATION_CODE: String( data.LOCATION_CODE ),
-									REF_ROLE: data.REF_ROLE,
-									JOB: data.JOB,
-									FULLNAME: data.FULLNAME
-								} );
-							}
-							if ( data.UPDATE_TIME >= start_date && data.UPDATE_TIME <= end_date ) {
-								console.log( "data update nambah" );
-								temp_update.push( {
-									USER_AUTH_CODE: data.USER_AUTH_CODE,
-									EMPLOYEE_NIK: data.EMPLOYEE_NIK,
-									USER_ROLE: data.USER_ROLE,
-									LOCATION_CODE: String( data.LOCATION_CODE ),
-									REF_ROLE: data.REF_ROLE,
-									JOB: data.JOB,
-									FULLNAME: data.FULLNAME
-								} );
-							}
+					}
+					if ( data.UPDATE_TIME >= start_date && data.UPDATE_TIME <= end_date ) {
+						temp_update.push( {
+							USER_AUTH_CODE: data.USER_AUTH_CODE,
+							EMPLOYEE_NIK: data.EMPLOYEE_NIK,
+							USER_ROLE: data.USER_ROLE,
+							LOCATION_CODE: String( data.LOCATION_CODE ),
+							REF_ROLE: data.REF_ROLE,
+							JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
+							FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
 						} );
-						res.json({
-							status: true,
-							message: 'Data Sync tanggal ' + Libraries.Helper.date_format( start_date, 'YYYY-MM-DD' ) + ' s/d ' + Libraries.Helper.date_format( end_date, 'YYYY-MM-DD' ),
-							data: {
-								"hapus": temp_delete,
-								"simpan": temp_insert,
-								"ubah": temp_update
-							}
-						});
-					} ).catch( err => {
-						if( err.kind === 'ObjectId' ) {
-							return res.send({
-								status: false,
-								message: "ObjectId Error",
-								data: {}
-							});
-						}
-
-						return res.send({
-							status: false,
-							message: err.message,//"Error",
-							data: {}
-						} );
+					}
+				} );
+				res.json({
+					status: true,
+					message: 'Data Sync tanggal ' + Libraries.Helper.date_format( start_date, 'YYYY-MM-DD' ) + ' s/d ' + Libraries.Helper.date_format( end_date, 'YYYY-MM-DD' ),
+					data: {
+						"hapus": temp_delete,
+						"simpan": temp_insert,
+						"ubah": temp_update
+					}
+				});
+			} ).catch( err => {
+				if( err.kind === 'ObjectId' ) {
+					return res.send({
+						status: false,
+						message: "ObjectId Error",
+						data: {}
 					});
 				}
 
-			} );
-		};
+				return res.send({
+					status: false,
+					message: err.message,//"Error",
+					data: {}
+				} );
+			});
+
+		} );
+	};
 
 	/**
 	 * EBCC Kualitas Find
@@ -1128,8 +1081,12 @@
 	 * --------------------------------------------------------------------------
 	 */
 		exports.content_find = ( req, res ) => {
-			
 			var auth = req.auth;
+			console.log({
+				INSERT_USER: auth.USER_AUTH_CODE,
+				IMEI: auth.IMEI,
+				TABEL_UPDATE: 'auth/content'
+			})
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
 				IMEI: auth.IMEI,
@@ -1139,6 +1096,9 @@
 			.limit( 1 )
 			.then( data_sync => {
 
+
+
+				console.log( "Data sync length: ", data_sync.length );
 				if ( data_sync.length === 0 ) {
 					Models.Content.find( {
 						DELETE_USER: ""
@@ -1775,8 +1735,8 @@
 		};
 	
 		/**
-	 * Kriteria Find
-	 * Mengambil data Kriteria.
+	 * Category Find
+	 * Mengambil data Category
 	 * --------------------------------------------------------------------------
 	 */
 	exports.category_find = ( req, res ) => {
@@ -1790,9 +1750,7 @@
 		.sort( { TGL_MOBILE_SYNC: -1 } )
 		.limit( 1 )
 		.then( data_sync => {
-
 			console.log(data_sync);
-
 			if ( data_sync.length == 0 ) {
 				Models.Category.find( {
 					DELETE_TIME: 0
@@ -1883,13 +1841,26 @@
 					var temp_insert = [];
 					var temp_update = [];
 					var temp_delete = [];
-					
+					if ( config.app.env == 'prod' ) {
+						var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.prod + '/';
+					}
+					else if ( config.app.env == 'qa' ) {
+						var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.qa + '/';
+					}
+					else if ( config.app.env == 'dev' ) {
+						var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.dev + '/' ;
+					}
 					data_insert.forEach( function( data ) {
+
+						
+					var path = 'files/images/category/' + data.ICON;
+
 						if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
 							temp_delete.push( {
 								CATEGORY_CODE: data.CATEGORY_CODE,
 								CATEGORY_NAME: data.CATEGORY_NAME,
 								ICON: data.ICON,
+								ICON_URL: path_global + path,
 								INSERT_USER: data.INSERT_USER,
 								INSERT_TIME: Libraries.Helper.date_format(data.INSERT_TIME, 'YYYY-MM-DD hh:mm:ss' ),
 								UPDATE_USER: data.UPDATE_USER,
@@ -1903,6 +1874,7 @@
 								CATEGORY_CODE: data.CATEGORY_CODE,
 								CATEGORY_NAME: data.CATEGORY_NAME,
 								ICON: data.ICON,
+								ICON_URL: path_global + path,
 								INSERT_USER: data.INSERT_USER,
 								INSERT_TIME: Libraries.Helper.date_format(data.INSERT_TIME, 'YYYY-MM-DD hh:mm:ss' ),
 								UPDATE_USER: data.UPDATE_USER,
@@ -1916,6 +1888,7 @@
 								CATEGORY_CODE: data.CATEGORY_CODE,
 								CATEGORY_NAME: data.CATEGORY_NAME,
 								ICON: data.ICON,
+								ICON_URL: path_global + path,
 								INSERT_USER: data.INSERT_USER,
 								INSERT_TIME: Libraries.Helper.date_format(data.INSERT_TIME, 'YYYY-MM-DD hh:mm:ss' ),
 								UPDATE_USER: data.UPDATE_USER,
