@@ -228,6 +228,7 @@
 					var temp_insert = [];
 					var temp_update = [];
 					var temp_delete = [];
+					
 					data_insert.forEach( function( data ) { 
 						if ( start_date && end_date  ) {
 							if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
@@ -238,7 +239,7 @@
 									LOCATION_CODE: String( data.LOCATION_CODE ),
 									REF_ROLE: data.REF_ROLE,
 									JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
-									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
+									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME  )
 								} );
 							}
 
@@ -250,7 +251,7 @@
 									LOCATION_CODE: String( data.LOCATION_CODE ),
 									REF_ROLE: data.REF_ROLE,
 									JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
-									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
+									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME  )
 								} );
 								
 							}
@@ -262,7 +263,7 @@
 									LOCATION_CODE: String( data.LOCATION_CODE ),
 									REF_ROLE: data.REF_ROLE,
 									JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
-									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_NAME : data.PJS_FULLNAME  )
+									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME  )
 								} );
 							}
 						}
@@ -274,9 +275,10 @@
 								LOCATION_CODE: String( data.LOCATION_CODE ),
 								REF_ROLE: data.REF_ROLE,
 								JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
-								FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_NAME : data.PJS_FULLNAME  )
+								FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME  )
 							} );
 						}
+						console.log( data.HRIS_FULLNAME );
 					} );
 					let message_first_sync = "First time sync";
 					res.json( {
