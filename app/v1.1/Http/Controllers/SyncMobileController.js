@@ -179,7 +179,6 @@
 			.then( data_sync => {
 				var query_aggregate = {};
 				if ( data_sync.length != 0 ) {
-					console.log( data_sync[0] );
 					var start_date = data_sync[0].TGL_MOBILE_SYNC;
 					var end_date = parseInt(Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ));
 					query_aggregate = {
@@ -1501,9 +1500,6 @@
 			.sort( { TGL_MOBILE_SYNC: -1 } )
 			.limit( 1 )
 			.then( data_sync => {
-
-				console.log(data_sync);
-
 				if ( data_sync.length == 0 ) {
 					Models.Kriteria.find( {
 						DELETE_USER: ""
@@ -1592,13 +1588,9 @@
 						DELETE_TIME: 1
 					} )
 					.then( data_insert => {
-						console.log(data_insert);
-
-
 						var temp_insert = [];
 						var temp_update = [];
 						var temp_delete = [];
-						console.log( data_insert );
 						data_insert.forEach( function( data ) {
 							if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
 								temp_delete.push( {
@@ -1710,7 +1702,6 @@
 		.sort( { TGL_MOBILE_SYNC: -1 } )
 		.limit( 1 )
 		.then( data_sync => {
-			console.log(data_sync);
 			if ( data_sync.length == 0 ) {
 				Models.Category.find( {
 					DELETE_TIME: 0
