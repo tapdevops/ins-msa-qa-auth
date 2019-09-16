@@ -262,7 +262,7 @@
 									LOCATION_CODE: String( data.LOCATION_CODE ),
 									REF_ROLE: data.REF_ROLE,
 									JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
-									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
+									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_NAME : data.PJS_FULLNAME  )
 								} );
 							}
 						}
@@ -274,7 +274,7 @@
 								LOCATION_CODE: String( data.LOCATION_CODE ),
 								REF_ROLE: data.REF_ROLE,
 								JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
-								FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
+								FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_NAME : data.PJS_FULLNAME  )
 							} );
 						}
 					} );
