@@ -1717,6 +1717,8 @@
 					__v: 0
 				} )
 				.then( data_first_sync => {
+
+					
 					if( !data_first_sync ) {
 						return res.send( {
 							status: false,
@@ -1724,13 +1726,34 @@
 							data: {}
 						} );
 					}
+					if ( config.app.env == 'prod' ) {
+						var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.prod + '/';
+					}
+					else if ( config.app.env == 'qa' ) {
+						var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.qa + '/';
+					}
+					else if ( config.app.env == 'dev' ) {
+						var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.dev + '/' ;
+					}
+
+					let temp_insert_first = [];
+					data_first_sync.forEach( function( data_category ) {
+						var path = 'files/images/category/' + data_category.ICON;
+						temp_insert_first.push( {
+							CATEGORY_CODE: data_category.CATEGORY_CODE,
+							CATEGORY_NAME: data_category.CATEGORY_NAME,
+							ICON: data_category.ICON,
+							ICON_URL: path_global + path
+						} ) ;
+					} )
+					
 
 					return res.json( { 
 						"status": true,
 						"message": "First time sync",
 						"data": {
 							hapus: [],
-							simpan: data_first_sync,
+							simpan: temp_insert_first,
 							ubah: []
 						}
 					} );
