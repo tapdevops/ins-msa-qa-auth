@@ -118,68 +118,67 @@
 	 * Untuk sync data contact.
 	 * --------------------------------------------------------------------------
 	 */
-	exports.contact_find = async ( req, res ) => {
+		exports.contact_find = async ( req, res ) => {
 
-		// var query = await Models.UserAuth.aggregate( [
-		// 	{
-		// 		"$lookup": {
-		// 			"from": "TM_EMPLOYEE_HRIS",
-		// 			"localField": "EMPLOYEE_NIK",
-		// 			"foreignField": "EMPLOYEE_NIK",
-		// 			"as": "HRIS"
-		// 		}
-		// 	},
-		// 	{
-		// 		"$lookup": {
-		// 			"from": "TM_PJS",
-		// 			"localField": "EMPLOYEE_NIK",
-		// 			"foreignField": "EMPLOYEE_NIK",
-		// 			"as": "PJS"
-		// 		}
-		// 	},
-		// 	{
-		// 		"$project": {
-		// 			USER_AUTH_CODE: 1,
-		// 			EMPLOYEE_NIK: 1,
-		// 			USER_ROLE: 1,
-		// 			LOCATION_CODE: 1,
-		// 			REF_ROLE: 1,
-		// 			PJS_JOB: 1,
-		// 			PJS_FULLNAME: 1,
-		// 			HRIS_FULLNAME: 1,
-		// 			INSERT_TIME: 1,
-		// 			UPDATE_TIME: 1,
-		// 			DELETE_TIME: 1,
-		// 			HRIS_JOB: "$HRIS[0].EMPLOYEE_POSITION",
-		// 			HRIS_FULLNAME: "$HRIS[0].EMPLOYEE_FULLNAME",
-		// 			PJS_JOB: "$PJS[0].JOB_CODE",
-		// 			PJS_JOB: "$PJS[0].NAMA_LENGKAP"
-		// 		}
-		// 	},
-		// 	{
-		// 		"$limit": 1
-		// 	}
-		// ] );
-		// return res.json( {
-		// 	query: query,
-		// 	message: "OK"
-		// } );
-		
-		var auth = req.auth;
-		
-		Models.SyncMobile.find( {
-			INSERT_USER: auth.USER_AUTH_CODE,
-			IMEI: auth.IMEI,
-			TABEL_UPDATE: 'auth/contact'
-		} )
-		.sort( { 
-			TGL_MOBILE_SYNC: -1 
-		} )
-		.limit( 1 )
-		.then( data_sync => {
-
-			var query_aggregate = {};
-			if ( data_sync ) {
+			// var query = await Models.UserAuth.aggregate( [
+			// 	{
+			// 		"$lookup": {
+			// 			"from": "TM_EMPLOYEE_HRIS",
+			// 			"localField": "EMPLOYEE_NIK",
+			// 			"foreignField": "EMPLOYEE_NIK",
+			// 			"as": "HRIS"
+			// 		}
+			// 	},
+			// 	{
+			// 		"$lookup": {
+			// 			"from": "TM_PJS",
+			// 			"localField": "EMPLOYEE_NIK",
+			// 			"foreignField": "EMPLOYEE_NIK",
+			// 			"as": "PJS"
+			// 		}
+			// 	},
+			// 	{
+			// 		"$project": {
+			// 			USER_AUTH_CODE: 1,
+			// 			EMPLOYEE_NIK: 1,
+			// 			USER_ROLE: 1,
+			// 			LOCATION_CODE: 1,
+			// 			REF_ROLE: 1,
+			// 			PJS_JOB: 1,
+			// 			PJS_FULLNAME: 1,
+			// 			HRIS_FULLNAME: 1,
+			// 			INSERT_TIME: 1,
+			// 			UPDATE_TIME: 1,
+			// 			DELETE_TIME: 1,
+			// 			HRIS_JOB: "$HRIS[0].EMPLOYEE_POSITION",
+			// 			HRIS_FULLNAME: "$HRIS[0].EMPLOYEE_FULLNAME",
+			// 			PJS_JOB: "$PJS[0].JOB_CODE",
+			// 			PJS_JOB: "$PJS[0].NAMA_LENGKAP"
+			// 		}
+			// 	},
+			// 	{
+			// 		"$limit": 1
+			// 	}
+			// ] );
+			// return res.json( {
+			// 	query: query,
+			// 	message: "OK"
+			// } );
+			
+			var auth = req.auth;
+			
+			Models.SyncMobile.find( {
+				INSERT_USER: auth.USER_AUTH_CODE,
+				IMEI: auth.IMEI,
+				TABEL_UPDATE: 'auth/contact'
+			} )
+			.sort( { 
+				TGL_MOBILE_SYNC: -1 
+			} )
+			.limit( 1 )
+			.then( data_sync => {
+				var query_aggregate = {};
+				if ( data_sync.length != 0 ) {
 					console.log( data_sync[0] );
 					var start_date = data_sync[0].TGL_MOBILE_SYNC;
 					var end_date = parseInt(Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ));
@@ -209,91 +208,104 @@
 							}
 						]
 					};
-			}
-			Models.ViewUserAuth.find( query_aggregate ).select( {
-				_id: 1,
-				USER_AUTH_CODE: 1,
-				EMPLOYEE_NIK: 1,
-				USER_ROLE: 1,
-				LOCATION_CODE: 1,
-				REF_ROLE: 1,
-				PJS_JOB: 1,
-				PJS_FULLNAME: 1,
-				HRIS_JOB: 1,
-				HRIS_FULLNAME: 1,
-				INSERT_TIME: 1,
-				UPDATE_TIME: 1,
-				DELETE_TIME: 1,
-				__v: 1
-			} )
-			.then( data_insert => {
-				var temp_insert = [];
-				var temp_update = [];
-				var temp_delete = [];
-				data_insert.forEach( function( data ) { 
-					if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
-						temp_delete.push( {
-							USER_AUTH_CODE: data.USER_AUTH_CODE,
-							EMPLOYEE_NIK: data.EMPLOYEE_NIK,
-							USER_ROLE: data.USER_ROLE,
-							LOCATION_CODE: String( data.LOCATION_CODE ),
-							REF_ROLE: data.REF_ROLE,
-							JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
-							FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
-						} );
-					}
+				}
+				Models.ViewUserAuth.find( query_aggregate ).select( {
+					_id: 1,
+					USER_AUTH_CODE: 1,
+					EMPLOYEE_NIK: 1,
+					USER_ROLE: 1,
+					LOCATION_CODE: 1,
+					REF_ROLE: 1,
+					PJS_JOB: 1,
+					PJS_FULLNAME: 1,
+					HRIS_JOB: 1,
+					HRIS_FULLNAME: 1,
+					INSERT_TIME: 1,
+					UPDATE_TIME: 1,
+					DELETE_TIME: 1,
+					__v: 1
+				} )
+				.then( data_insert => {
+					var temp_insert = [];
+					var temp_update = [];
+					var temp_delete = [];
+					data_insert.forEach( function( data ) { 
+						if ( start_date && end_date  ) {
+							if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
+								temp_delete.push( {
+									USER_AUTH_CODE: data.USER_AUTH_CODE,
+									EMPLOYEE_NIK: data.EMPLOYEE_NIK,
+									USER_ROLE: data.USER_ROLE,
+									LOCATION_CODE: String( data.LOCATION_CODE ),
+									REF_ROLE: data.REF_ROLE,
+									JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
+									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
+								} );
+							}
 
-					if ( data.INSERT_TIME >= start_date && data.INSERT_TIME <= end_date ) {
-						temp_insert.push( {
-							USER_AUTH_CODE: data.USER_AUTH_CODE,
-							EMPLOYEE_NIK: data.EMPLOYEE_NIK,
-							USER_ROLE: data.USER_ROLE,
-							LOCATION_CODE: String( data.LOCATION_CODE ),
-							REF_ROLE: data.REF_ROLE,
-							JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
-							FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
-						} );
-						
+							if ( data.INSERT_TIME >= start_date && data.INSERT_TIME <= end_date ) {
+								temp_insert.push( {
+									USER_AUTH_CODE: data.USER_AUTH_CODE,
+									EMPLOYEE_NIK: data.EMPLOYEE_NIK,
+									USER_ROLE: data.USER_ROLE,
+									LOCATION_CODE: String( data.LOCATION_CODE ),
+									REF_ROLE: data.REF_ROLE,
+									JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
+									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
+								} );
+								
+							}
+							if ( data.UPDATE_TIME >= start_date && data.UPDATE_TIME <= end_date ) {
+								temp_update.push( {
+									USER_AUTH_CODE: data.USER_AUTH_CODE,
+									EMPLOYEE_NIK: data.EMPLOYEE_NIK,
+									USER_ROLE: data.USER_ROLE,
+									LOCATION_CODE: String( data.LOCATION_CODE ),
+									REF_ROLE: data.REF_ROLE,
+									JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
+									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
+								} );
+							}
+						}
+						else {
+							temp_insert.push( {
+								USER_AUTH_CODE: data.USER_AUTH_CODE,
+								EMPLOYEE_NIK: data.EMPLOYEE_NIK,
+								USER_ROLE: data.USER_ROLE,
+								LOCATION_CODE: String( data.LOCATION_CODE ),
+								REF_ROLE: data.REF_ROLE,
+								JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
+								FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
+							} );
+						}
+					} );
+					let message_first_sync = "First time sync";
+					res.json( {
+						status: true,
+						message: !start_date ? message_first_sync : 'Data Sync tanggal ' + Libraries.Helper.date_format( start_date, 'YYYY-MM-DD' ) + ' s/d ' + Libraries.Helper.date_format( end_date, 'YYYY-MM-DD' ),
+						data: {
+							"hapus": temp_delete,
+							"simpan": temp_insert,
+							"ubah": temp_update
+						}
+					} );
+				} ).catch( err => {
+					if( err.kind === 'ObjectId' ) {
+						return res.send({
+							status: false,
+							message: "ObjectId Error",
+							data: {}
+						});
 					}
-					if ( data.UPDATE_TIME >= start_date && data.UPDATE_TIME <= end_date ) {
-						temp_update.push( {
-							USER_AUTH_CODE: data.USER_AUTH_CODE,
-							EMPLOYEE_NIK: data.EMPLOYEE_NIK,
-							USER_ROLE: data.USER_ROLE,
-							LOCATION_CODE: String( data.LOCATION_CODE ),
-							REF_ROLE: data.REF_ROLE,
-							JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
-							FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
-						} );
-					}
-				} );
-				res.json({
-					status: true,
-					message: 'Data Sync tanggal ' + Libraries.Helper.date_format( start_date, 'YYYY-MM-DD' ) + ' s/d ' + Libraries.Helper.date_format( end_date, 'YYYY-MM-DD' ),
-					data: {
-						"hapus": temp_delete,
-						"simpan": temp_insert,
-						"ubah": temp_update
-					}
-				});
-			} ).catch( err => {
-				if( err.kind === 'ObjectId' ) {
 					return res.send({
 						status: false,
-						message: "ObjectId Error",
+						message: err.message,//"Error",
 						data: {}
-					});
-				}
+					} );
+				});
 
-				return res.send({
-					status: false,
-					message: err.message,//"Error",
-					data: {}
-				} );
-			});
-
-		} );
-	};
+			} );
+		};
 
 	/**
 	 * EBCC Kualitas Find
@@ -1082,11 +1094,6 @@
 	 */
 		exports.content_find = ( req, res ) => {
 			var auth = req.auth;
-			console.log({
-				INSERT_USER: auth.USER_AUTH_CODE,
-				IMEI: auth.IMEI,
-				TABEL_UPDATE: 'auth/content'
-			})
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
 				IMEI: auth.IMEI,
@@ -1095,125 +1102,66 @@
 			.sort( { TGL_MOBILE_SYNC: -1 } )
 			.limit( 1 )
 			.then( data_sync => {
-
-
-
-				console.log( "Data sync length: ", data_sync.length );
-				if ( data_sync.length === 0 ) {
-					Models.Content.find( {
-						DELETE_USER: ""
-					} )
-					.select( {
-						_id: 0,
-						CONTENT_CODE: 1,
-						GROUP_CATEGORY: 1,
-						CATEGORY: 1,
-						CONTENT_NAME: 1,
-						CONTENT_TYPE: 1,
-						UOM: 1,
-						FLAG_TYPE: 1,
-						BOBOT: 1,
-						URUTAN: 1,
-						INSERT_USER:1,
-						INSERT_TIME: 1,
-						UPDATE_USER: 1,
-						UPDATE_TIME: 1,
-						DELETE_USER: 1,
-						DELETE_TIME: 1,
-						TBM0: 1,
-						TBM1: 1,
-						TBM2: 1,
-						TBM3: 1,
-						TM: 1,
-						__v: 1
-					} )
-					.then( data_first_sync => {
-						if( !data_first_sync ) {
-							return res.send( {
-								status: false,
-								message: config.app.error_message.find_404,
-								data: {}
-							} );
-						}
-
-						return res.json( { 
-							"status": true,
-							"message": "First time sync",
-							"data": {
-								hapus: [],
-								simpan: data_first_sync,
-								ubah: []
-							}
-						} );
-					} ).catch( err => {
-						res.send( {
-							status: false,
-							message: config.app.error_message.find_500,
-							data: {}
-						} );
-					} );
-				}
-				else {
+				var query_aggregate = {}
+				if( data_sync.length != 0 ){
 					var start_date = data_sync[0].TGL_MOBILE_SYNC;
 					var end_date = parseInt(Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ));
-
-					Models.Content.find( 
-						{
-							$and: [
-								{
-									$or: [
-										{
-											INSERT_TIME: {
-												$gte: start_date,
-												$lte: end_date
-											}
-										},
-										{
-											UPDATE_TIME: {
-												$gte: start_date,
-												$lte: end_date
-											}
-										},
-										{
-											DELETE_TIME: {
-												$gte: start_date,
-												$lte: end_date
-											}
+					query_aggregate = {
+						$and: [
+							{
+								$or: [
+									{
+										INSERT_TIME: {
+											$gte: start_date,
+											$lte: end_date
 										}
-									]
-								}
-							]
-						}
-						
-					).select( {
-						_id: 0,
-						CONTENT_CODE: 1,
-						GROUP_CATEGORY: 1,
-						CATEGORY: 1,
-						CONTENT_NAME: 1,
-						CONTENT_TYPE: 1,
-						UOM: 1,
-						FLAG_TYPE: 1,
-						BOBOT: 1,
-						URUTAN: 1,
-						INSERT_USER:1,
-						INSERT_TIME: 1,
-						UPDATE_USER: 1,
-						UPDATE_TIME: 1,
-						DELETE_USER: 1,
-						DELETE_TIME: 1,
-						TBM0: 1,
-						TBM1: 1,
-						TBM2: 1,
-						TBM3: 1,
-						TM: 1
-					} )
-					.then( data_insert => {
-						var temp_insert = [];
-						var temp_update = [];
-						var temp_delete = [];
-						data_insert.forEach( function( data ) {
-							console.log( data );
+									},
+									{
+										UPDATE_TIME: {
+											$gte: start_date,
+											$lte: end_date
+										}
+									},
+									{
+										DELETE_TIME: {
+											$gte: start_date,
+											$lte: end_date
+										}
+									}
+								]
+							}
+						]
+					};
+				}
+				Models.Content.find( query_aggregate ).select( {
+					_id: 0,
+					CONTENT_CODE: 1,
+					GROUP_CATEGORY: 1,
+					CATEGORY: 1,
+					CONTENT_NAME: 1,
+					CONTENT_TYPE: 1,
+					UOM: 1,
+					FLAG_TYPE: 1,
+					BOBOT: 1,
+					URUTAN: 1,
+					INSERT_USER:1,
+					INSERT_TIME: 1,
+					UPDATE_USER: 1,
+					UPDATE_TIME: 1,
+					DELETE_USER: 1,
+					DELETE_TIME: 1,
+					TBM0: 1,
+					TBM1: 1,
+					TBM2: 1,
+					TBM3: 1,
+					TM: 1
+				} )
+				.then( data_insert => {
+					var temp_insert = [];
+					var temp_update = [];
+					var temp_delete = [];
+					data_insert.forEach( function( data ) {
+						if( start_date && end_date ){
 							if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
 								temp_delete.push( {
 									CONTENT_CODE: data.CONTENT_CODE,
@@ -1238,7 +1186,7 @@
 									TM: data.TM
 								} );
 							}
-
+	
 							if ( data.INSERT_TIME >= start_date && data.INSERT_TIME <= end_date ) {
 								temp_insert.push( {
 									CONTENT_CODE: data.CONTENT_CODE,
@@ -1287,16 +1235,42 @@
 									TM: data.TM
 								} );
 							}
-						} );
-						res.json({
-							status: true,
-							message: 'Data Sync tanggal ' + Libraries.Helper.date_format( start_date, 'YYYY-MM-DD' ) + ' s/d ' + Libraries.Helper.date_format( end_date, 'YYYY-MM-DD' ),
-							data: {
-								"hapus": temp_delete,
-								"simpan": temp_insert,
-								"ubah": temp_update
-							}
-						});
+						}
+						else {
+							temp_insert.push( {
+								CONTENT_CODE: data.CONTENT_CODE,
+								GROUP_CATEGORY: data.GROUP_CATEGORY,
+								CATEGORY: data.CATEGORY,
+								CONTENT_NAME: data.CONTENT_NAME,
+								CONTENT_TYPE: data.CONTENT_TYPE,
+								UOM: data.UOM,
+								FLAG_TYPE: data.FLAG_TYPE,
+								BOBOT: data.BOBOT,
+								URUTAN: data.URUTAN,
+								INSERT_USER: data.INSERT_USER,
+								INSERT_TIME: Libraries.Helper.date_format(data.INSERT_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+								UPDATE_USER: data.UPDATE_USER,
+								UPDATE_TIME: Libraries.Helper.date_format(data.UPDATE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+								DELETE_USER: data.DELETE_USER,
+								DELETE_TIME: Libraries.Helper.date_format(data.DELETE_TIME, 'YYYY-MM-DD hh:mm:ss' ),
+								TBM0: data.TBM0,
+								TBM1: data.TBM1,
+								TBM2: data.TBM2,
+								TBM3: data.TBM3,
+								TM: data.TM
+							} );
+						}
+					} );
+					let message_first_sync = "First time sync";
+					res.json({
+						status: true,
+						message: !start_date ? message_first_sync : 'Data Sync tanggal ' + Libraries.Helper.date_format( start_date, 'YYYY-MM-DD' ) + ' s/d ' + Libraries.Helper.date_format( end_date, 'YYYY-MM-DD' ),
+						data: {
+							"hapus": temp_delete,
+							"simpan": temp_insert,
+							"ubah": temp_update
+						}
+					});
 					} ).catch( err => {
 						if( err.kind === 'ObjectId' ) {
 							return res.send({
@@ -1306,27 +1280,13 @@
 							});
 						}
 
-						return res.send({
-							status: false,
-							message: err.message,//"Error",
-							data: {}
-						} );
-					});
-				}
-				
-			} ).catch( err => {
-				if( err.kind === 'ObjectId' ) {
-					return res.send( {
+					return res.send({
 						status: false,
-						message: 'ObjectId Error',
+						message: err.message,//"Error",
 						data: {}
 					} );
-				}
-				return res.send( {
-					status: false,
-					message: 'Error retrieving data',
-					data: {}
-				} );
+				});
+
 			} );
 		};
 
