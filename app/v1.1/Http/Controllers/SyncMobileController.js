@@ -278,7 +278,6 @@
 								FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME  )
 							} );
 						}
-						console.log( data.HRIS_FULLNAME );
 					} );
 					let message_first_sync = "First time sync";
 					res.json( {
