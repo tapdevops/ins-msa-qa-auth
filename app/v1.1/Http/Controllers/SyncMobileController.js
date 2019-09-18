@@ -238,8 +238,8 @@
 									USER_ROLE: data.USER_ROLE,
 									LOCATION_CODE: String( data.LOCATION_CODE ),
 									REF_ROLE: data.REF_ROLE,
-									JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
-									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME  )
+									JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB ? data.PJS_JOB : ""  ),
+									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME ?  data.PJS_FULLNAME : ""  )
 								} );
 							}
 
@@ -250,8 +250,8 @@
 									USER_ROLE: data.USER_ROLE,
 									LOCATION_CODE: String( data.LOCATION_CODE ),
 									REF_ROLE: data.REF_ROLE,
-									JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
-									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME  )
+									JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB ? data.PJS_JOB : ""  ),
+									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME ?  data.PJS_FULLNAME : ""  )
 								} );
 								
 							}
@@ -262,8 +262,8 @@
 									USER_ROLE: data.USER_ROLE,
 									LOCATION_CODE: String( data.LOCATION_CODE ),
 									REF_ROLE: data.REF_ROLE,
-									JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
-									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME  )
+									JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB ? data.PJS_JOB : ""  ),
+									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME ?  data.PJS_FULLNAME : ""  )
 								} );
 							}
 						}
@@ -274,8 +274,8 @@
 								USER_ROLE: data.USER_ROLE,
 								LOCATION_CODE: String( data.LOCATION_CODE ),
 								REF_ROLE: data.REF_ROLE,
-								JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
-								FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME  )
+								JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB ? data.PJS_JOB : ""  ),
+								FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME ?  data.PJS_FULLNAME : ""  )
 							} );
 						}
 					} );
