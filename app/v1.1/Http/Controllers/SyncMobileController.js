@@ -242,7 +242,6 @@
 									FULLNAME:  data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME ?  data.PJS_FULLNAME : ""  
 								} );
 							}
-
 							if ( data.INSERT_TIME >= start_date && data.INSERT_TIME <= end_date ) {
 								temp_insert.push( {
 									USER_AUTH_CODE: data.USER_AUTH_CODE,
@@ -252,8 +251,7 @@
 									REF_ROLE: data.REF_ROLE,
 									JOB:  data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB ? data.PJS_JOB : ""  ,
 									FULLNAME:  data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME ?  data.PJS_FULLNAME : ""  
-								} );
-								
+								} );								
 							}
 							if ( data.UPDATE_TIME >= start_date && data.UPDATE_TIME <= end_date ) {
 								temp_update.push( {
