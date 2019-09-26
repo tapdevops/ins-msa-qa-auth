@@ -1,25 +1,17 @@
 /*
  |--------------------------------------------------------------------------
- | Models - View User Auth
+ | Models - Module
  |--------------------------------------------------------------------------
  */
 	const Mongoose = require( 'mongoose' );
-	const ViewUserAuthSchema = Mongoose.Schema( {
-		USER_AUTH_CODE: String,
-		EMPLOYEE_NIK: String,
-		USER_ROLE: String,
-		REF_ROLE: String,
-		LOCATION_CODE: String,
+	const ModulesSchema = Mongoose.Schema( {
+		MODULE_CODE: String,
+		MODULE_NAME: String,
+		PARENT_MODULE: String,
+		ITEM_NAME: String,
+		ICON: String,
+		STATUS: String,
 		INSERT_USER: String,
-		HRIS_JOB: String,
-		HRIS_FULLNAME: String,
-		PJS_JOB: String,
-		PJS_FULLNAME: String,
-		LOCATION_CODE_NATIONAL: String,
-		LOCATION_CODE_REGION: String,
-		LOCATION_CODE_COMP: String,
-		LOCATION_CODE_BA: String,
-		LOCATION_CODE_AFD: String,
 		INSERT_TIME: {
 			type: Number,
 			get: v => Math.floor( v ),
@@ -48,7 +40,7 @@
 			default: function() {
 				return 0;
 			}
-		}
+		},
 	});
 
 /*
@@ -56,4 +48,4 @@
  | Exports
  |--------------------------------------------------------------------------
  */
-	module.exports = Mongoose.model( 'ViewUserAuth_v_1_1', ViewUserAuthSchema, 'VIEW_USER_AUTH' );
+	module.exports = Mongoose.model( 'Modules_v_1_2', ModulesSchema, 'T_MODULE' );

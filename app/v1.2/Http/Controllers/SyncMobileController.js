@@ -228,7 +228,6 @@
 					var temp_insert = [];
 					var temp_update = [];
 					var temp_delete = [];
-					
 					data_insert.forEach( function( data ) { 
 						if ( start_date && end_date  ) {
 							if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
@@ -238,10 +237,11 @@
 									USER_ROLE: data.USER_ROLE,
 									LOCATION_CODE: String( data.LOCATION_CODE ),
 									REF_ROLE: data.REF_ROLE,
-									JOB:  data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB ? data.PJS_JOB : ""  ,
-									FULLNAME:  data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME ?  data.PJS_FULLNAME : ""  
+									JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
+									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
 								} );
 							}
+
 							if ( data.INSERT_TIME >= start_date && data.INSERT_TIME <= end_date ) {
 								temp_insert.push( {
 									USER_AUTH_CODE: data.USER_AUTH_CODE,
@@ -249,9 +249,10 @@
 									USER_ROLE: data.USER_ROLE,
 									LOCATION_CODE: String( data.LOCATION_CODE ),
 									REF_ROLE: data.REF_ROLE,
-									JOB:  data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB ? data.PJS_JOB : ""  ,
-									FULLNAME:  data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME ?  data.PJS_FULLNAME : ""  
-								} );								
+									JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
+									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
+								} );
+								
 							}
 							if ( data.UPDATE_TIME >= start_date && data.UPDATE_TIME <= end_date ) {
 								temp_update.push( {
@@ -260,8 +261,8 @@
 									USER_ROLE: data.USER_ROLE,
 									LOCATION_CODE: String( data.LOCATION_CODE ),
 									REF_ROLE: data.REF_ROLE,
-									JOB:  data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB ? data.PJS_JOB : ""  ,
-									FULLNAME:  data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME ?  data.PJS_FULLNAME : ""  
+									JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
+									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
 								} );
 							}
 						}
@@ -272,8 +273,8 @@
 								USER_ROLE: data.USER_ROLE,
 								LOCATION_CODE: String( data.LOCATION_CODE ),
 								REF_ROLE: data.REF_ROLE,
-								JOB:  data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB ? data.PJS_JOB : ""  ,
-								FULLNAME:  data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME ?  data.PJS_FULLNAME : ""  
+								JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
+								FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
 							} );
 						}
 					} );
@@ -1716,8 +1717,6 @@
 					__v: 0
 				} )
 				.then( data_first_sync => {
-
-					
 					if( !data_first_sync ) {
 						return res.send( {
 							status: false,
@@ -1725,34 +1724,13 @@
 							data: {}
 						} );
 					}
-					if ( config.app.env == 'prod' ) {
-						var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.prod + '/';
-					}
-					else if ( config.app.env == 'qa' ) {
-						var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.qa + '/';
-					}
-					else if ( config.app.env == 'dev' ) {
-						var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.dev + '/' ;
-					}
-
-					let temp_insert_first = [];
-					data_first_sync.forEach( function( data_category ) {
-						var path = 'files/images/category/' + data_category.ICON;
-						temp_insert_first.push( {
-							CATEGORY_CODE: data_category.CATEGORY_CODE,
-							CATEGORY_NAME: data_category.CATEGORY_NAME,
-							ICON: data_category.ICON,
-							ICON_URL: path_global + path
-						} ) ;
-					} )
-					
 
 					return res.json( { 
 						"status": true,
 						"message": "First time sync",
 						"data": {
 							hapus: [],
-							simpan: temp_insert_first,
+							simpan: data_first_sync,
 							ubah: []
 						}
 					} );

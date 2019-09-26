@@ -1,25 +1,26 @@
 /*
  |--------------------------------------------------------------------------
- | Models - View User Auth
+ | Models - Content
  |--------------------------------------------------------------------------
- */
+ */	
 	const Mongoose = require( 'mongoose' );
-	const ViewUserAuthSchema = Mongoose.Schema( {
-		USER_AUTH_CODE: String,
-		EMPLOYEE_NIK: String,
-		USER_ROLE: String,
-		REF_ROLE: String,
-		LOCATION_CODE: String,
+	const ContentSchema = Mongoose.Schema( {
+
+		CONTENT_CODE: String,
+		GROUP_CATEGORY: String,
+		CATEGORY: String,
+		CONTENT_NAME: String,
+		CONTENT_TYPE: String,
+		UOM: String,
+		FLAG_TYPE: String,
+		BOBOT: {
+			type: Number,
+			default: function() {
+				return 0;
+			}
+		},
+		URUTAN: String,
 		INSERT_USER: String,
-		HRIS_JOB: String,
-		HRIS_FULLNAME: String,
-		PJS_JOB: String,
-		PJS_FULLNAME: String,
-		LOCATION_CODE_NATIONAL: String,
-		LOCATION_CODE_REGION: String,
-		LOCATION_CODE_COMP: String,
-		LOCATION_CODE_BA: String,
-		LOCATION_CODE_AFD: String,
 		INSERT_TIME: {
 			type: Number,
 			get: v => Math.floor( v ),
@@ -48,12 +49,16 @@
 			default: function() {
 				return 0;
 			}
-		}
+		},
+		TBM0: String,
+		TBM1: String,
+		TBM2: String,
+		TBM3: String,
+		TM: String
 	});
-
 /*
  |--------------------------------------------------------------------------
  | Exports
  |--------------------------------------------------------------------------
  */
-	module.exports = Mongoose.model( 'ViewUserAuth_v_1_1', ViewUserAuthSchema, 'VIEW_USER_AUTH' );
+	module.exports = Mongoose.model( 'Content_v_1_2', ContentSchema, 'TM_CONTENT' );
