@@ -190,6 +190,10 @@
 			// Sync TAP
 			app.post( '/api/v1.1/sync/tap/employee-hris', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncTAP.sync_employee_hris );
 			app.post( '/api/v1.1/sync/tap/employee-sap', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncTAP.sync_employee_sap );
+			
+			// User
+			app.post( '/api/v1.1/user/create', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.User.create );
+			app.put( '/api/v1.1/user/update/:id', Middleware.v_1_0.VerifyToken, Controllers.v_1_1.User.update );
 
 			// Server
 			app.get( '/api/v1.1/server/service-list', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Server.service_list );
