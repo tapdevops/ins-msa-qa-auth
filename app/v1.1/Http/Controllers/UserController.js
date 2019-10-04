@@ -548,7 +548,7 @@
 							DLTUR: "",
 							DLTTM: 0
 						};
-						
+						console.log( "Kirim Kafka Message" );
 						Libraries.KafkaServer.producer( 'INS_MSA_AUTH_TM_USER_AUTH', JSON.stringify( kafka_body ) );
 					}
 					return res.send( {
