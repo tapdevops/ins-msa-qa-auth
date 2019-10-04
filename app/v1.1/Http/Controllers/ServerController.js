@@ -142,7 +142,7 @@
 		exports.apk_version = async ( req, res ) => {
 			const set = new Models.APKVersion( {
 				INSERT_USER: req.body.INSERT_USER,
-				APK_VERSION: parseFloat( req.body.APK_VERSION ),
+				APK_VERSION: req.body.APK_VERSION ,
 				IMEI: req.body.IMEI,
 				INSERT_TIME: Libraries.Helper.date_format( req.body.INSERT_TIME, 'YYYYMMDDhhmmss'),
 			});
@@ -181,7 +181,7 @@
 							}
 						},
 						{
-							$limit: 3//parseInt( limit_version.DESC )
+							$limit: parseInt( limit_version.DESC )
 						}
 					] );
 					var found = false;
@@ -221,23 +221,41 @@
 	 */
 		exports.current_apk_version = async (req, res) => {
 			var data = await Models.APKVersion.aggregate( [
-				{
-					$group: {
-						_id: {
-							INSERT_USER: "$INSERT_USER"
-						},
-						APK_VERSION: {
-							$first: "$APK_VERSION"
-						},
-						IMEI: {
-							$first: "$IMEI"
-						}
-					}
-				},
+				// {
+				// 	$group: {
+				// 		_id: {
+				// 			INSERT_USER: "$INSERT_USER"
+				// 		},
+				// 		APK_VERSION: {
+				// 			$first: "$APK_VERSION"
+				// 		},
+				// 		IMEI: {
+				// 			$first: "$IMEI"
+				// 		}
+				// 	}
+				// },
+				// {
+				// 	$project: {
+				// 		_id: 0,
+				// 		INSERT_USER: "$_id.INSERT_USER",
+				// 		APK_VERSION: 1,
+				// 		IMEI: 1
+				// 	}
+				// },
+				// {
+				// 	$match: {
+				// 		INSERT_USER: req.params.id
+				// 	}
+				// },
+				// {
+				// 	$sort: {
+				// 		INSERT_TIME: -1
+				// 	}
+				// }
 				{
 					$project: {
 						_id: 0,
-						INSERT_USER: "$_id.INSERT_USER",
+						INSERT_USER: 1,
 						APK_VERSION: 1,
 						IMEI: 1
 					}
@@ -249,8 +267,11 @@
 				},
 				{
 					$sort: {
-						INSERT_TIME: -1
+						APK_VERSION: -1 
 					}
+				},
+				{
+					$limit: 1
 				}
 			] );
 			return res.send( {
