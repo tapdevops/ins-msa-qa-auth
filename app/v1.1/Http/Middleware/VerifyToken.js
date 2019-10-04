@@ -40,6 +40,7 @@
 					if ( adaKoma !== -1 ) {
 						req.auth.LOCATION_CODE_GROUP = req.auth.LOCATION_CODE.split( ',' );
 					}
+					console.log( req.auth.LOCATION_CODE_GROUP );
 					req.config = config;
 					next();
 				}

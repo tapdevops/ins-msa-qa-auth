@@ -158,7 +158,7 @@
 
 				var limit_version = await Models.Parameter.findOne( {
 					PARAMETER_GROUP: "APK",
-					PARAMETER_NAME: "VERSION_LIMIT"
+					PARAMETER_NAME: "VERSION_LIMIT" //di database permitted_version
 				} );
 				var check_version = await Models.APKVersion.aggregate( [
 						{
@@ -181,10 +181,11 @@
 							}
 						},
 						{
-							$limit: parseInt( limit_version.DESC )
+							$limit: 3//parseInt( limit_version.DESC )
 						}
 					] );
 					var found = false;
+					console.log( check_version );
 					for( var i = 0; i < check_version.length; i++){
 						if( check_version[i].APK_VERSION == req.body.APK_VERSION ) {
 							found = true;
@@ -198,7 +199,6 @@
 						data: {}
 					} );
 			}). catch( err => {
-				console.log(err);
 				if(err.kind === 'ObjectId' ){
 					return res.send( {
 						status: false,
@@ -253,7 +253,6 @@
 					}
 				}
 			] );
-
 			return res.send( {
 				status: true,
 				message: config.app.error_message.find_200,
