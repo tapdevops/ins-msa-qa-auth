@@ -29,7 +29,8 @@
 			SyncTAP: require( _directory_base + '/app/v1.1/Http/Controllers/SyncTAPController.js' ),
 			Server: require( _directory_base + '/app/v1.1/Http/Controllers/ServerController.js' ),
 			User: require( _directory_base + '/app/v1.1/Http/Controllers/UserController.js' ),
-			WebReport: require( _directory_base + '/app/v1.1/Http/Controllers/WebReportController.js' )
+			WebReport: require( _directory_base + '/app/v1.1/Http/Controllers/WebReportController.js' ),
+			ExportKafka: require( _directory_base + '/app/v1.1/Http/Controllers/ExportKafkaController.js' )
 		},
 		v_1_0: {
 			Auth: require( _directory_base + '/app/v1.0/Http/Controllers/AuthController.js' ),
@@ -140,6 +141,7 @@
 			// User
 			app.get( '/api/v1.2/user/data', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.User.user_data );
 
+			
 		/*
 		 |--------------------------------------------------------------------------
 		 | API Versi 1.1
@@ -203,6 +205,10 @@
 			
 			// User
 			app.get( '/api/v1.1/user/data', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.User.user_data );
+
+			//export kafka
+			app.get( '/api/v1.1/export-kafka/export', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ExportKafka.export_kafka );
+
 		/*
 		 |--------------------------------------------------------------------------
 		 | API Versi 1.0
