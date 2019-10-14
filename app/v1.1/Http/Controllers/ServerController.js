@@ -267,7 +267,7 @@
 				},
 				{
 					$sort: {
-						APK_VERSION: -1 
+						INSERT_TIME: -1 
 					}
 				},
 				{

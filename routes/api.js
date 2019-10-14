@@ -207,7 +207,7 @@
 			app.get( '/api/v1.1/user/data', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.User.user_data );
 
 			//export kafka
-			app.get( '/api/v1.1/export-kafka/export', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ExportKafka.export_kafka );
+			app.get( '/api/v1.1/export-kafka/auth', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ExportKafka.export_kafka );
 
 		/*
 		 |--------------------------------------------------------------------------
