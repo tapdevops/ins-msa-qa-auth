@@ -323,11 +323,10 @@
 			.limit( 1 )
 			.then( data => {
 				if ( data.length == 0 ) {
-					var url = service_url + '/ebcc/kualitas';
+					var url = service_url + '/api/v1.1/ebcc/kualitas';
 					var args = {
 						headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
 					};
-
 					( new NodeRestClient() ).get( url, args, function ( data, response ) {
 						var insert = [];
 						if ( data.data.length > 0 ) {
