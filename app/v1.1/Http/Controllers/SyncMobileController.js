@@ -489,7 +489,6 @@
 						data: {}
 					} );
 				}
-
 				if ( data.length > 0 ) {
 					var dt = data[0];
 					var start_date = Libraries.Helper.date_format( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );

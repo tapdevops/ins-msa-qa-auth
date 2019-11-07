@@ -209,6 +209,9 @@
 			//export kafka
 			app.get( '/api/v1.1/export-kafka/auth', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ExportKafka.export_kafka );
 
+			// GET Inspection User By Month
+			app.get( '/api/v1.1/auth-month/:month', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ExportKafka.find_by_month );	 
+
 		/*
 		 |--------------------------------------------------------------------------
 		 | API Versi 1.0
