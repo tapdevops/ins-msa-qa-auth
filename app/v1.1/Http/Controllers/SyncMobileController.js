@@ -477,7 +477,7 @@
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
 				IMEI: auth.IMEI,
-				TABEL_UPDATE: 'finding'
+				TABEL_UPDATE: 'finding-image'
 			} )
 			.sort( { TGL_MOBILE_SYNC: -1 } )
 			.limit( 1 )
