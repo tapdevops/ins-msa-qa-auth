@@ -2,4 +2,4 @@
 
 Dockerfile
 config/app.js
-public/tmp/import-db-realm
+public/tmp/
