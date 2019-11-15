@@ -19,6 +19,7 @@
 	const BodyParser = require( 'body-parser' );
 	const Express = require( 'express' );
 	const Mongoose = require( 'mongoose' );
+	const ExpressUpload = require( 'express-fileupload' );
 
 	// Primary Variable
 	const App = Express();
@@ -91,6 +92,9 @@
 
 	// Parse request of content-type - application/json
 	App.use( BodyParser.json() );
+
+	// Add Express Upload to App
+	App.use( ExpressUpload() );
 
 	// Setup Database
 	Mongoose.Promise = global.Promise;
