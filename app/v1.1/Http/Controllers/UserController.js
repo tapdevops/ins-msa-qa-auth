@@ -512,6 +512,8 @@
 				if ( !data ) {
 					
 				}
+
+				console.log( 'IHSAN1' );
 				
 				Models.UserAuth.findOneAndUpdate( { 
 					USER_AUTH_CODE : req.params.id 
@@ -527,6 +529,7 @@
 				.then( update_data => {
 					
 					if( !update_data ) {
+						console.log( 'IHSAN2' );
 						return res.send( {
 							status: false,
 							message: config.app.error_message.put_404,
@@ -535,6 +538,7 @@
 					}
 					else {
 						// Send Message To Kafka
+						console.log( 'IHSAN3' );
 						var kafka_body = {
 							URACD: data.USER_AUTH_CODE,
 							EMNIK: data.EMPLOYEE_NIK,

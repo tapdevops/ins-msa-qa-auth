@@ -88,6 +88,12 @@
 										then: {
 											"$concat": [ config_url.microservice_inspection, "$API_URL_PARAMETER" ]
 										}
+									},
+									{
+										case: { $eq: [ "$MICROSERVICE", "REPORTS" ] }, 
+										then: {
+											"$concat": [ config_url.microservice_reports, "$API_URL_PARAMETER" ]
+										}
 									}
 								],
 								default: ""
