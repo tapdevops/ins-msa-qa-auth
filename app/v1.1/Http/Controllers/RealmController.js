@@ -50,7 +50,7 @@
 
             }
             
-            var options = {
+            let options = {
                 encoding: 'utf8'
             };
             let tables = [ 'TR_H_EBCC_VALIDATION', 'TR_D_EBCC_VALIDATION', 'TR_BLOCK_INSPECTION_D', 'TR_BLOCK_INSPECTION_H', 'TR_FINDING', 'TM_INSPECTION_TRACK', 'TR_GENBA_INSPECTION', "TR_IMAGE" ];
