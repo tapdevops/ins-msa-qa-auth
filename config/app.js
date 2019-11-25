@@ -78,6 +78,7 @@
 					microservice_hectare_statement: 'http://app.tap-agri.com/mobileinspection/ins-msa-hectarestatement',
 					microservice_inspection: 'http://app.tap-agri.com/mobileinspection/ins-msa-inspection',
 					microservice_images: 'http://149.129.245.230:3012',
+					microservice_reports: 'http://app.tap-agri.com/mobileinspection/ins-msa-reports'
 				}
 			},
 
