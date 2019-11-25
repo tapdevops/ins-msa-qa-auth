@@ -53,8 +53,8 @@
             var options = {
                 encoding: 'utf8'
             };
-            let tables = [ /*'TR_H_EBCC_VALIDATION', 'TR_D_EBCC_VALIDATION', 'TR_BLOCK_INSPECTION_D', 'TR_BLOCK_INSPECTION_H', 'TR_FINDING', 'TM_INSPECTION_TRACK', /*'TR_GENBA_INSPECTION',*/ "TR_IMAGE" ];
-            let headersName = [/*"headersEBCCHeader", "headersEBCCDetail", "headersInspectionDetail", "headersInspectionHeader", "headersFinding", "headersInspectionTrack", /*"headerInspectionGenba",*/ "headerImage"];
+            let tables = [ 'TR_H_EBCC_VALIDATION', 'TR_D_EBCC_VALIDATION', 'TR_BLOCK_INSPECTION_D', 'TR_BLOCK_INSPECTION_H', 'TR_FINDING', 'TM_INSPECTION_TRACK', 'TR_GENBA_INSPECTION', "TR_IMAGE" ];
+            let headersName = ["headersEBCCHeader", "headersEBCCDetail", "headersInspectionDetail", "headersInspectionHeader", "headersFinding", "headersInspectionTrack", "headerInspectionGenba", "headerImage"];
             try {
                 for ( let i = 0; i < tables.length; i++ ) {
                     let newCsvFileName = './public/tmp/import-db-realm/' + req.auth.USER_AUTH_CODE + '-' + Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) + '-' + tables[i] + '.csv';
@@ -159,7 +159,7 @@
                             result[i].TIME = undefined;
                             result[i].inspectionType = undefined;
                         }
-                    } /*else if ( tables[i] === 'TR_GENBA_INSPECTION' ) {
+                    } else if ( tables[i] === 'TR_GENBA_INSPECTION' ) {
                         result = [];
                         try {
                             let realm = new Realm( { path: directory } );
@@ -190,7 +190,7 @@
                         //     result[i].STATUS_SYNC = undefined;
                         //     result[i].GENBA_USER = genbaUser[i];
                         // }
-                    } */else if ( tables[i] === 'TR_IMAGE' ) {
+                    } else if ( tables[i] === 'TR_IMAGE' ) {
                         let dateNow = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
                         let dateSubstring = dateNow.toString().substring( 0, 8 );
                         const trCodeInitial = [ 'F', 'V', 'I' ];
