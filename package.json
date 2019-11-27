@@ -54,6 +54,8 @@
 	"author": "",
 	"license": "ISC",
 	"nodemonConfig": {
-		"ignore": ["public/tmp/import-db-realm/*"]
-	  }
+		"ignore": [
+			"public/tmp/import-db-realm/*"
+		]
+	}
 }

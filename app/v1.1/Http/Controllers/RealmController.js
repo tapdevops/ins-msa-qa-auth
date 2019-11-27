@@ -8,12 +8,15 @@
  */
     const Realm = require( 'realm' );
     const FileServer = require( 'fs' );
-    const FileSystem = require( 'file-system' );
     const Terminal = require( 'child_process' ).execSync;
-    const jsonfile = require( 'jsonfile' );
     const csvToJson = require( 'csvtojson' );
     const Helper = require( _directory_base + '/app/v1.1/Http/Libraries/Helper.js' );
+    const Client = require( 'node-rest-client' ).Client;
+    const client = new Client();
 
+    const ebccServiceUrl = config.app.url[config.app.env].microservice_ebcc_validation;
+    const findingServiceUrl = config.app.url[config.app.env].microservice_finding;
+    const inspectionServiceUrl = config.app.url[config.app.env].microservice_inspection;
  /*
  |--------------------------------------------------------------------------
  | Versi 1.1
@@ -82,6 +85,22 @@
                             result[i].DELETE_USER = "";
                             result[i].STATUS_TRACK = 1;
                         }
+                        for ( let index = 0; index < result.length; index++ ) {
+                            let dataResult = result[index];
+                            let args = {
+                                data: dataResult ,
+                                headers: { 
+                                    "Content-Type": "application/json", 
+                                    "Authorization": req.headers.authorization
+                                }
+                            }
+                            let request = client.post( inspectionServiceUrl + '/api/v1.1/tracking', args, function ( data, response ) {
+                                // console.log( 'sukses simpan inspection track' );
+                            } );
+                            request.on( 'error', ( err ) => {
+                                console.log( err.message );
+                            } );
+                        }
                     }
                     else if ( tables[i] === 'TR_H_EBCC_VALIDATION' ) {
                         //EDIT FIELD EBCC_VALIDATION_H
@@ -97,6 +116,22 @@
                             result[i].DELETE_TIME = 0;
                             result[i].DELETE_USER = "";
                         }
+                        for ( let index = 0; index < result.length; index++ ) {
+                            let dataResult = result[index];
+                            let args = {
+                                data: dataResult ,
+                                headers: { 
+                                    "Content-Type": "application/json", 
+                                    "Authorization": req.headers.authorization
+                                }
+                            }
+                            let request = client.post( ebccServiceUrl + '/api/v1.1/ebcc/validation/header', args, function ( data, response ) {
+                                // console.log( 'sukses simpan ebcc header' );
+                            } );
+                            request.on( 'error', ( err ) => {
+                                console.log( err.message );
+                            } );
+                        }
                     }
                     else if ( tables[i] === 'TR_D_EBCC_VALIDATION' ) {
                         //EDIT FIELD EBCC_VALIDATION_D
@@ -109,6 +144,22 @@
                             result[i].INSERT_TIME = parseInt( Helper.date_format( result[i].INSERT_TIME, 'YYYYMMDDhhmmss' ) );
                             result[i].SYNC_TIME = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
                             result[i].STATUS_SYNC = "Y";
+                        }
+                        for ( let index = 0; index < result.length; index++ ) {
+                            let dataResult = result[index];
+                            let args = {
+                                data: dataResult ,
+                                headers: { 
+                                    "Content-Type": "application/json", 
+                                    "Authorization": req.headers.authorization
+                                }
+                            }
+                            let request = client.post( ebccServiceUrl + '/api/v1.1/ebcc/validation/detail', args, function ( data, response ) {
+                                // console.log( 'sukses simpan ebcc detail' );
+                            } );
+                            request.on( 'error', ( err ) => {
+                                console.log( err.message );
+                            } );
                         }
                     }
                     else if ( tables[i] === 'TR_FINDING' ) {
@@ -126,6 +177,22 @@
                             result[i].DELETE_USER = "";
                             result[i].DELETE_TIME = 0;
                         }
+                        for ( let index = 0; index < result.length; index++ ) {
+                            let dataResult = result[index];
+                            let args = {
+                                data: dataResult ,
+                                headers: { 
+                                    "Content-Type": "application/json", 
+                                    "Authorization": req.headers.authorization
+                                }
+                            }
+                            let request = client.post( findingServiceUrl + '/api/v1.1/finding', args, function ( data, response ) {
+                                // console.log( 'sukses simpan finding' );
+                            } );
+                            request.on( 'error', ( err ) => {
+                                console.log( err.message );
+                            } );
+                        }
                     }
                     else if ( tables[i] === 'TR_BLOCK_INSPECTION_D' ) {
                         // EDIT FIELD INSPECTION_BLOCK_D
@@ -138,6 +205,22 @@
                             result[i].DELETE_TIME = 0;
                             result[i].DELETE_USER = "";
                             result[i].INSERT_TIME = parseInt( Helper.date_format( result[i].INSERT_TIME, 'YYYYMMDDhhmmss' ) );
+                        }
+                        for ( let index = 0; index < result.length; index++ ) {
+                            let dataResult = result[index];
+                            let args = {
+                                data: dataResult ,
+                                headers: { 
+                                    "Content-Type": "application/json", 
+                                    "Authorization": req.headers.authorization
+                                }
+                            }
+                            let request = client.post( inspectionServiceUrl + '/api/v1.1/detail', args, function ( data, response ) {
+                                // console.log( 'sukses simpan inspection detail' );
+                            } );
+                            request.on( 'error', ( err ) => {
+                                console.log( err.message );
+                            } );
                         }
                     }
                     else if ( tables[i] === 'TR_BLOCK_INSPECTION_H' ) {
@@ -158,6 +241,22 @@
                             result[i].DISTANCE = undefined;
                             result[i].TIME = undefined;
                             result[i].inspectionType = undefined;
+                        }
+                        for ( let index = 0; index < result.length; index++ ) {
+                            let dataResult = result[index];
+                            let args = {
+                                data: dataResult ,
+                                headers: { 
+                                    "Content-Type": "application/json", 
+                                    "Authorization": req.headers.authorization
+                                }
+                            }
+                            let request = client.post( inspectionServiceUrl + '/api/v1.1/header', args, function ( data, response ) {
+                                // console.log( 'sukses simpan inspection header' );
+                            } );
+                            request.on( 'error', ( err ) => {
+                                console.log( err.message );
+                            } );
                         }
                     } else if ( tables[i] === 'TR_GENBA_INSPECTION' ) {
                         result = [];
@@ -186,6 +285,26 @@
                         } catch ( error ) {
                             console.log( error );
                         }
+
+                        for ( let index = 0; index < result.length; index++ ) {
+                            let dataResult = result[index];
+                            let args = {
+                                data: dataResult ,
+                                headers: { 
+                                    "Content-Type": "application/json", 
+                                    "Authorization": req.headers.authorization
+                                }
+                            }
+                            result[index].GENBA_USER = [ result[index].GENBA_USER ];
+                            if ( result[index].GENBA_USER[0] !== "" ) {
+                                let request = client.post( inspectionServiceUrl+ '/api/v1.1/genba', args, function ( data, response ) {
+                                    console.log( 'sukses simpan inspection genba', result[index].GENBA_USER );
+                                } );
+                                request.on( 'error', ( err ) => {
+                                    console.log( err.message );
+                                } );
+                            }
+                        }
                         // for( let i = 0; i < result.length; i++ ) {
                         //     result[i].STATUS_SYNC = undefined;
                         //     result[i].GENBA_USER = genbaUser[i];
@@ -213,9 +332,9 @@
                             result[i].IMAGE_URL = undefined;
                         }
                     }
-                    let jsonFilePath = './public/tmp/import-db-realm/' + fixFileName + '-'  + Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) + '-' + req.auth.USER_AUTH_CODE +  '-' + tables[i] + '.json';
-                    jsonfile.writeFileSync(jsonFilePath, result ) 
-                    FileServer.unlinkSync( newCsvFileName );
+                    // let jsonFilePath = './public/tmp/import-db-realm/' + fixFileName + '-'  + Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) + '-' + req.auth.USER_AUTH_CODE +  '-' + tables[i] + '.json';
+                    // jsonfile.writeFileSync(jsonFilePath, result ) 
+                    // FileServer.unlinkSync( newCsvFileName );
                 }
                 FileServer.unlinkSync( directory );
                 // FileServer.unlinkSync( directory + '.management' );
