@@ -17,6 +17,7 @@
     const ebccServiceUrl = config.app.url[config.app.env].microservice_ebcc_validation;
     const findingServiceUrl = config.app.url[config.app.env].microservice_finding;
     const inspectionServiceUrl = config.app.url[config.app.env].microservice_inspection;
+    const imageServiceUrl = config.app.url[config.app.env].microservice_images;
  /*
  |--------------------------------------------------------------------------
  | Versi 1.1
@@ -329,7 +330,24 @@
                             result[i].DELETE_TIME = 0;
                             result[i].UPDATE_USER = "";
                             result[i].DELETE_USER = "";
+                            result[i].STATUS_SYNC = "Y";
                             result[i].IMAGE_URL = undefined;
+                        }
+                        for ( let index = 0; index < result.length; index++ ) {
+                            let dataResult = result[index];
+                            let args = {
+                                data: dataResult ,
+                                headers: { 
+                                    "Content-Type": "application/json", 
+                                    "Authorization": req.headers.authorization
+                                }
+                            }
+                            let request = client.post( imageServiceUrl + '/api/v1.1/auth/upload/image/foto-transaksi', args, function ( data, response ) {
+                                // console.log( 'sukses simpan image' );
+                            } );
+                            request.on( 'error', ( err ) => {
+                                console.log( err.message );
+                            } );
                         }
                     }
                     // let jsonFilePath = './public/tmp/import-db-realm/' + fixFileName + '-'  + Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) + '-' + req.auth.USER_AUTH_CODE +  '-' + tables[i] + '.json';
