@@ -352,11 +352,19 @@
                     }
                     // let jsonFilePath = './public/tmp/import-db-realm/' + fixFileName + '-'  + Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) + '-' + req.auth.USER_AUTH_CODE +  '-' + tables[i] + '.json';
                     // jsonfile.writeFileSync(jsonFilePath, result ) 
-                    // FileServer.unlinkSync( newCsvFileName );
+                    FileServer.unlinkSync( newCsvFileName );
                 }
                 FileServer.unlinkSync( directory );
                 // FileServer.unlinkSync( directory + '.management' );
-                // FileServer.unlinkSync( directory + '.lock' );
+                FileServer.rmdir( directory + '.management', function(err) {
+                    if (err) {
+                      throw err
+                    } else {
+                      console.log("Successfully removed the empty directory!")
+                    } 
+                } );
+                    
+                FileServer.unlinkSync( directory + '.lock' );
                 res.send( {
                     message: 'Success!'
                 } );

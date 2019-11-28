@@ -18,7 +18,8 @@
 		Login: require( _directory_base + '/app/v1.1/Http/Models/LoginModel.js' ),
 		LoginLog:require( _directory_base + '/app/v1.1/Http/Models/LoginLogModel.js' ),
 		PJS: require( _directory_base + '/app/v1.1/Http/Models/PJSModel.js' ),
-		ViewUserAuth: require( _directory_base + '/app/v1.1/Http/Models/ViewUserAuthModel.js' )
+		ViewUserAuth: require( _directory_base + '/app/v1.1/Http/Models/ViewUserAuthModel.js' ),
+		UserAuth: require( _directory_base + '/app/v1.1/Http/Models/UserAuthModel.js' )
 	}
 
 	// Node Module
@@ -452,3 +453,20 @@
 				data: token
 			} );
 		};
+	
+	/** 
+ 	  * Save or update Firebase Token
+	  * Untuk simpan atau ubah token firebase. 
+	  * --------------------------------------------------------------------
+	*/
+		
+		exports.create_update_firebase_token = async ( req, res ) => {
+			let FIREBASE_TOKEN = req.body.FIREBASE_TOKEN;
+			try {
+				await UserAuth.findOneAndUpdate( { USER_AUTH_CODE: req.auth.USER_AUTH_CODE },
+					{ FIREBASE_TOKEN }, 
+					{ new: true } );
+			} catch ( err ) {
+				console.log( err.message );
+			}
+		}

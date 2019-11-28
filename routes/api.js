@@ -216,6 +216,9 @@
 			// Post Realm 
 			app.post( '/api/v1.1/import/database', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ImportDB.read_database);
 
+			//Create or update FIREBASE_TOKEN
+			app.post( '/api/v1.1/firebase-token', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Auth.create_update_firebase_token); 
+
 		/*
 		 |--------------------------------------------------------------------------
 		 | API Versi 1.0
