@@ -338,17 +338,17 @@
                         for ( let index = 0; index < result.length; index++ ) {
                             let dataResult = result[index];
                             let args = {
-                                data: dataResult ,
+                                data: dataResult,
                                 headers: { 
                                     "Content-Type": "application/json", 
                                     "Authorization": req.headers.authorization
                                 }
                             }
                             let request = client.post( imageServiceUrl + '/api/v1.1/auth/upload/image/foto-transaksi', args, function ( data, response ) {
-                                // console.log( 'sukses simpan image' );
+                                console.log( 'sukses simpan image' );
                             } );
                             request.on( 'error', ( err ) => {
-                                console.log( `IMAGE ${err.message}` );
+                                console.log( `IMAGE ${err}` );
                             } );
                         }
                     }
