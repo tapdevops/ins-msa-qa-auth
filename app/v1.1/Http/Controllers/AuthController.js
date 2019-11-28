@@ -202,6 +202,11 @@
 
 										var setup = await exports.set_authentication( options );
 										if ( setup.status == true ) {
+											let firebaseToken = await Models.UserAuth.findOne( { EMPLOYEE_NIK: data_pjs.EMPLOYEE_NIK } ).select( 'FIREBASE_TOKEN -_id' );
+											if ( firebaseToken.FIREBASE_TOKEN ) 
+												setup.data.FIREBASE_TOKEN = firebaseToken.FIREBASE_TOKEN;
+											else 
+												setup.data.FIREBASE_TOKEN = "";
 											return res.json({
 												status: true,
 												message: "Success!",
@@ -243,6 +248,11 @@
 								var setup = await exports.set_authentication( options );
 
 								if ( setup.status == true ) {
+									let firebaseToken = await Models.UserAuth.findOne( { EMPLOYEE_NIK: data_hris.EMPLOYEE_NIK } ).select( 'FIREBASE_TOKEN -_id' );
+									if ( firebaseToken.FIREBASE_TOKEN ) 
+										setup.data.FIREBASE_TOKEN = firebaseToken.FIREBASE_TOKEN;
+									else
+										setup.data.FIREBASE_TOKEN = "";
 									return res.json({
 										status: true,
 										message: "Success!",
@@ -268,7 +278,7 @@
 
 							return res.send( {
 								status: false,
-								message: "Error retrieving user 1",
+								message: err.message,//"Error retrieving user 1",
 								data: {}
 							} );
 						} );
@@ -455,18 +465,34 @@
 		};
 	
 	/** 
- 	  * Save or update Firebase Token
-	  * Untuk simpan atau ubah token firebase. 
+ 	  * Update Firebase Token
+	  * Untuk ubah token firebase. 
 	  * --------------------------------------------------------------------
 	*/
 		
-		exports.create_update_firebase_token = async ( req, res ) => {
+		exports.update_firebase_token = async ( req, res ) => {
+			if ( !req.body.FIREBASE_TOKEN ) {
+				return res.send( {
+					status: false,
+					message: config.app.error_message.put_404,
+				} )
+			}
 			let FIREBASE_TOKEN = req.body.FIREBASE_TOKEN;
 			try {
-				await UserAuth.findOneAndUpdate( { USER_AUTH_CODE: req.auth.USER_AUTH_CODE },
+				await Models.UserAuth.findOneAndUpdate( { USER_AUTH_CODE: req.auth.USER_AUTH_CODE },
 					{ FIREBASE_TOKEN }, 
 					{ new: true } );
+				res.send( {
+					status: true,
+					message: 'Success!',
+					data: []
+				} )
 			} catch ( err ) {
 				console.log( err.message );
+				res.send( {
+					status: false,
+					message: config.app.error_message.put_500,
+					data: []
+				} );
 			}
 		}

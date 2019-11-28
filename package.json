@@ -21,6 +21,7 @@
 		"express-fileupload": "^1.0.0",
 		"express-group-routes": "^1.1.0",
 		"file-system": "^2.2.2",
+		"firebase-admin": "^8.8.0",
 		"forever-monitor": "^1.7.1",
 		"jsonfile": "^5.0.0",
 		"jsonwebtoken": "^8.3.0",
@@ -52,5 +53,10 @@
 		"start": "node app.js"
 	},
 	"author": "",
+	"nodemonConfig": {
+		"ignore": [
+			"public/tmp/import-db-realm/*"
+		]
+	},
 	"license": "ISC"
 }
