@@ -14,7 +14,7 @@
     const Client = require( 'node-rest-client' ).Client;
     const client = new Client();
     const jsonfile = require( 'jsonfile' );
-    
+
     const ebccServiceUrl = config.app.url[config.app.env].microservice_ebcc_validation;
     const findingServiceUrl = config.app.url[config.app.env].microservice_finding;
     const inspectionServiceUrl = config.app.url[config.app.env].microservice_inspection;
@@ -351,8 +351,8 @@
                             } );
                         }
                     }
-                    let jsonFilePath = './public/tmp/import-db-realm/' + fixFileName + '-'  + Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) + '-' + req.auth.USER_AUTH_CODE +  '-' + tables[i] + '.json';
-                    jsonfile.writeFileSync(jsonFilePath, result ) 
+                    // let jsonFilePath = './public/tmp/import-db-realm/' + fixFileName + '-'  + Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) + '-' + req.auth.USER_AUTH_CODE +  '-' + tables[i] + '.json';
+                    // jsonfile.writeFileSync(jsonFilePath, result ) 
                     FileServer.unlinkSync( newCsvFileName );
                 }
                 FileServer.unlinkSync( directory );
