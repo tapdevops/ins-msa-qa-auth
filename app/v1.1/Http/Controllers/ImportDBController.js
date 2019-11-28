@@ -100,7 +100,7 @@
                                 // console.log( 'sukses simpan inspection track' );
                             } );
                             request.on( 'error', ( err ) => {
-                                console.log( err.message );
+                                console.log( `INSPECTION TRACK: ${err.message}` );
                             } );
                         }
                     }
@@ -131,7 +131,7 @@
                                 // console.log( 'sukses simpan ebcc header' );
                             } );
                             request.on( 'error', ( err ) => {
-                                console.log( err.message );
+                                console.log( `EBCC HEADER ${err.message}` );
                             } );
                         }
                     }
@@ -160,7 +160,7 @@
                                 // console.log( 'sukses simpan ebcc detail' );
                             } );
                             request.on( 'error', ( err ) => {
-                                console.log( err.message );
+                                console.log( `EBCC DETAIL ${err.message}` );
                             } );
                         }
                     }
@@ -192,7 +192,7 @@
                                 // console.log( 'sukses simpan finding' );
                             } );
                             request.on( 'error', ( err ) => {
-                                console.log( err.message );
+                                console.log( `FINDING ${err.message}` );
                             } );
                         }
                     }
@@ -221,7 +221,7 @@
                                 // console.log( 'sukses simpan inspection detail' );
                             } );
                             request.on( 'error', ( err ) => {
-                                console.log( err.message );
+                                console.log( `INSPECTION DETAIL ${err.message}` );
                             } );
                         }
                     }
@@ -257,8 +257,9 @@
                                 // console.log( 'sukses simpan inspection header' );
                             } );
                             request.on( 'error', ( err ) => {
-                                console.log( err.message );
+                                console.log( `INSPECTION HEADER ${err.message}` );
                             } );
+                            
                         }
                     } else if ( tables[i] === 'TR_GENBA_INSPECTION' ) {
                         result = [];
@@ -303,7 +304,7 @@
                                     console.log( 'sukses simpan inspection genba', result[index].GENBA_USER );
                                 } );
                                 request.on( 'error', ( err ) => {
-                                    console.log( err.message );
+                                    console.log( `INSPECTION GENBA ${err.message}` );
                                 } );
                             }
                         }
@@ -347,7 +348,7 @@
                                 // console.log( 'sukses simpan image' );
                             } );
                             request.on( 'error', ( err ) => {
-                                console.log( err.message );
+                                console.log( `IMAGE ${err.message}` );
                             } );
                         }
                     }
