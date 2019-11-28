@@ -23,7 +23,7 @@
  | Versi 1.1
  |--------------------------------------------------------------------------
  */
-    exports.read_realm = async ( req, res ) => {
+    exports.read_database = async ( req, res ) => {
         if ( !req.files ) {
             return res.send( {
                 status: false,

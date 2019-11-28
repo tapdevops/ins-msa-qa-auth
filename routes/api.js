@@ -31,7 +31,7 @@
 			User: require( _directory_base + '/app/v1.1/Http/Controllers/UserController.js' ),
 			WebReport: require( _directory_base + '/app/v1.1/Http/Controllers/WebReportController.js' ),
 			ExportKafka: require( _directory_base + '/app/v1.1/Http/Controllers/ExportKafkaController.js' ),
-			Realm: require( _directory_base + '/app/v1.1/Http/Controllers/RealmController.js' )
+			ImportDB: require( _directory_base + '/app/v1.1/Http/Controllers/ImportDBController.js' )
 		},
 		v_1_0: {
 			Auth: require( _directory_base + '/app/v1.0/Http/Controllers/AuthController.js' ),
@@ -214,7 +214,7 @@
 			app.get( '/api/v1.1/auth-month/:month', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ExportKafka.find_by_month );	 
 
 			// Post Realm 
-			app.post( '/api/v1.1/import/realmdb', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Realm.read_realm)
+			app.post( '/api/v1.1/import/database', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ImportDB.read_database);
 
 		/*
 		 |--------------------------------------------------------------------------
