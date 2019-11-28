@@ -52,10 +52,5 @@
 		"start": "node app.js"
 	},
 	"author": "",
-	"license": "ISC",
-	"nodemonConfig": {
-		"ignore": [
-			"public/tmp/import-db-realm/*"
-		]
-	}
+	"license": "ISC"
 }
