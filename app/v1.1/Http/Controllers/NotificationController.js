@@ -22,8 +22,12 @@
                 }
             ] );
             let payload = {
+                notification: {
+                    title: 'Example',
+                    body: 'Hai!!!'
+                },
                 data: {
-                    Mykey: 'Welcome Firebase'
+                    DEEPLINK: 'RESTAN'
                 }
             }
             let options = {
@@ -34,7 +38,8 @@
                 credential: admin.credential.cert( serviceAccount ),
                 databaseURL: "https://mobile-inspection-257403.firebaseio.com"
             } );
-            admin.messaging().sendToDevice( 'klkj', payload, options )
+            let firebaseToken = [ 'eGHV-Z6G95c:APA91bGDrEG1m037Ac9rwF6sslByi1giruNkX0uN71_LePUzZf90I6L_0jmOEJFmm6xbjgU4g68c50rech25FM8pVdq1WixiSU3ICf24HqIXJQCimBeoN-bGPh58RvAXTKzC4FbdcnTf' ];
+            admin.messaging().sendToDevice( firebaseToken, payload, options )
             .then( response => {
                 console.log( 'Successfully sent message', response );
                 res.send( 'Sukses' );
@@ -46,5 +51,30 @@
             res.send( err );
         }
     }
+//         POST https://fcm.googleapis.com/v1/projects/myproject-b5ae1/messages:send HTTP/1.1
+
+// Content-Type: application/json
+// Authorization: Bearer ya29.ElqKBGN2Ri_Uz...PbJ_uNasm
+
+// {
+//   "message": {
+//     "token" : <token of destination app>,
+//     "notification": {
+//       "title": "FCM Message",
+//       "body": "This is a message from FCM"
+//     },
+//     "webpush": {
+//       "headers": {
+//         "Urgency": "high"
+//       },
+//       "notification": {
+//         "body": "This is a message from FCM to web",
+//         "requireInteraction": "true",
+//         "badge": "/badge-icon.png"
+//       }
+//     }
+//   }
+// }
+//     }
 
 
