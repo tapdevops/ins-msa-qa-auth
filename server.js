@@ -10,6 +10,9 @@
 
 	//Model
 	const ViewUserAuth = require( _directory_base + '/app/v1.1/Http/Models/ViewUserAuthModel.js' );
+
+	//Controller
+	const Notification = require( _directory_base + '/app/v1.1/Http/Controllers/NotificationController.js' );
 /*
 |--------------------------------------------------------------------------
 | APP Setup
@@ -20,7 +23,7 @@
 	const Express = require( 'express' );
 	const Mongoose = require( 'mongoose' );
 	const ExpressUpload = require( 'express-fileupload' );
-
+	const CronJob = require( 'cron' ).CronJob;
 	// Primary Variable
 	const App = Express();
 
@@ -125,6 +128,21 @@
  |--------------------------------------------------------------------------
  */
 	require( './routes/api.js' )( App );
+
+/*
+ |--------------------------------------------------------------------------
+ | Cron Push notificatin Firebase
+ |--------------------------------------------------------------------------
+ */
+	const admin = require( 'firebase-admin' );
+	const serviceAccount = require( _directory_base + '/public/key/push-notification.json' );
+	admin.initializeApp( {
+		credential: admin.credential.cert( serviceAccount ),
+		databaseURL: "https://mobile-inspection-257403.firebaseio.com"
+	} );
+	new CronJob( '0 2 * * *', function () {
+		Notification.push_notification( admin );
+	}, null, true );
 
 /*
  |--------------------------------------------------------------------------

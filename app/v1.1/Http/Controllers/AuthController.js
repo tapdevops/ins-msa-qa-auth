@@ -203,10 +203,11 @@
 										var setup = await exports.set_authentication( options );
 										if ( setup.status == true ) {
 											let firebaseToken = await Models.UserAuth.findOne( { EMPLOYEE_NIK: data_pjs.EMPLOYEE_NIK } ).select( 'FIREBASE_TOKEN -_id' );
-											if ( firebaseToken.FIREBASE_TOKEN ) 
+											if ( firebaseToken.FIREBASE_TOKEN ) { 
 												setup.data.FIREBASE_TOKEN = firebaseToken.FIREBASE_TOKEN;
-											else 
+											} else {
 												setup.data.FIREBASE_TOKEN = "";
+											}
 											return res.json({
 												status: true,
 												message: "Success!",
@@ -249,10 +250,11 @@
 
 								if ( setup.status == true ) {
 									let firebaseToken = await Models.UserAuth.findOne( { EMPLOYEE_NIK: data_hris.EMPLOYEE_NIK } ).select( 'FIREBASE_TOKEN -_id' );
-									if ( firebaseToken.FIREBASE_TOKEN ) 
+									if ( firebaseToken.FIREBASE_TOKEN ) {
 										setup.data.FIREBASE_TOKEN = firebaseToken.FIREBASE_TOKEN;
-									else
+									} else {
 										setup.data.FIREBASE_TOKEN = "";
+									}
 									return res.json({
 										status: true,
 										message: "Success!",
@@ -475,7 +477,8 @@
 				return res.send( {
 					status: false,
 					message: config.app.error_message.put_404,
-				} )
+					data: []
+				} );
 			}
 			let FIREBASE_TOKEN = req.body.FIREBASE_TOKEN;
 			try {
