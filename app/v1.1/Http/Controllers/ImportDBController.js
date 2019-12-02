@@ -300,7 +300,7 @@
                             }
                             result[index].GENBA_USER = [ result[index].GENBA_USER ];
                             if ( result[index].GENBA_USER[0] !== "" ) {
-                                let request = client.post( inspectionServiceUrl+ '/api/v1.1/genba', args, function ( data, response ) {
+                                let request = client.post( inspectionServiceUrl + '/api/v1.1/genba', args, function ( data, response ) {
                                     console.log( 'sukses simpan inspection genba', result[index].GENBA_USER );
                                 } );
                                 request.on( 'error', ( err ) => {
@@ -345,7 +345,7 @@
                                 }
                             }
                             let request = client.post( imageServiceUrl + '/api/v1.1/auth/upload/image/foto-transaksi', args, function ( data, response ) {
-                                console.log( 'sukses simpan image' );
+                                // console.log( 'sukses simpan image' );
                             } );
                             request.on( 'error', ( err ) => {
                                 console.log( `IMAGE ${err}` );
