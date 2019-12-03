@@ -26,7 +26,7 @@
                 }
             }
             let date = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ).substring( 0, 8 ) ) - 1;
-            let url = `http://localhost:4013/api/v1.1/report/titik-restan/all/20191124`;
+            let url = `http://localhost:4013/api/v1.1/report/taksasi/${date}`;
             let request = client.get( url, args, async function ( data, response ) {
                 if ( data ) {
                     data.data.forEach( async function ( dt ) {
@@ -39,8 +39,7 @@
                             }
                         ] );
                         users.forEach( ( user ) => {
-                            console.log( user );
-                            if ( dt.OTORISASI === '5121A' ) {
+                            // if ( dt.OTORISASI === '5121A' ) {
                                 if ( user.FIREBASE_TOKEN ) {
                                     let totalTon = dt.TOTAL / 1000;
                                         totalTon = totalTon.toFixed( 2 ).replace( '.', ',' );
@@ -65,7 +64,7 @@
                                         console.log( 'Error sending message: ', error );
                                     } );
                                 }
-                            }
+                            // }
                         } );        
                     } );
                 }
