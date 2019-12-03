@@ -31,7 +31,7 @@
                     .then( () => {
                         let payload = {
                             notification: {
-                                title: 'Example',
+                                title: 'Mobile Inspection',
                                 body: 'Hai!!!'
                             },
                             data: {
