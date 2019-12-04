@@ -13,21 +13,23 @@
 	const Client = require( 'node-rest-client' ).Client;
     const client = new Client();
     //push notifikasi ke firebase
-    exports.push_notification = async ( req, res ) => {
+    exports.push_notification = async ( admin, token ) => {
         // admin.initializeApp( {
         //     credential: admin.credential.cert( serviceAccount ),
         //     databaseURL: "https://mobile-inspection-257403.firebaseio.com"
         // } );
         try {
+            let date = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ).substring( 0, 8 ) ) - 1;
+            const url = config.url[config.app.env].microservice_reports + `/api/v1.1/report/taksasi/${date}`;
             let args = {
                 headers: { 
                     "Content-Type": "application/json",
-                    "Authorization": req.headers.authorization
+                    "Authorization": `Bearer ${token}`
                 }
             }
-            let date = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ).substring( 0, 8 ) ) - 1;
-            let url = `http://localhost:4013/api/v1.1/report/taksasi/${date}`;
+            // const url = config.app.url[config.app.env].microservice_reports + `/api/v1.1/report/taksasi/20191124`;
             let request = client.get( url, args, async function ( data, response ) {
+                console.log( `Data: ${data}` );
                 if ( data ) {
                     data.data.forEach( async function ( dt ) {
                         let users = await UserAuth.aggregate( [
@@ -41,12 +43,10 @@
                         users.forEach( ( user ) => {
                             // if ( dt.OTORISASI === '5121A' ) {
                                 if ( user.FIREBASE_TOKEN ) {
-                                    let totalTon = dt.TOTAL / 1000;
-                                        totalTon = totalTon.toFixed( 2 ).replace( '.', ',' );
                                     let payload = {
                                         notification: {
                                             title: 'Mobile Inspection',
-                                            body: 'Ada ' + totalTon + ' ton belum diangkut'
+                                            body: 'Hey, ada ' + dt.TOTAL + ' kg restan yang harus diangkut hari ini.'
                                         },
                                         data: {
                                             DEEPLINK: 'RESTAN'
@@ -59,6 +59,9 @@
                                     let firebaseToken = [ user.FIREBASE_TOKEN ];
                                     admin.messaging().sendToDevice( firebaseToken, payload, options )
                                     .then( response => {
+                                        console.log( user.FIREBASE_TOKEN );
+                                        console.log( user.USER_AUTH_CODE );
+                                        console.log( dt.TOTAL );
                                         console.log( 'Successfully push notification', response.results[0] );
                                     } ).catch ( error => {
                                         console.log( 'Error sending message: ', error );
@@ -72,10 +75,9 @@
             request.on( 'error', ( error ) => {
                 console.log( error.message );
             } );
-
-            res.send( {
-                messge: 'Success'
-            } );
+            // res.send( {
+            //     messge: 'Success'
+            // } );
         } catch ( err ) {
             console.log( err.message );
         }

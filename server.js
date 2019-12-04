@@ -13,6 +13,7 @@
 
 	//Controller
 	const Notification = require( _directory_base + '/app/v1.1/Http/Controllers/NotificationController.js' );
+	const Security = require( _directory_base + '/app/v1.1/Http/Libraries/Security.js' );
 /*
 |--------------------------------------------------------------------------
 | APP Setup
@@ -140,8 +141,15 @@
 		credential: admin.credential.cert( serviceAccount ),
 		databaseURL: "https://mobile-inspection-257403.firebaseio.com"
 	} );
-	new CronJob( '0 3 * * *', function () {
-		Notification.push_notification( admin );
+	new CronJob( '* * * * *', function () {
+		var claims = {
+			USERNAME: 'ferdinand',
+			USER_AUTH_CODE: '0102',
+			IMEI: '123txxx',
+			LOCATION_CODE: 'ALL'
+		};
+		let token = Security.generate_token( claims ); // Generate Token
+		Notification.push_notification( admin, token );
 	}, null, true );
 
 /*
