@@ -20,7 +20,7 @@
         // } );
         try {
             let date = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ).substring( 0, 8 ) ) - 1;
-            const url = config.url[config.app.env].microservice_reports + `/api/v1.1/report/taksasi/${date}`;
+            const url = config.app.url[config.app.env].microservice_reports + `/api/v1.1/report/taksasi/${date}`;
             let args = {
                 headers: { 
                     "Content-Type": "application/json",
