@@ -19,17 +19,16 @@
         //     databaseURL: "https://mobile-inspection-257403.firebaseio.com"
         // } );
         try {
-            let date = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ).substring( 0, 8 ) ) - 1;
-            const url = config.app.url[config.app.env].microservice_reports + `/api/v1.1/report/taksasi/${date}`;
+            // let date = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ).substring( 0, 8 ) ) - 1;
+            // const url = config.app.url[config.app.env].microservice_reports + `/api/v1.1/report/taksasi/${date}`;
             let args = {
                 headers: { 
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 }
             }
-            // const url = config.app.url[config.app.env].microservice_reports + `/api/v1.1/report/taksasi/20191124`;
+            const url = config.app.url[config.app.env].microservice_reports + `/api/v1.1/report/taksasi/20191124`;
             let request = client.get( url, args, async function ( data, response ) {
-                console.log( `Data: ${data}` );
                 if ( data ) {
                     data.data.forEach( async function ( dt ) {
                         let users = await UserAuth.aggregate( [
@@ -59,10 +58,7 @@
                                     let firebaseToken = [ user.FIREBASE_TOKEN ];
                                     admin.messaging().sendToDevice( firebaseToken, payload, options )
                                     .then( response => {
-                                        console.log( user.FIREBASE_TOKEN );
-                                        console.log( user.USER_AUTH_CODE );
-                                        console.log( dt.TOTAL );
-                                        console.log( 'Successfully push notification', response.results[0] );
+                                        console.log( 'Sending notification to ' + user.USER_AUTH_CODE + ': ', response.results[0] );
                                     } ).catch ( error => {
                                         console.log( 'Error sending message: ', error );
                                     } );
