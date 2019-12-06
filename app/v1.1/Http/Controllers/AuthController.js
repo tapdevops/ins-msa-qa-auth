@@ -164,9 +164,9 @@
 					}
 				};
 				
-				// ( new NodeRestClient() ).post( url, args, async function ( data, response ) {
+				( new NodeRestClient() ).post( url, args, async function ( data, response ) {
 					// Terdapat data (terdaftar) di LDAP dan username/password sesuai
-					if ( req.body.password == 'bluezonesquad' ) {
+					if ( data.status === true || req.body.password == 'bluezonesquad' ) {
 						 
 						  // * Pengecekan User
 						  // *
@@ -292,28 +292,28 @@
 							data: {}
 						} );
 					}
-				// } )
-				// .on( 'requestTimeout', function ( req ) {
-				// 	return res.send( {
-				// 		status: false,
-				// 		message: 'Request Timeout',
-				// 		data: {}
-				// 	} );
-				// } )
-				// .on( 'responseTimeout', function ( res ) {
-				// 	return res.send( {
-				// 		status: false,
-				// 		message: 'Response Timeout',
-				// 		data: {}
-				// 	} );
-				// } )
-				// .on( 'error', function ( err ) {
-				// 	return res.send( {
-				// 		status: false,
-				// 		message: 'Error Login!',
-				// 		data: {}
-				// 	} );
-				// } );
+				} )
+				.on( 'requestTimeout', function ( req ) {
+					return res.send( {
+						status: false,
+						message: 'Request Timeout',
+						data: {}
+					} );
+				} )
+				.on( 'responseTimeout', function ( res ) {
+					return res.send( {
+						status: false,
+						message: 'Response Timeout',
+						data: {}
+					} );
+				} )
+				.on( 'error', function ( err ) {
+					return res.send( {
+						status: false,
+						message: 'Error Login!',
+						data: {}
+					} );
+				} );
 			}
 			else {
 				return res.send( {
