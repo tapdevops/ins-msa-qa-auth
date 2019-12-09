@@ -19,17 +19,20 @@
         //     databaseURL: "https://mobile-inspection-257403.firebaseio.com"
         // } );
         try {
-            let date = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ).substring( 0, 8 ) ) - 1;
-            const url = config.app.url[config.app.env].microservice_reports + `/api/v1.1/report/taksasi/${date}`;
+            // let date = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ).substring( 0, 8 ) ) - 1;
+            // const url = config.app.url[config.app.env].microservice_reports + `/api/v1.1/report/taksasi/${date}`;
             let args = {
                 headers: { 
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 }
             }
-            // const url = config.app.url[config.app.env].microservice_reports + `/api/v1.1/report/taksasi/20191124`;
+            const url = config.app.url[config.app.env].microservice_reports + `/api/v1.1/report/taksasi/20191124`;
             let request = client.get( url, args, async function ( data, response ) {
                 if ( data ) {
+                    if ( data.data.length == 0 ) {
+                        return console.log( `Data titik restan pada tanggal ini kosong!` );
+                    }
                     data.data.forEach( async function ( dt ) {
                         let users = await UserAuth.aggregate( [
                             {

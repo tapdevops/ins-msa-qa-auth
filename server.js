@@ -151,7 +151,7 @@
 		let token = Security.generate_token( claims ); // Generate Token
 		console.log( 'running cron' );
 		Notification.push_notification( admin, token );
-	}, null, true );
+	}, null, true, 'Asia/Jakarta' );
 
 /*
  |--------------------------------------------------------------------------
