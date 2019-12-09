@@ -23,7 +23,7 @@
                     "Authorization": `Bearer ${token}`
                 }
             }
-            // const url = config.app.url[config.app.env].microservice_reports + `/api/v1.1/report/taksasi/20191124`;
+            const url = config.app.url[config.app.env].microservice_reports + `/api/v1.1/report/taksasi/20191124`;
             let request = client.get( url, args, async function ( data, response ) {
                 if ( data ) {
                     if ( data.data.length == 0 ) {
