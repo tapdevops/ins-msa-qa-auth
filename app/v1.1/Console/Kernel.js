@@ -35,7 +35,7 @@
                     }
                 }
                 const url = config.app.url[config.app.env].microservice_reports + `/api/v1.1/report/taksasi`;
-                // const url = 'http://localhost:4013/api/v1.1/report/taksasi';
+                console.log( url );
                 let request = client.get( url, args, async function ( data, response ) {
                     if ( data ) {
                         console.log( data.data );
