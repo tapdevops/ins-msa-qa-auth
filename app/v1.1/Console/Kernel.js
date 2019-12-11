@@ -34,7 +34,7 @@
                         "Authorization": `Bearer ${token}`
                     }
                 }
-                const url = config.app.url[config.app.env].microservice_reports + `/api/v1.1/report/taksasi`;
+                const url = config.app.url[config.app.env].microservice_reports + `/api/v1.1/report/taksasi/20191124`;
                 console.log( url );
                 let request = client.get( url, args, async function ( data, response ) {
                     if ( data ) {
@@ -54,10 +54,11 @@
                             users.forEach( ( user ) => {
                                 // if ( dt.OTORISASI === '5121A' ) {
                                 if ( user.FIREBASE_TOKEN ) {
+                                    let total = ( dt.TOTAL / 1000).toFixed(2).toString().replace(".", ",")
                                     let payload = {
                                         notification: {
                                             title: 'Mobile Inspection',
-                                            body: 'Hey, ada ' + dt.TOTAL + ' kg restan yang harus diangkut hari ini.'
+                                            body: 'Hey, ada ' + total + ' ton restan yang harus diangkut hari ini.'
                                         },
                                         data: {
                                             DEEPLINK: 'RESTAN'
