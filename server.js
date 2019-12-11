@@ -137,6 +137,7 @@
  */
 	const admin = require( 'firebase-admin' );
 	const serviceAccount = require( _directory_base + '/public/key/push-notification.json' );
+	const Kernel = require( _directory_base + '/app/v1.1/Console/Kernel.js' );
 	admin.initializeApp( {
 		credential: admin.credential.cert( serviceAccount ),
 		databaseURL: "https://mobile-inspection-257403.firebaseio.com"
@@ -150,7 +151,7 @@
 		};
 		let token = Security.generate_token( claims ); // Generate Token
 		console.log( 'running cron' );
-		Notification.push_notification( admin, token );
+		Kernel.pushNotification( admin, token );
 	}, null, true, 'Asia/Jakarta' );
 
 /*
