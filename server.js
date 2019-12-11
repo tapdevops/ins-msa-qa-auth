@@ -10,9 +10,6 @@
 
 	//Model
 	const ViewUserAuth = require( _directory_base + '/app/v1.1/Http/Models/ViewUserAuthModel.js' );
-
-	//Controller
-	const Notification = require( _directory_base + '/app/v1.1/Http/Controllers/NotificationController.js' );
 	const Security = require( _directory_base + '/app/v1.1/Http/Libraries/Security.js' );
 /*
 |--------------------------------------------------------------------------
@@ -132,7 +129,7 @@
 
 /*
  |--------------------------------------------------------------------------
- | Cron Push notificatin Firebase
+ | Cron Push notification Firebase
  |--------------------------------------------------------------------------
  */
 	const admin = require( 'firebase-admin' );
