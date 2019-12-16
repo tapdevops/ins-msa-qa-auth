@@ -5,6 +5,19 @@
 */
 	// Controllers
 	const Controllers = {
+		v_1_2: {
+			Auth: require( _directory_base + '/app/v1.2/Http/Controllers/AuthController.js' ),
+			Category: require( _directory_base + '/app/v1.2/Http/Controllers/CategoryController.js' ),
+			Content: require( _directory_base + '/app/v1.2/Http/Controllers/ContentController.js' ),
+			Kriteria: require( _directory_base + '/app/v1.2/Http/Controllers/KriteriaController.js' ),
+			Module: require( _directory_base + '/app/v1.2/Http/Controllers/ModuleController.js' ),
+			Parameter: require( _directory_base + '/app/v1.2/Http/Controllers/ParameterController.js' ),
+			SyncMobile: require( _directory_base + '/app/v1.2/Http/Controllers/SyncMobileController.js' ),
+			SyncTAP: require( _directory_base + '/app/v1.2/Http/Controllers/SyncTAPController.js' ),
+			Server: require( _directory_base + '/app/v1.2/Http/Controllers/ServerController.js' ),
+			User: require( _directory_base + '/app/v1.2/Http/Controllers/UserController.js' ),
+			WebReport: require( _directory_base + '/app/v1.2/Http/Controllers/WebReportController.js' )
+		},
 		v_1_1: {
 			Auth: require( _directory_base + '/app/v1.1/Http/Controllers/AuthController.js' ),
 			Category: require( _directory_base + '/app/v1.1/Http/Controllers/CategoryController.js' ),
@@ -16,7 +29,9 @@
 			SyncTAP: require( _directory_base + '/app/v1.1/Http/Controllers/SyncTAPController.js' ),
 			Server: require( _directory_base + '/app/v1.1/Http/Controllers/ServerController.js' ),
 			User: require( _directory_base + '/app/v1.1/Http/Controllers/UserController.js' ),
-			WebReport: require( _directory_base + '/app/v1.1/Http/Controllers/WebReportController.js' )
+			WebReport: require( _directory_base + '/app/v1.1/Http/Controllers/WebReportController.js' ),
+			ExportKafka: require( _directory_base + '/app/v1.1/Http/Controllers/ExportKafkaController.js' ),
+			ImportDB: require( _directory_base + '/app/v1.1/Http/Controllers/ImportDBController.js' )
 		},
 		v_1_0: {
 			Auth: require( _directory_base + '/app/v1.0/Http/Controllers/AuthController.js' ),
@@ -35,6 +50,9 @@
 
 	// Middleware
 	const Middleware = {
+		v_1_2: {
+			VerifyToken: require( _directory_base + '/app/v1.2/Http/Middleware/VerifyToken.js' )
+		},
 		v_1_1: {
 			VerifyToken: require( _directory_base + '/app/v1.1/Http/Middleware/VerifyToken.js' )
 		},
@@ -64,6 +82,67 @@
 				} )
 			} );
 
+		/*
+		 |--------------------------------------------------------------------------
+		 | API Versi 1.2
+		 |--------------------------------------------------------------------------
+		 */
+			// Auth
+			app.post( '/api/v1.2/auth/login', Controllers.v_1_2.Auth.login );
+			app.get( '/api/v1.2/auth/contacts', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Auth.contacts );
+			app.get( '/api/v1.2/auth/generate/token', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Auth.generate_token );
+
+			// Category
+			app.get( '/api/v1.2/category', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Category.find );
+			app.get( '/api/v1.2/category/:start_date/:end_date', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Category.sync_mobile );
+
+			// Content
+			app.get( '/api/v1.2/content', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Content.find );
+			app.get( '/api/v1.2/content/:id', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Content.find_one );
+			app.get( '/api/v1.2/content/:start_date/:end_date', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Content.sync_mobile );
+			app.get( '/api/v1.2/content-label', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Content.label_find );
+			app.get( '/api/v1.2/content-label/:id', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Content.label_find_one );
+
+			// Kriteria
+			app.get( '/api/v1.2/kriteria', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Kriteria.find );
+			app.get( '/api/v1.2/kriteria/:start_date/:end_date', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Kriteria.sync_mobile );
+
+			// Parameter
+			app.get( '/api/v1.2/parameter', Middleware.v_1_2.VerifyToken,  Controllers.v_1_2.Parameter.find );
+			app.get( '/api/v1.2/parameter/track', Middleware.v_1_2.VerifyToken,  Controllers.v_1_2.Parameter.time_track_find_one );
+
+			// Sync Mobile 
+			app.post( '/api/v1.2/sync/mobile', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.create );
+			app.post( '/api/v1.2/sync/mobile/reset', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.reset );
+			app.get( '/api/v1.2/mobile-sync/finding-images', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.finding_images_find );
+			app.get( '/api/v1.2/mobile-sync/auth/contact', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.contact_find );
+			app.get( '/api/v1.2/mobile-sync/finding', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.finding_find );
+			app.get( '/api/v1.2/mobile-sync/auth/kriteria', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.kriteria_find );
+			app.get( '/api/v1.2/mobile-sync/auth/category', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.category_find );
+			app.get( '/api/v1.2/mobile-sync/ebcc/kualitas', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.ebcc_kualitas_find );
+			app.get( '/api/v1.2/mobile-sync/auth/content', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.content_find );
+			app.get( '/api/v1.2/mobile-sync/auth/content-label', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.content_label_find );
+			app.get( '/api/v1.2/mobile-sync/hectare-statement/afdeling', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.hs_afdeling_find );
+			app.get( '/api/v1.2/mobile-sync/hectare-statement/block', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.hs_block_find );
+			app.get( '/api/v1.2/mobile-sync/hectare-statement/comp', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.hs_comp_find );
+			app.get( '/api/v1.2/mobile-sync/hectare-statement/est', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.hs_est_find );
+			app.get( '/api/v1.2/mobile-sync/hectare-statement/land-use', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.hs_land_use_find );
+			app.get( '/api/v1.2/mobile-sync/hectare-statement/region', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.hs_region_find );
+
+			// Sync TAP
+			app.post( '/api/v1.2/sync/tap/employee-hris', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncTAP.sync_employee_hris );
+			app.post( '/api/v1.2/sync/tap/employee-sap', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncTAP.sync_employee_sap );
+
+			// Server
+			app.get( '/api/v1.2/server/service-list', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Server.service_list );
+			app.get( '/api/v1.2/server/time', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Server.time );
+			app.post( '/api/v1.2/server/apk-version', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Server.apk_version );
+			app.get( '/api/v1.2/server/apk-version/:id', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Server.current_apk_version ); 
+			
+			// User
+			app.get( '/api/v1.2/user/data', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.User.user_data );
+
+			
 		/*
 		 |--------------------------------------------------------------------------
 		 | API Versi 1.1
@@ -114,6 +193,10 @@
 			// Sync TAP
 			app.post( '/api/v1.1/sync/tap/employee-hris', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncTAP.sync_employee_hris );
 			app.post( '/api/v1.1/sync/tap/employee-sap', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncTAP.sync_employee_sap );
+			
+			// User
+			app.post( '/api/v1.1/user/create', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.User.create );
+			app.put( '/api/v1.1/user/update/:id', Middleware.v_1_0.VerifyToken, Controllers.v_1_1.User.update );
 
 			// Server
 			app.get( '/api/v1.1/server/service-list', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Server.service_list );
@@ -123,6 +206,18 @@
 			
 			// User
 			app.get( '/api/v1.1/user/data', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.User.user_data );
+
+			//export kafka
+			app.get( '/api/v1.1/export-kafka/auth', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ExportKafka.export_kafka );
+
+			// GET Inspection User By Month
+			app.get( '/api/v1.1/auth-month/:month', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ExportKafka.find_by_month );	 
+
+			// Post Realm 
+			app.post( '/api/v1.1/import/database', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ImportDB.read_database);
+
+			//update FIREBASE_TOKEN
+			app.put( '/api/v1.1/firebase/token', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Auth.update_firebase_token); 
 		/*
 		 |--------------------------------------------------------------------------
 		 | API Versi 1.0

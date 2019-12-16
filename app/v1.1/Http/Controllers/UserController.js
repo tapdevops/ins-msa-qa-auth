@@ -8,7 +8,8 @@
  */
  	// Libraries
 	const Libraries = {
-		Helper: require( _directory_base + '/app/v1.1/Http/Libraries/Helper.js' )
+		Helper: require( _directory_base + '/app/v1.1/Http/Libraries/Helper.js' ),
+		KafkaServer: require( _directory_base + '/app/v1.1/Http/Libraries/KafkaServer.js' )
 	}
 
  	// Models
@@ -134,14 +135,32 @@
 								data: {}
 							} );
 						}
+						else {
+							// Send Message To Kafka
+							var kafka_body = {
+								URACD: generate_auth_code,
+								EMNIK: NIK,
+								URROL: String( req.body.USER_ROLE ),
+								LOCCD: String( req.body.LOCATION_CODE ),
+								RROLE: String( req.body.REF_ROLE ),
+								INSUR: auth.USER_AUTH_CODE,
+								INSTM: Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ),
+								UPTUR: auth.USER_AUTH_CODE,
+								UPTTM: Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ),
+								DLTUR: "",
+								DLTTM: 0
+							};
+							console.log( "Set Kafka Msg - HRIS" );
+							Libraries.KafkaServer.producer( 'INS_MSA_AUTH_TM_USER_AUTH', JSON.stringify( kafka_body ) );
+						}
 						
-						res.send( {
+						return res.send( {
 							status: true,
 							message: config.app.error_message.create_200,
 							data: {}
 						} );
 					} ).catch( err => {
-						res.send( {
+						return res.send( {
 							status: false,
 							message: config.app.error_message.create_500,
 							data: {}
@@ -200,6 +219,24 @@
 									message: config.app.error_message.create_404,
 									data: {}
 								} );
+							}
+							else {
+								// Send Message To Kafka
+								var kafka_body = {
+									URACD: generate_auth_code,
+									EMNIK: String( query_data_sap[0].NIK ),
+									URROL: String( req.body.USER_ROLE ),
+									LOCCD: String( req.body.LOCATION_CODE ),
+									RROLE: String( req.body.REF_ROLE ),
+									INSUR: auth.USER_AUTH_CODE,
+									INSTM: Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ),
+									UPTUR: auth.USER_AUTH_CODE,
+									UPTTM: Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ),
+									DLTUR: "",
+									DLTTM: 0
+								};
+								console.log( "Set Kafka Msg - PJS" );
+								Libraries.KafkaServer.producer( 'INS_MSA_AUTH_TM_USER_AUTH', JSON.stringify( kafka_body ) );
 							}
 							
 							res.send( {
@@ -468,33 +505,70 @@
 	 */
 		exports.update = ( req, res ) => {
 			var auth = req.auth;
+			
+			Models.UserAuth.findOne( {
+				USER_AUTH_CODE: req.params.id
+			} ).then( data => {
+				if ( !data ) {
+					
+				}
 
-			Models.UserAuth.findOneAndUpdate( { 
-				USER_AUTH_CODE : req.params.id 
-			}, {
-				USER_ROLE: req.body.USER_ROLE,
-				REF_ROLE: req.body.REF_ROLE,
-				LOCATION_CODE: req.body.LOCATION_CODE,
-				UPDATE_USER: auth.USER_AUTH_CODE,
-				UPDATE_TIME: Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ),
-				DELETE_USER: "",
-				DELETE_TIME: 0
-			}, { new: true } )
-			.then( data => {
-				if( !data ) {
+				console.log( 'IHSAN1' );
+				
+				Models.UserAuth.findOneAndUpdate( { 
+					USER_AUTH_CODE : req.params.id 
+				}, {
+					USER_ROLE: req.body.USER_ROLE,
+					REF_ROLE: req.body.REF_ROLE,
+					LOCATION_CODE: req.body.LOCATION_CODE,
+					UPDATE_USER: auth.USER_AUTH_CODE,
+					UPDATE_TIME: Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ),
+					DELETE_USER: "",
+					DELETE_TIME: 0
+				}, { new: true } )
+				.then( update_data => {
+					
+					if( !update_data ) {
+						console.log( 'IHSAN2' );
+						return res.send( {
+							status: false,
+							message: config.app.error_message.put_404,
+							data: {}
+						} );
+					}
+					else {
+						// Send Message To Kafka
+						console.log( 'IHSAN3' );
+						var kafka_body = {
+							URACD: data.USER_AUTH_CODE,
+							EMNIK: data.EMPLOYEE_NIK,
+							URROL: req.body.USER_ROLE,
+							LOCCD: req.body.LOCATION_CODE,
+							RROLE: req.body.REF_ROLE,
+							INSUR: data.INSERT_USER,
+							INSTM: data.INSERT_TIME,
+							UPTUR: auth.USER_AUTH_CODE,
+							UPTTM: parseInt( Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) ),
+							DLTUR: "",
+							DLTTM: 0
+						};
+						console.log( "Kirim Kafka Message" );
+						Libraries.KafkaServer.producer( 'INS_MSA_AUTH_TM_USER_AUTH', JSON.stringify( kafka_body ) );
+					}
 					return res.send( {
-						status: false,
-						message: config.app.error_message.put_404,
+						status: true,
+						message: config.app.error_message.put_200,
 						data: {}
 					} );
-				}
-				return res.send( {
-					status: true,
-					message: config.app.error_message.put_200,
-					data: {}
-				} );
-
-			}).catch( err => {
+	
+				}).catch( err => {
+					return res.send( {
+						status: false,
+						message: config.app.error_message.put_500,
+						data: {}
+					} );
+				});
+			} ).catch( err => {
 				return res.send( {
 					status: false,
 					message: config.app.error_message.put_500,

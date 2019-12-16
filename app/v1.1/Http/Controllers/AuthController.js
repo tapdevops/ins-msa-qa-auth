@@ -18,7 +18,8 @@
 		Login: require( _directory_base + '/app/v1.1/Http/Models/LoginModel.js' ),
 		LoginLog:require( _directory_base + '/app/v1.1/Http/Models/LoginLogModel.js' ),
 		PJS: require( _directory_base + '/app/v1.1/Http/Models/PJSModel.js' ),
-		ViewUserAuth: require( _directory_base + '/app/v1.1/Http/Models/ViewUserAuthModel.js' )
+		ViewUserAuth: require( _directory_base + '/app/v1.1/Http/Models/ViewUserAuthModel.js' ),
+		UserAuth: require( _directory_base + '/app/v1.1/Http/Models/UserAuthModel.js' )
 	}
 
 	// Node Module
@@ -37,7 +38,9 @@
 	  * --------------------------------------------------------------------
 	*/
 		exports.contacts = ( req, res ) => {
-			Models.ViewUserAuth.find()
+			Models.ViewUserAuth.find(
+
+			)
 			.select( {
 				USER_AUTH_CODE: 1,
 				EMPLOYEE_NIK: 1,
@@ -47,7 +50,10 @@
 				PJS_JOB: 1,
 				PJS_FULLNAME: 1,
 				HRIS_JOB: 1,
-				HRIS_FULLNAME: 1
+				HRIS_FULLNAME: 1,
+				INSERT_TIME: 1,
+				UPDATE_TIME: 1,
+				DELETE_TIME: 1
 			} )
 			.then( data => {
 				if( !data ) {
@@ -157,11 +163,10 @@
 						timeout: 10000
 					}
 				};
-
+				
 				( new NodeRestClient() ).post( url, args, async function ( data, response ) {
-
 					// Terdapat data (terdaftar) di LDAP dan username/password sesuai
-					if ( data.status == true || req.body.password == 'bluezonesquad' ) {
+					if ( data.status === true || req.body.password == 'bluezonesquad' ) {
 						 
 						  // * Pengecekan User
 						  // *
@@ -196,6 +201,12 @@
 
 										var setup = await exports.set_authentication( options );
 										if ( setup.status == true ) {
+											let firebaseToken = await Models.UserAuth.findOne( { EMPLOYEE_NIK: data_pjs.EMPLOYEE_NIK } ).select( 'FIREBASE_TOKEN -_id' );
+											if ( firebaseToken.FIREBASE_TOKEN ) { 
+												setup.data.FIREBASE_TOKEN = firebaseToken.FIREBASE_TOKEN;
+											} else {
+												setup.data.FIREBASE_TOKEN = "";
+											}
 											return res.json({
 												status: true,
 												message: "Success!",
@@ -237,6 +248,12 @@
 								var setup = await exports.set_authentication( options );
 
 								if ( setup.status == true ) {
+									let firebaseToken = await Models.UserAuth.findOne( { EMPLOYEE_NIK: data_hris.EMPLOYEE_NIK } ).select( 'FIREBASE_TOKEN -_id' );
+									if ( firebaseToken.FIREBASE_TOKEN ) {
+										setup.data.FIREBASE_TOKEN = firebaseToken.FIREBASE_TOKEN;
+									} else {
+										setup.data.FIREBASE_TOKEN = "";
+									}
 									return res.json({
 										status: true,
 										message: "Success!",
@@ -262,7 +279,7 @@
 
 							return res.send( {
 								status: false,
-								message: "Error retrieving user 1",
+								message: err.message,//"Error retrieving user 1",
 								data: {}
 							} );
 						} );
@@ -447,3 +464,37 @@
 				data: token
 			} );
 		};
+	
+	/** 
+ 	  * Update Firebase Token
+	  * Untuk ubah token firebase. 
+	  * --------------------------------------------------------------------
+	*/
+		
+		exports.update_firebase_token = async ( req, res ) => {
+			if ( !req.body.FIREBASE_TOKEN ) {
+				return res.send( {
+					status: false,
+					message: config.app.error_message.put_404,
+					data: []
+				} );
+			}
+			let FIREBASE_TOKEN = req.body.FIREBASE_TOKEN;
+			try {
+				await Models.UserAuth.findOneAndUpdate( { USER_AUTH_CODE: req.auth.USER_AUTH_CODE },
+					{ FIREBASE_TOKEN }, 
+					{ new: true } );
+				res.send( {
+					status: true,
+					message: 'Success!',
+					data: []
+				} )
+			} catch ( err ) {
+				console.log( err.message );
+				res.send( {
+					status: false,
+					message: config.app.error_message.put_500,
+					data: []
+				} );
+			}
+		}

@@ -13,6 +13,8 @@
 		INSERT_USER: String,
 		HRIS_JOB: String,
 		HRIS_FULLNAME: String,
+		PJS_JOB: String,
+		PJS_FULLNAME: String,
 		LOCATION_CODE_NATIONAL: String,
 		LOCATION_CODE_REGION: String,
 		LOCATION_CODE_COMP: String,

@@ -26,6 +26,23 @@
 			secret_key: 'T4pagri123#',
 			token_expiration: 7, // Days
 			token_algorithm: 'HS256',
+		
+		/*
+		|--------------------------------------------------------------------------
+		| Kafka Config
+		|--------------------------------------------------------------------------
+		*/
+			kafka: {
+				dev: {
+					server_host: '149.129.221.137:9092'
+				},
+				qa: {
+					server_host: '149.129.221.137:9092'
+				},
+				prod: {
+					server_host: '149.129.252.13:9092'
+				}
+			},
 
 		/*
 		|--------------------------------------------------------------------------
@@ -40,7 +57,8 @@
 					microservice_finding: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-finding',
 					microservice_hectare_statement: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-hectarestatement',
 					microservice_inspection: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-inspection',
-					microservice_images: 'http://149.129.250.199:3012',
+					microservice_images: 'http://149.129.250.199:4012',
+					microservice_reports: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-reports'
 				},
 				qa: {
 					ldap: 'http://tap-ldapdev.tap-agri.com/login',
@@ -50,6 +68,7 @@
 					microservice_hectare_statement: 'http://app.tap-agri.com/mobileinspectionqa/ins-msa-qa-hectarestatement',
 					microservice_inspection: 'http://app.tap-agri.com/mobileinspectionqa/ins-msa-qa-inspection',
 					microservice_images: 'http://149.129.246.66:5012',
+					microservice_reports: 'http://app.tap-agri.com/mobileinspectionqa/ins-msa-qa-reports'
 				},
 				prod: {
 					ldap: 'http://tap-ldap.tap-agri.com/login',
@@ -59,6 +78,7 @@
 					microservice_hectare_statement: 'http://app.tap-agri.com/mobileinspection/ins-msa-hectarestatement',
 					microservice_inspection: 'http://app.tap-agri.com/mobileinspection/ins-msa-inspection',
 					microservice_images: 'http://149.129.245.230:3012',
+					microservice_reports: 'http://app.tap-agri.com/mobileinspection/ins-msa-reports'
 				}
 			},
 

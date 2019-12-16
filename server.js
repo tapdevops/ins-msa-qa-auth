@@ -10,6 +10,7 @@
 
 	//Model
 	const ViewUserAuth = require( _directory_base + '/app/v1.1/Http/Models/ViewUserAuthModel.js' );
+	const Security = require( _directory_base + '/app/v1.1/Http/Libraries/Security.js' );
 /*
 |--------------------------------------------------------------------------
 | APP Setup
@@ -19,7 +20,8 @@
 	const BodyParser = require( 'body-parser' );
 	const Express = require( 'express' );
 	const Mongoose = require( 'mongoose' );
-
+	const ExpressUpload = require( 'express-fileupload' );
+	const CronJob = require( 'cron' ).CronJob;
 	// Primary Variable
 	const App = Express();
 
@@ -92,6 +94,9 @@
 	// Parse request of content-type - application/json
 	App.use( BodyParser.json() );
 
+	// Add Express Upload to App
+	App.use( ExpressUpload() );
+
 	// Setup Database
 	Mongoose.Promise = global.Promise;
 	Mongoose.connect( config.database.url, {
@@ -121,6 +126,30 @@
  |--------------------------------------------------------------------------
  */
 	require( './routes/api.js' )( App );
+
+/*
+ |--------------------------------------------------------------------------
+ | Cron Push notification Firebase
+ |--------------------------------------------------------------------------
+ */
+	const admin = require( 'firebase-admin' );
+	const serviceAccount = require( _directory_base + '/public/key/push-notification.json' );
+	const Kernel = require( _directory_base + '/app/v1.1/Console/Kernel.js' );
+	admin.initializeApp( {
+		credential: admin.credential.cert( serviceAccount ),
+		databaseURL: "https://mobile-inspection-257403.firebaseio.com"
+	} );
+	new CronJob( '0 3 * * *', function () {
+		var claims = {
+			USERNAME: 'ferdinand',
+			USER_AUTH_CODE: '0102',
+			IMEI: '123txxx',
+			LOCATION_CODE: 'ALL'
+		};
+		let token = Security.generate_token( claims ); // Generate Token
+		console.log( 'running cron' );
+		Kernel.pushNotification( admin, token );
+	}, null, true, 'Asia/Jakarta' );
 
 /*
  |--------------------------------------------------------------------------

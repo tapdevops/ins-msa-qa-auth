@@ -88,6 +88,12 @@
 										then: {
 											"$concat": [ config_url.microservice_inspection, "$API_URL_PARAMETER" ]
 										}
+									},
+									{
+										case: { $eq: [ "$MICROSERVICE", "REPORTS" ] }, 
+										then: {
+											"$concat": [ config_url.microservice_reports, "$API_URL_PARAMETER" ]
+										}
 									}
 								],
 								default: ""
@@ -142,7 +148,7 @@
 		exports.apk_version = async ( req, res ) => {
 			const set = new Models.APKVersion( {
 				INSERT_USER: req.body.INSERT_USER,
-				APK_VERSION: parseFloat( req.body.APK_VERSION ),
+				APK_VERSION: req.body.APK_VERSION ,
 				IMEI: req.body.IMEI,
 				INSERT_TIME: Libraries.Helper.date_format( req.body.INSERT_TIME, 'YYYYMMDDhhmmss'),
 			});
@@ -158,7 +164,7 @@
 
 				var limit_version = await Models.Parameter.findOne( {
 					PARAMETER_GROUP: "APK",
-					PARAMETER_NAME: "VERSION_LIMIT"
+					PARAMETER_NAME: "VERSION_LIMIT" //di database permitted_version
 				} );
 				var check_version = await Models.APKVersion.aggregate( [
 						{
@@ -185,6 +191,7 @@
 						}
 					] );
 					var found = false;
+					console.log( check_version );
 					for( var i = 0; i < check_version.length; i++){
 						if( check_version[i].APK_VERSION == req.body.APK_VERSION ) {
 							found = true;
@@ -198,7 +205,6 @@
 						data: {}
 					} );
 			}). catch( err => {
-				console.log(err);
 				if(err.kind === 'ObjectId' ){
 					return res.send( {
 						status: false,
@@ -221,23 +227,41 @@
 	 */
 		exports.current_apk_version = async (req, res) => {
 			var data = await Models.APKVersion.aggregate( [
-				{
-					$group: {
-						_id: {
-							INSERT_USER: "$INSERT_USER"
-						},
-						APK_VERSION: {
-							$first: "$APK_VERSION"
-						},
-						IMEI: {
-							$first: "$IMEI"
-						}
-					}
-				},
+				// {
+				// 	$group: {
+				// 		_id: {
+				// 			INSERT_USER: "$INSERT_USER"
+				// 		},
+				// 		APK_VERSION: {
+				// 			$first: "$APK_VERSION"
+				// 		},
+				// 		IMEI: {
+				// 			$first: "$IMEI"
+				// 		}
+				// 	}
+				// },
+				// {
+				// 	$project: {
+				// 		_id: 0,
+				// 		INSERT_USER: "$_id.INSERT_USER",
+				// 		APK_VERSION: 1,
+				// 		IMEI: 1
+				// 	}
+				// },
+				// {
+				// 	$match: {
+				// 		INSERT_USER: req.params.id
+				// 	}
+				// },
+				// {
+				// 	$sort: {
+				// 		INSERT_TIME: -1
+				// 	}
+				// }
 				{
 					$project: {
 						_id: 0,
-						INSERT_USER: "$_id.INSERT_USER",
+						INSERT_USER: 1,
 						APK_VERSION: 1,
 						IMEI: 1
 					}
@@ -249,11 +273,13 @@
 				},
 				{
 					$sort: {
-						INSERT_TIME: -1
+						INSERT_TIME: -1 
 					}
+				},
+				{
+					$limit: 1
 				}
 			] );
-
 			return res.send( {
 				status: true,
 				message: config.app.error_message.find_200,

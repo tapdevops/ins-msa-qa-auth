@@ -39,7 +39,8 @@
 			default: function() {
 				return 0;
 			}
-		}
+		},
+		FIREBASE_TOKEN: String
 	});
 	
 /*

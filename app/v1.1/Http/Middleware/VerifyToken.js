@@ -34,7 +34,13 @@
 				}
 				else {
 					req.auth = JWTDecode( req.token );
-					req.auth.LOCATION_CODE_GROUP = req.auth.LOCATION_CODE.split( ',' );
+					//cek apakah LOCATION_CODE lebih dari satu element
+					req.auth.LOCATION_CODE_GROUP = null;
+					let adaKoma = req.auth.LOCATION_CODE.indexOf( ',', 0 );
+					if ( adaKoma !== -1 ) {
+						req.auth.LOCATION_CODE_GROUP = req.auth.LOCATION_CODE.split( ',' );
+					}
+					console.log( req.auth.LOCATION_CODE_GROUP );
 					req.config = config;
 					next();
 				}
