@@ -368,12 +368,16 @@
                         
                     FileServer.unlinkSync( directory + '.lock' );
                     res.send( {
-                        message: 'Success!'
+                        status: true,
+                        message: 'Success!',
+                        data: []
                     } );
                 } catch ( err ) {
                     console.log( err );
                     res.send( {
-                        message: err
+                        status: false,
+                        message: err,
+                        data: []
                     } )
                 }
             } catch ( error ) {
@@ -387,7 +391,7 @@
             res.send( {
                 status: false,
                 message: 'Upload file dengan ekstensi .realm',
-                data: {}
+                data: []
             } )
         }
     }
