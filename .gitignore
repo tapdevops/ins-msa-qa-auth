@@ -2,5 +2,6 @@
 
 Dockerfile
 config/app.js
-node_modules/
+node_modules
 public/tmp/import-db-realm/*
+app/v1.1/Http/Controllers/ExportDBController.js
