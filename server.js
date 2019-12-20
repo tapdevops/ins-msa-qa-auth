@@ -88,14 +88,16 @@
 	// Routing Folder
 	App.use( '/files', Express.static( 'public' ) );
 
-	// Parse request of content-type - application/x-www-form-urlencoded
-	App.use( BodyParser.urlencoded( { extended: false } ) );
-
 	// Parse request of content-type - application/json
-	App.use( BodyParser.json() );
+	App.use( BodyParser.json( { limit: '50mb' } ) );
+
+	// Parse request of content-type - application/x-www-form-urlencoded
+	App.use( BodyParser.urlencoded( { extended: false, limit: '50mb' } ) );
 
 	// Add Express Upload to App
-	App.use( ExpressUpload() );
+	App.use( ExpressUpload( { 
+		limits: { fileSize: 50 * 1024 * 1024 } 
+	} ) );
 
 	// Setup Database
 	Mongoose.Promise = global.Promise;
