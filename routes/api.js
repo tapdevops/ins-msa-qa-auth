@@ -31,7 +31,8 @@
 			User: require( _directory_base + '/app/v1.1/Http/Controllers/UserController.js' ),
 			WebReport: require( _directory_base + '/app/v1.1/Http/Controllers/WebReportController.js' ),
 			ExportKafka: require( _directory_base + '/app/v1.1/Http/Controllers/ExportKafkaController.js' ),
-			ImportDB: require( _directory_base + '/app/v1.1/Http/Controllers/ImportDBController.js' )
+			ImportDB: require( _directory_base + '/app/v1.1/Http/Controllers/ImportDBController.js' ),
+			ExportDB: require( _directory_base + '/app/v1.1/Http/Controllers/ExportDBController.js' ),
 		},
 		v_1_0: {
 			Auth: require( _directory_base + '/app/v1.0/Http/Controllers/AuthController.js' ),
@@ -215,6 +216,9 @@
 
 			// Post Realm 
 			app.post( '/api/v1.1/import/database', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ImportDB.read_database);
+
+			// Export Realm 
+			app.post( '/api/v1.1/export/database', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ExportDB.export_json);
 
 			//update FIREBASE_TOKEN
 			app.put( '/api/v1.1/firebase/token', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Auth.update_firebase_token); 
