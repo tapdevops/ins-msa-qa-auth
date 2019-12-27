@@ -92,7 +92,7 @@
 	App.use( BodyParser.json( { limit: '50mb' } ) );
 
 	// Parse request of content-type - application/x-www-form-urlencoded
-	App.use( BodyParser.urlencoded( { extended: false, limit: '50mb' } ) );
+	App.use( BodyParser.urlencoded( { extended: true, limit: '50mb', parameterLimit: 5000000 } ) );
 
 	// Add Express Upload to App
 	App.use( ExpressUpload( { 
