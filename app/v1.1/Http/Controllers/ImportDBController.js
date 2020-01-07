@@ -217,6 +217,10 @@
                                     console.log( `INSPECTION HEADER ${err.message}` );
                                 } );
                             } )
+                        } else if ( result['TABLE_NAME'] === 'TR_GENBA_INSPECTION' ) {   
+                            result['DATA'].forEach( function ( rs ) {
+                                console.log( rs );
+                            } );
                         } else if( result['TABLE_NAME'] === 'TR_IMAGE' ) {
                             for ( let i = 0; i < result['DATA'].length; i++ ) {
                                 let dateNow = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
