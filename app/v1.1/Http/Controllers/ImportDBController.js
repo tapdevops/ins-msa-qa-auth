@@ -7,14 +7,13 @@
  |
  */
     const Realm = require( 'realm' );
-    const FileServer = require( 'fs' );
     const Terminal = require( 'child_process' ).execSync;
     const csvToJson = require( 'csvtojson' );
     const Helper = require( _directory_base + '/app/v1.1/Http/Libraries/Helper.js' );
     const Client = require( 'node-rest-client' ).Client;
     const client = new Client();
     const jsonfile = require( 'jsonfile' );
-
+    const fs = require( 'fs' );
     const ebccServiceUrl = config.app.url[config.app.env].microservice_ebcc_validation;
     const findingServiceUrl = config.app.url[config.app.env].microservice_finding;
     const inspectionServiceUrl = config.app.url[config.app.env].microservice_inspection;
@@ -29,8 +28,162 @@
             return res.send( {
                 status: false,
                 message: config.error_message.invalid_input + ' REQUEST FILES.',
+                data: []
+            } );
+        }
+        let file = req.files.JSON;
+        let filename = file.name;
+        if ( file.name.endsWith( '.json' ) ) {
+            let directory;
+            try {
+                directory = _directory_base + '/public/tmp/import-db-json/' + filename;
+                try {
+                    await file.mv( directory );
+                } catch ( error ) {
+                    console.log( error );
+                }
+                var results;
+                console.log( directory );
+                fs.readFile( directory, 'utf8', function ( err, data ) {
+                    if (err) throw err;
+                    results = JSON.parse(data);
+                    results.forEach( function ( result ) {
+                        if (result['TABLE_NAME'] === 'TR_FINDING') {
+                            result['DATA'].forEach(function ( rs ) {
+                                rs.DUE_DATE = rs.DUE_DATE === "" ? 0 : parseInt( Helper.date_format( rs.DUE_DATE, 'YYYYMMDDhhmmss' ) );
+                                rs.PROGRESS = parseInt( rs.PROGRESS );
+                                rs.INSERT_TIME = parseInt( Helper.date_format( rs.INSERT_TIME, 'YYYYMMDDhhmmss' ) );
+                                rs.UPDATE_TIME = rs.UPDATE_TIME === "" ? 0 : parseInt( Helper.date_format( rs.UPDATE_TIME, 'YYYYMMDDhhmmss' ) );
+                                rs.END_TIME = rs.END_TIME === "" ? 0 : parseInt( Helper.date_format( rs.END_TIME, 'YYYYMMDDhhmmss' ) );
+                                rs.RATING_VALUE = parseInt( rs.RATING_VALUE );
+                                rs.SYNC_IMAGE = undefined;
+                                rs.STATUS_SYNC = undefined;
+                                rs.STATUS = undefined;
+                                rs.syncImage = undefined;
+                                rs.DELETE_USER = "";
+                                rs.DELETE_TIME = 0;
+
+                                let args = {
+                                    data: rs ,
+                                    headers: { 
+                                        "Content-Type": "application/json", 
+                                        "Authorization": req.headers.authorization
+                                    }
+                                }
+                                let request = client.post( findingServiceUrl + '/api/v1.1/finding', args, function ( data, response ) {
+                                    console.log( 'sukses simpan finding' );
+                                } );
+                                request.on( 'error', ( err ) => {
+                                    console.log( `FINDING ${err.message}` );
+                                } );
+                            } );
+                        } else if ( result['TABLE_NAME'] ===  'TM_INSPECTION_TRACK' ) {
+                            result['DATA'].forEach( function ( rs ) {
+                                rs.INSERT_TIME = parseInt( Helper.date_format( rs.INSERT_TIME, 'YYYYMMDDhhmmss' ) );
+                                rs.DATE_TRACK = parseInt( Helper.date_format( rs.DATE_TRACK, 'YYYYMMDDhhmmss' ) );
+                                rs.SYNC_TIME = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
+                                rs.STATUS_SYNC = undefined;
+                                rs.UPDATE_TIME = 0;
+                                rs.UPDATE_USER = "";
+                                rs.DELETE_TIME = 0;
+                                rs.DELETE_USER = "";
+                                rs.STATUS_TRACK = 1;
+
+                                let args = {
+                                    data: rs ,
+                                    headers: { 
+                                        "Content-Type": "application/json", 
+                                        "Authorization": req.headers.authorization
+                                    }
+                                }
+                                let request = client.post( inspectionServiceUrl + '/api/v1.1/tracking', args, function ( data, response ) {
+                                    console.log( 'sukses simpan inspection track' );
+                                } );
+                                request.on( 'error', ( err ) => {
+                                    console.log( `INSPECTION TRACK: ${err.message}` );
+                                } );
+                            } );
+                        } else if( result['TABLE_NAME'] === 'TR_IMAGE' ) {
+                            for ( let i = 0; i < result['DATA'].length; i++ ) {
+                                let dateNow = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
+                                let dateSubstring = dateNow.toString().substring( 0, 8 );
+                                const trCodeInitial = [ 'F', 'V', 'I' ];
+                                const imagePath = [ 'image-finding/backup-' + dateSubstring, 
+                                                    'image-ebcc/backup-' + dateSubstring,
+                                                    'image-inspeksi/backup-' + dateSubstring ];
+                                for ( let j = 0; j < trCodeInitial.length; j++ ) {
+                                    if ( result['DATA'][i].TR_CODE.startsWith( trCodeInitial[j] ) ) {
+                                        result['DATA'][i].IMAGE_PATH = imagePath[j];
+                                    }
+                                }
+                                result['DATA'][i].MIME_TYPE = "image/jpeg";
+                                result['DATA'][i].SYNC_TIME = dateNow
+                                result['DATA'][i].INSERT_TIME = result['DATA'][i].INSERT_TIME === "" ? "" : parseInt( Helper.date_format( result['DATA'][i].INSERT_TIME, 'YYYYMMDDhhmmss' ) );
+                                result['DATA'][i].UPDATE_TIME = 0;
+                                result['DATA'][i].DELETE_TIME = 0;
+                                result['DATA'][i].UPDATE_USER = "";
+                                result['DATA'][i].DELETE_USER = "";
+                                result['DATA'][i].STATUS_SYNC = "Y";
+                                result['DATA'][i].IMAGE_URL = undefined;
+
+                                let dataResult = result['DATA'][i];
+                                let args = {
+                                    data: dataResult,
+                                    headers: { 
+                                        "Content-Type": "application/json", 
+                                        "Authorization": req.headers.authorization
+                                    }
+                                }
+                                let request = client.post( imageServiceUrl + '/api/v1.1/auth/upload/image/foto-transaksi', args, function ( data, response ) {
+                                    console.log( 'sukses simpan image' );
+                                } );
+                                request.on( 'error', ( err ) => {
+                                    console.log( `IMAGE ${err}` );
+                                } );
+                            } 
+                        }
+                    } );
+                } );
+            } catch ( err ) {
+                res.send( {
+                    status: false,
+                    message: error.message,
+                    data: []
+                } )
+            } finally {
+                if ( directory ) {
+                    fs.unlinkSync( directory );
+                }
+            }
+        } else {
+            res.send( {
+                status: false,
+                message: 'Upload file dengan ekstensi .json',
+                data: []
+            } );
+        }
+    }
+    /*exports.read_database_backup = async ( req, res ) => {
+        if ( !req.files ) {
+            return res.send( {
+                status: false,
+                message: config.error_message.invalid_input + ' REQUEST FILES.',
                 data: {}
             } );
+        }
+        let file = req.files.JSON;
+        let filename = file.name;
+        if ( file.name.endsWith( '.json' ) ) {
+            try {
+                let directory = _directory_base + '/public/tmp/import-db-realm/' + filename;
+                try {
+                    await file.mv( directory );
+                } catch ( error ) {
+
+                }
+            } catch ( err ) {
+                console.log( err );
+            }
         }
         let headers = {
             headersEBCCHeader : 'EBCC_VALIDATION_CODE,WERKS,AFD_CODE,BLOCK_CODE,NO_TPH,STATUS_TPH_SCAN,ALASAN_MANUAL,LAT_TPH,LON_TPH,DELIVERY_CODE,STATUS_DELIVERY_CODE,TOTAL_JANJANG,STATUS_SYNC,SYNC_TIME,INSERT_USER,INSERT_TIME,SYNC_IMAGE,SYNC_DETAIL\n',
@@ -77,7 +230,7 @@
                         if ( tables[i] === 'TM_INSPECTION_TRACK' ) {
                             //EDIT FIELD TM_TRACK_INSPECTION
                             for ( let i = 0; i < result.length; i++ ) {
-                                result[i].INSERT_TIME = parseInt( Helper.date_format( result[i].INSERT_TIME, 'YYYYMMDDhhmmss' ) );
+                                rs.INSERT_TIME = parseInt( Helper.date_format( result[i].INSERT_TIME, 'YYYYMMDDhhmmss' ) );
                                 result[i].DATE_TRACK = parseInt( Helper.date_format( result[i].DATE_TRACK, 'YYYYMMDDhhmmss' ) );
                                 result[i].SYNC_TIME = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
                                 result[i].STATUS_SYNC = undefined;
@@ -394,4 +547,4 @@
                 data: []
             } )
         }
-    }
+    }*/

@@ -19,7 +19,7 @@
 		PJS: require( _directory_base + '/app/v1.1/Http/Models/PJSModel.js' ),
 		UserAuth: require( _directory_base + '/app/v1.1/Http/Models/UserAuthModel.js' ),
 		UserAuthorization: require( _directory_base + '/app/v1.1/Http/Models/UserAuthorizationModel.js' ),
-		ViewUserAuth: require( _directory_base + '/app/v1.1/Http/Models/ViewUserAuthModel.js' )
+		ViewUserAuth: require( _directory_base + '/app/v1.1/Http/Models/ViewUserAuthModel.js' ),
 	}
 
 /*
@@ -33,7 +33,7 @@
 	 * berdasarkan roles.
 	 * --------------------------------------------------------------------------
 	 */
-		exports.user_data = ( req, res ) => {
+		exports.user_data = async ( req, res ) => {
 			Models.UserAuth.aggregate( [
 				{
 					"$match": {
@@ -58,6 +58,34 @@
 					data: data
 				} );
 			} )
+
+			/* GET EMPLOYEE_NIK, LOCATION_CODE, AND EMPLOYEE_NAME */
+			
+			// try { 
+			// 	let result = [];
+			// 	let data = await Models.ViewUserAuth.aggregate( [
+			// 		{
+			// 			$project: {
+			// 				EMPLOYEE_NIK: 1,
+			// 				LOCATION_CODE: 1,
+			// 				HRIS_FULLNAME: 1,
+			// 				PJS_FULLNAME: 1
+			// 			}
+			// 		}
+			// 	] );
+			// 	data.forEach( function ( dt ) {
+			// 		result.push( {
+			// 			NIK: dt.EMPLOYEE_NIK,
+			// 			NAME: dt.HRIS_FULLNAME ? dt.HRIS_FULLNAME : dt.PJS_FULLNAME,
+			// 			LOCATION_CODE: dt.LOCATION_CODE
+			// 		} )
+			// 	} )
+			// 	res.send( {
+			// 		data: result
+			// 	} );
+			// } catch ( err ) {
+			// 	console.log( err );
+			// }
 			
 		}
 
