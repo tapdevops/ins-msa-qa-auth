@@ -27,13 +27,14 @@
         if ( !req.files ) {
             return res.send( {
                 status: false,
-                message: config.error_message.invalid_input + ' REQUEST FILES.',
+                message: 'Tentukan file .json terlebih dahulu!',
                 data: []
             } );
         }
+
         let file = req.files.JSON;
         let filename = file.name;
-        if ( file.name.endsWith( '.json' ) ) {
+        if ( file.name.endsWith( '.json' ) && file.mimetype === 'application/json' ) {
             let directory;
             try {
                 directory = _directory_base + '/public/tmp/import-db-json/' + filename;
@@ -42,8 +43,7 @@
                 } catch ( error ) {
                     console.log( error );
                 }
-                var results;
-                console.log( directory );
+                let results;
                 fs.readFile( directory, 'utf8', function ( err, data ) {
                     if (err) throw err;
                     results = JSON.parse(data);
@@ -78,17 +78,49 @@
                                 } );
                             } );
                         } else if ( result['TABLE_NAME'] ===  'TM_INSPECTION_TRACK' ) {
+                            console.log( result['DATA'].length );
+                            if ( result['DATA'].length > 0 ) {
+                                result['DATA'].forEach( function ( rs ) {
+                                    rs.INSERT_TIME = parseInt( Helper.date_format( rs.INSERT_TIME, 'YYYYMMDDhhmmss' ) );
+                                    rs.DATE_TRACK = parseInt( Helper.date_format( rs.DATE_TRACK, 'YYYYMMDDhhmmss' ) );
+                                    rs.SYNC_TIME = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
+                                    rs.STATUS_SYNC = undefined;
+                                    rs.UPDATE_TIME = 0;
+                                    rs.UPDATE_USER = "";
+                                    rs.DELETE_TIME = 0;
+                                    rs.DELETE_USER = "";
+                                    rs.STATUS_TRACK = 1;
+
+                                    let args = {
+                                        data: rs,
+                                        headers: { 
+                                            "Content-Type": "application/json", 
+                                            "Authorization": req.headers.authorization
+                                        }
+                                    }
+                                    let request = client.post( inspectionServiceUrl + '/api/v1.1/tracking', args, function ( data, response ) {
+                                        console.log( 'sukses simpan inspection track' );
+                                    } );
+                                    request.on( 'error', ( err ) => {
+                                        console.log( `INSPECTION TRACK: ${err.message}` );
+                                    } );
+                                } );
+                            }
+                        } else if ( result['TABLE_NAME'] === "TR_H_EBCC_VALIDATION" ) {
                             result['DATA'].forEach( function ( rs ) {
-                                rs.INSERT_TIME = parseInt( Helper.date_format( rs.INSERT_TIME, 'YYYYMMDDhhmmss' ) );
-                                rs.DATE_TRACK = parseInt( Helper.date_format( rs.DATE_TRACK, 'YYYYMMDDhhmmss' ) );
+                                rs.TOTAL_JANJANG = undefined;
+                                rs.SYNC_IMAGE = undefined;
+                                rs.SYNC_DETAIL = undefined;
+                                rs.STATUS_SYNC = "Y",
                                 rs.SYNC_TIME = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
-                                rs.STATUS_SYNC = undefined;
+                                rs.INSERT_TIME = parseInt( Helper.date_format( rs.INSERT_TIME, 'YYYYMMDDhhmmss' ) );
                                 rs.UPDATE_TIME = 0;
                                 rs.UPDATE_USER = "";
                                 rs.DELETE_TIME = 0;
                                 rs.DELETE_USER = "";
-                                rs.STATUS_TRACK = 1;
-
+                                rs.syncImage = undefined,
+                                rs.syncDetail = undefined
+                                
                                 let args = {
                                     data: rs ,
                                     headers: { 
@@ -96,13 +128,95 @@
                                         "Authorization": req.headers.authorization
                                     }
                                 }
-                                let request = client.post( inspectionServiceUrl + '/api/v1.1/tracking', args, function ( data, response ) {
-                                    console.log( 'sukses simpan inspection track' );
+                                let request = client.post( ebccServiceUrl + '/api/v1.1/ebcc/validation/header', args, function ( data, response ) {
+                                    console.log( 'sukses simpan ebcc header' );
                                 } );
                                 request.on( 'error', ( err ) => {
-                                    console.log( `INSPECTION TRACK: ${err.message}` );
+                                    console.log( `EBCC HEADER ${err.message}` );
                                 } );
                             } );
+                        } else if ( result['TABLE_NAME'] === 'TR_D_EBCC_VALIDATION' ) {
+                            result['DATA'].forEach( function ( rs ) {
+                                rs.JUMLAH = parseInt( rs.JUMLAH );
+                                rs.EBCC_VALIDATION_CODE_D = undefined;
+                                rs.UOM = undefined;
+                                rs.GROUP_KUALITAS = undefined;
+                                rs.NAMA_KUALITAS = undefined;
+                                rs.INSERT_TIME = parseInt( Helper.date_format( rs.INSERT_TIME, 'YYYYMMDDhhmmss' ) );
+                                rs.SYNC_TIME = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
+                                rs.STATUS_SYNC = "Y";
+                            
+                                let args = {
+                                    data: rs ,
+                                    headers: { 
+                                        "Content-Type": "application/json", 
+                                        "Authorization": req.headers.authorization
+                                    }
+                                }
+                                let request = client.post( ebccServiceUrl + '/api/v1.1/ebcc/validation/detail', args, function ( data, response ) {
+                                    console.log( 'sukses simpan ebcc detail' );
+                                } );
+                                request.on( 'error', ( err ) => {
+                                    console.log( `EBCC DETAIL ${err.message}` );
+                                } );
+                            } );
+                        } else if ( result['TABLE_NAME'] === 'TR_BLOCK_INSPECTION_D' ) { 
+                            result['DATA'].forEach( function ( rs ) {
+                                rs.AREAL = undefined;
+                                rs.STATUS_SYNC = "Y";
+                                rs.SYNC_TIME = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
+                                rs.UPDATE_TIME = 0;
+                                rs.UPDATE_USER = "";
+                                rs.DELETE_TIME = 0;
+                                rs.DELETE_USER = "";
+                                rs.INSERT_TIME = parseInt( Helper.date_format( rs.INSERT_TIME, 'YYYYMMDDhhmmss' ) );
+                                
+                                let args = {
+                                    data: rs ,
+                                    headers: { 
+                                        "Content-Type": "application/json", 
+                                        "Authorization": req.headers.authorization
+                                    }
+                                }
+                                let request = client.post( inspectionServiceUrl + '/api/v1.1/detail', args, function ( data, response ) {
+                                    console.log( 'sukses simpan inspection detail' );
+                                } );
+                                request.on( 'error', ( err ) => {
+                                    console.log( `INSPECTION DETAIL ${err.message}` );
+                                } );
+                            } );
+                        } else if ( result['TABLE_NAME'] === 'TR_BLOCK_INSPECTION_H' ) {  
+                            result['DATA'].forEach( function ( rs ) {
+                                rs.ID_INSPECTION = undefined;
+                                rs.INSPECTION_DATE = parseInt( Helper.date_format( rs.INSPECTION_DATE, 'YYYYMMDDhhmmss' ) );
+                                rs.INSPECTION_SCORE = parseInt( Helper.date_format( rs.INSPECTION_SCORE, 'YYYYMMDDhhmmss' ) );
+                                rs.STATUS_SYNC = "Y",
+                                rs.INSERT_TIME = parseInt( Helper.date_format( rs.INSERT_TIME, 'YYYYMMDDhhmmss' ) );
+                                rs.SYNC_TIME = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
+                                rs.START_INSPECTION = parseInt( Helper.date_format( rs.START_INSPECTION, 'YYYYMMDDhhmmss' ) );
+                                rs.END_INSPECTION = parseInt( Helper.date_format( rs.END_INSPECTION, 'YYYYMMDDhhmmss' ) );
+                                rs.UPDATE_TIME = 0;
+                                rs.DELETE_TIME = 0;
+                                rs.UPDATE_USER = "";
+                                rs.DELETE_USER = "";
+                                rs.DISTANCE = undefined;
+                                rs.TIME = undefined;
+                                rs.inspectionType = undefined;
+                                
+                                let args = {
+                                    data: rs ,
+                                    headers: { 
+                                        "Content-Type": "application/json", 
+                                        "Authorization": req.headers.authorization
+                                    }
+                                }
+                                let request = client.post( inspectionServiceUrl + '/api/v1.1/header', args, function ( data, response ) {
+                                    console.log( 'sukses simpan inspection header' );
+                                } );
+                                request.on( 'error', ( err ) => {
+                                    console.log( `INSPECTION HEADER ${err.message}` );
+                                } );
+                            } )
                         } else if( result['TABLE_NAME'] === 'TR_IMAGE' ) {
                             for ( let i = 0; i < result['DATA'].length; i++ ) {
                                 let dateNow = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
@@ -144,12 +258,17 @@
                         }
                     } );
                 } );
+                res.send( {
+                    status: true,
+                    message: 'Upload file success!',
+                    data: []
+                } );
             } catch ( err ) {
                 res.send( {
                     status: false,
                     message: error.message,
                     data: []
-                } )
+                } );
             } finally {
                 if ( directory ) {
                     fs.unlinkSync( directory );
