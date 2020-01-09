@@ -331,7 +331,7 @@
                 }
             }
         } else {
-            res.send( {
+            return res.send( {
                 status: false,
                 message: 'Upload file dengan ekstensi .json',
                 data: []
