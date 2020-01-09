@@ -46,41 +46,44 @@
                 let results;
                 fs.readFile( directory, 'utf8', function ( err, data ) {
                     if (err) throw err;
-                    results = JSON.parse(data);
+                    results = JSON.parse( data );
                     results.forEach( function ( result ) {
                         if (result['TABLE_NAME'] === 'TR_FINDING') {
-                            result['DATA'].forEach(function ( rs ) {
-                                rs.DUE_DATE = rs.DUE_DATE === "" ? 0 : parseInt( Helper.date_format( rs.DUE_DATE, 'YYYYMMDDhhmmss' ) );
-                                rs.PROGRESS = parseInt( rs.PROGRESS );
-                                rs.INSERT_TIME = parseInt( Helper.date_format( rs.INSERT_TIME, 'YYYYMMDDhhmmss' ) );
-                                rs.UPDATE_TIME = rs.UPDATE_TIME === "" ? 0 : parseInt( Helper.date_format( rs.UPDATE_TIME, 'YYYYMMDDhhmmss' ) );
-                                rs.END_TIME = rs.END_TIME === "" ? 0 : parseInt( Helper.date_format( rs.END_TIME, 'YYYYMMDDhhmmss' ) );
-                                rs.RATING_VALUE = parseInt( rs.RATING_VALUE );
-                                rs.SYNC_IMAGE = undefined;
-                                rs.STATUS_SYNC = undefined;
-                                rs.STATUS = undefined;
-                                rs.syncImage = undefined;
-                                rs.DELETE_USER = "";
-                                rs.DELETE_TIME = 0;
-
-                                let args = {
-                                    data: rs ,
-                                    headers: { 
-                                        "Content-Type": "application/json", 
-                                        "Authorization": req.headers.authorization
+                            let data = realmListToArrayObject( result['DATA'] );
+                            data.then( function ( dt ) {
+                                dt.forEach(function ( rs ) {
+                                    rs.DUE_DATE = rs.DUE_DATE === "" ? 0 : parseInt( Helper.date_format( rs.DUE_DATE, 'YYYYMMDDhhmmss' ) );
+                                    rs.PROGRESS = parseInt( rs.PROGRESS );
+                                    rs.INSERT_TIME = parseInt( Helper.date_format( rs.INSERT_TIME, 'YYYYMMDDhhmmss' ) );
+                                    rs.UPDATE_TIME = rs.UPDATE_TIME === "" ? 0 : parseInt( Helper.date_format( rs.UPDATE_TIME, 'YYYYMMDDhhmmss' ) );
+                                    rs.END_TIME = rs.END_TIME === "" ? 0 : parseInt( Helper.date_format( rs.END_TIME, 'YYYYMMDDhhmmss' ) );
+                                    rs.RATING_VALUE = parseInt( rs.RATING_VALUE );
+                                    rs.SYNC_IMAGE = undefined;
+                                    rs.STATUS_SYNC = undefined;
+                                    rs.STATUS = undefined;
+                                    rs.syncImage = undefined;
+                                    rs.DELETE_USER = "";
+                                    rs.DELETE_TIME = 0;
+                                    
+                                    let args = {
+                                        data: rs ,
+                                        headers: { 
+                                            "Content-Type": "application/json", 
+                                            "Authorization": req.headers.authorization
+                                        }
                                     }
-                                }
-                                let request = client.post( findingServiceUrl + '/api/v1.1/finding', args, function ( data, response ) {
-                                    console.log( 'sukses simpan finding' );
-                                } );
-                                request.on( 'error', ( err ) => {
-                                    console.log( `FINDING ${err.message}` );
+                                    let request = client.post( findingServiceUrl + '/api/v1.1/finding', args, function ( data, response ) {
+                                        console.log( 'sukses simpan finding' );
+                                    } );
+                                    request.on( 'error', ( err ) => {
+                                        console.log( `FINDING ${err.message}` );
+                                    } );
                                 } );
                             } );
                         } else if ( result['TABLE_NAME'] ===  'TM_INSPECTION_TRACK' ) {
-                            console.log( result['DATA'].length );
-                            if ( result['DATA'].length > 0 ) {
-                                result['DATA'].forEach( function ( rs ) {
+                            let data = realmListToArrayObject( result['DATA'] );
+                            data.then( function ( dt ) {
+                                dt.forEach( function ( rs ) {
                                     rs.INSERT_TIME = parseInt( Helper.date_format( rs.INSERT_TIME, 'YYYYMMDDhhmmss' ) );
                                     rs.DATE_TRACK = parseInt( Helper.date_format( rs.DATE_TRACK, 'YYYYMMDDhhmmss' ) );
                                     rs.SYNC_TIME = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
@@ -105,161 +108,210 @@
                                         console.log( `INSPECTION TRACK: ${err.message}` );
                                     } );
                                 } );
-                            }
+                            } );     
                         } else if ( result['TABLE_NAME'] === "TR_H_EBCC_VALIDATION" ) {
-                            result['DATA'].forEach( function ( rs ) {
-                                rs.TOTAL_JANJANG = undefined;
-                                rs.SYNC_IMAGE = undefined;
-                                rs.SYNC_DETAIL = undefined;
-                                rs.STATUS_SYNC = "Y",
-                                rs.SYNC_TIME = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
-                                rs.INSERT_TIME = parseInt( Helper.date_format( rs.INSERT_TIME, 'YYYYMMDDhhmmss' ) );
-                                rs.UPDATE_TIME = 0;
-                                rs.UPDATE_USER = "";
-                                rs.DELETE_TIME = 0;
-                                rs.DELETE_USER = "";
-                                rs.syncImage = undefined,
-                                rs.syncDetail = undefined
-                                
-                                let args = {
-                                    data: rs ,
-                                    headers: { 
-                                        "Content-Type": "application/json", 
-                                        "Authorization": req.headers.authorization
+                            let data = realmListToArrayObject( result['DATA'] );
+                            data.then( function ( dt ) {
+                                dt.forEach( function ( rs ) {
+                                    rs.TOTAL_JANJANG = undefined;
+                                    rs.SYNC_IMAGE = undefined;
+                                    rs.SYNC_DETAIL = undefined;
+                                    rs.STATUS_SYNC = "Y",
+                                    rs.SYNC_TIME = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
+                                    rs.INSERT_TIME = parseInt( Helper.date_format( rs.INSERT_TIME, 'YYYYMMDDhhmmss' ) );
+                                    rs.UPDATE_TIME = 0;
+                                    rs.UPDATE_USER = "";
+                                    rs.DELETE_TIME = 0;
+                                    rs.DELETE_USER = "";
+                                    rs.syncImage = undefined,
+                                    rs.syncDetail = undefined
+                                    
+                                    let args = {
+                                        data: rs ,
+                                        headers: { 
+                                            "Content-Type": "application/json", 
+                                            "Authorization": req.headers.authorization
+                                        }
                                     }
-                                }
-                                let request = client.post( ebccServiceUrl + '/api/v1.1/ebcc/validation/header', args, function ( data, response ) {
-                                    console.log( 'sukses simpan ebcc header' );
-                                } );
-                                request.on( 'error', ( err ) => {
-                                    console.log( `EBCC HEADER ${err.message}` );
+                                    let request = client.post( ebccServiceUrl + '/api/v1.1/ebcc/validation/header', args, function ( data, response ) {
+                                        console.log( 'sukses simpan ebcc header' );
+                                    } );
+                                    request.on( 'error', ( err ) => {
+                                        console.log( `EBCC HEADER ${err.message}` );
+                                    } );
                                 } );
                             } );
                         } else if ( result['TABLE_NAME'] === 'TR_D_EBCC_VALIDATION' ) {
-                            result['DATA'].forEach( function ( rs ) {
-                                rs.JUMLAH = parseInt( rs.JUMLAH );
-                                rs.EBCC_VALIDATION_CODE_D = undefined;
-                                rs.UOM = undefined;
-                                rs.GROUP_KUALITAS = undefined;
-                                rs.NAMA_KUALITAS = undefined;
-                                rs.INSERT_TIME = parseInt( Helper.date_format( rs.INSERT_TIME, 'YYYYMMDDhhmmss' ) );
-                                rs.SYNC_TIME = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
-                                rs.STATUS_SYNC = "Y";
-                            
-                                let args = {
-                                    data: rs ,
-                                    headers: { 
-                                        "Content-Type": "application/json", 
-                                        "Authorization": req.headers.authorization
+                            let data = realmListToArrayObject( result['DATA'] );
+                            data.then( function ( dt ) {
+                                dt.forEach( function ( rs ) {
+                                    rs.JUMLAH = parseInt( rs.JUMLAH );
+                                    rs.EBCC_VALIDATION_CODE_D = undefined;
+                                    rs.UOM = undefined;
+                                    rs.GROUP_KUALITAS = undefined;
+                                    rs.NAMA_KUALITAS = undefined;
+                                    rs.INSERT_TIME = parseInt( Helper.date_format( rs.INSERT_TIME, 'YYYYMMDDhhmmss' ) );
+                                    rs.SYNC_TIME = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
+                                    rs.STATUS_SYNC = "Y";
+                                
+                                    let args = {
+                                        data: rs ,
+                                        headers: { 
+                                            "Content-Type": "application/json", 
+                                            "Authorization": req.headers.authorization
+                                        }
                                     }
-                                }
-                                let request = client.post( ebccServiceUrl + '/api/v1.1/ebcc/validation/detail', args, function ( data, response ) {
-                                    console.log( 'sukses simpan ebcc detail' );
-                                } );
-                                request.on( 'error', ( err ) => {
-                                    console.log( `EBCC DETAIL ${err.message}` );
+                                    let request = client.post( ebccServiceUrl + '/api/v1.1/ebcc/validation/detail', args, function ( data, response ) {
+                                        console.log( 'sukses simpan ebcc detail' );
+                                    } );
+                                    request.on( 'error', ( err ) => {
+                                        console.log( `EBCC DETAIL ${err.message}` );
+                                    } );
                                 } );
                             } );
                         } else if ( result['TABLE_NAME'] === 'TR_BLOCK_INSPECTION_D' ) { 
-                            result['DATA'].forEach( function ( rs ) {
-                                rs.AREAL = undefined;
-                                rs.STATUS_SYNC = "Y";
-                                rs.SYNC_TIME = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
-                                rs.UPDATE_TIME = 0;
-                                rs.UPDATE_USER = "";
-                                rs.DELETE_TIME = 0;
-                                rs.DELETE_USER = "";
-                                rs.INSERT_TIME = parseInt( Helper.date_format( rs.INSERT_TIME, 'YYYYMMDDhhmmss' ) );
-                                
-                                let args = {
-                                    data: rs ,
-                                    headers: { 
-                                        "Content-Type": "application/json", 
-                                        "Authorization": req.headers.authorization
+                            let data = realmListToArrayObject( result['DATA'] );
+                            data.then( function ( dt ) {
+                                dt.forEach( function ( rs ) {
+                                    rs.AREAL = undefined;
+                                    rs.STATUS_SYNC = "Y";
+                                    rs.SYNC_TIME = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
+                                    rs.UPDATE_TIME = 0;
+                                    rs.UPDATE_USER = "";
+                                    rs.DELETE_TIME = 0;
+                                    rs.DELETE_USER = "";
+                                    rs.INSERT_TIME = parseInt( Helper.date_format( rs.INSERT_TIME, 'YYYYMMDDhhmmss' ) );
+                                    
+                                    let args = {
+                                        data: rs ,
+                                        headers: { 
+                                            "Content-Type": "application/json", 
+                                            "Authorization": req.headers.authorization
+                                        }
                                     }
-                                }
-                                let request = client.post( inspectionServiceUrl + '/api/v1.1/detail', args, function ( data, response ) {
-                                    console.log( 'sukses simpan inspection detail' );
-                                } );
-                                request.on( 'error', ( err ) => {
-                                    console.log( `INSPECTION DETAIL ${err.message}` );
+                                    let request = client.post( inspectionServiceUrl + '/api/v1.1/detail', args, function ( data, response ) {
+                                        console.log( 'sukses simpan inspection detail' );
+                                    } );
+                                    request.on( 'error', ( err ) => {
+                                        console.log( `INSPECTION DETAIL ${err.message}` );
+                                    } );
                                 } );
                             } );
                         } else if ( result['TABLE_NAME'] === 'TR_BLOCK_INSPECTION_H' ) {  
-                            result['DATA'].forEach( function ( rs ) {
-                                rs.ID_INSPECTION = undefined;
-                                rs.INSPECTION_DATE = parseInt( Helper.date_format( rs.INSPECTION_DATE, 'YYYYMMDDhhmmss' ) );
-                                rs.INSPECTION_SCORE = parseInt( Helper.date_format( rs.INSPECTION_SCORE, 'YYYYMMDDhhmmss' ) );
-                                rs.STATUS_SYNC = "Y",
-                                rs.INSERT_TIME = parseInt( Helper.date_format( rs.INSERT_TIME, 'YYYYMMDDhhmmss' ) );
-                                rs.SYNC_TIME = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
-                                rs.START_INSPECTION = parseInt( Helper.date_format( rs.START_INSPECTION, 'YYYYMMDDhhmmss' ) );
-                                rs.END_INSPECTION = parseInt( Helper.date_format( rs.END_INSPECTION, 'YYYYMMDDhhmmss' ) );
-                                rs.UPDATE_TIME = 0;
-                                rs.DELETE_TIME = 0;
-                                rs.UPDATE_USER = "";
-                                rs.DELETE_USER = "";
-                                rs.DISTANCE = undefined;
-                                rs.TIME = undefined;
-                                rs.inspectionType = undefined;
-                                
-                                let args = {
-                                    data: rs ,
-                                    headers: { 
-                                        "Content-Type": "application/json", 
-                                        "Authorization": req.headers.authorization
+                            let data = realmListToArrayObject( result['DATA'] );
+                            data.then( function ( dt ) {
+                                dt.forEach( function ( rs ) {
+                                    rs.ID_INSPECTION = undefined;
+                                    rs.INSPECTION_DATE = parseInt( Helper.date_format( rs.INSPECTION_DATE, 'YYYYMMDDhhmmss' ) );
+                                    rs.INSPECTION_SCORE = parseInt( Helper.date_format( rs.INSPECTION_SCORE, 'YYYYMMDDhhmmss' ) );
+                                    rs.STATUS_SYNC = "Y",
+                                    rs.INSERT_TIME = parseInt( Helper.date_format( rs.INSERT_TIME, 'YYYYMMDDhhmmss' ) );
+                                    rs.SYNC_TIME = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
+                                    rs.START_INSPECTION = parseInt( Helper.date_format( rs.START_INSPECTION, 'YYYYMMDDhhmmss' ) );
+                                    rs.END_INSPECTION = parseInt( Helper.date_format( rs.END_INSPECTION, 'YYYYMMDDhhmmss' ) );
+                                    rs.UPDATE_TIME = 0;
+                                    rs.DELETE_TIME = 0;
+                                    rs.UPDATE_USER = "";
+                                    rs.DELETE_USER = "";
+                                    rs.DISTANCE = undefined;
+                                    rs.TIME = undefined;
+                                    rs.inspectionType = undefined;
+                                    
+                                    let args = {
+                                        data: rs ,
+                                        headers: { 
+                                            "Content-Type": "application/json", 
+                                            "Authorization": req.headers.authorization
+                                        }
                                     }
-                                }
-                                let request = client.post( inspectionServiceUrl + '/api/v1.1/header', args, function ( data, response ) {
-                                    console.log( 'sukses simpan inspection header' );
+                                    let request = client.post( inspectionServiceUrl + '/api/v1.1/header', args, function ( data, response ) {
+                                        console.log( 'sukses simpan inspection header' );
+                                    } );
+                                    request.on( 'error', ( err ) => {
+                                        console.log( `INSPECTION HEADER ${err.message}` );
+                                    } );
                                 } );
-                                request.on( 'error', ( err ) => {
-                                    console.log( `INSPECTION HEADER ${err.message}` );
-                                } );
-                            } )
+                            } );
                         } else if ( result['TABLE_NAME'] === 'TR_GENBA_INSPECTION' ) {   
-                            result['DATA'].forEach( function ( rs ) {
-                                console.log( rs );
+                            let data = realmListToArrayObject( result['DATA'] );
+                            data.then( function ( dt ) {
+                                if ( dt ) {
+                                    dt.forEach( function ( result ) {
+                                        let resultDataGenba = [];
+                                        let genbaUser = realmListToArrayObject( result.GENBA_USER );
+                                        if ( genbaUser ) {
+                                            let userAuthCode = [];
+                                            genbaUser.then( function ( rs ) {
+                                                rs.forEach( function ( r ) {
+                                                    userAuthCode.push( r.USER_AUTH_CODE );
+                                                } );
+                                                resultDataGenba.push( {
+                                                    BLOCK_INSPECTION_CODE: result.BLOCK_INSPECTION_CODE,
+                                                    GENBA_USER: userAuthCode
+                                                } );
+                                                resultDataGenba = resultDataGenba[0];
+                                                let args = {
+                                                    data: resultDataGenba,
+                                                    headers: { 
+                                                        "Content-Type": "application/json", 
+                                                        "Authorization": req.headers.authorization
+                                                    }
+                                                }
+                                                if ( userAuthCode.length > 0 ) {
+                                                    let request = client.post( inspectionServiceUrl + '/api/v1.1/genba', args, function ( data, response ) {
+                                                        console.log( 'sukses simpan inspection genba' );
+                                                    } );
+                                                    request.on( 'error', ( err ) => {
+                                                        console.log( `INSPECTION GENBA ${err.message}` );
+                                                    } );
+                                                }
+                                            } );
+                                        }
+                                    } );
+                                }
                             } );
                         } else if( result['TABLE_NAME'] === 'TR_IMAGE' ) {
-                            for ( let i = 0; i < result['DATA'].length; i++ ) {
+                            let results = realmListToArrayObject( result['DATA'] );
+                            results.then( function ( data ) {
                                 let dateNow = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
                                 let dateSubstring = dateNow.toString().substring( 0, 8 );
                                 const trCodeInitial = [ 'F', 'V', 'I' ];
                                 const imagePath = [ 'image-finding/backup-' + dateSubstring, 
                                                     'image-ebcc/backup-' + dateSubstring,
                                                     'image-inspeksi/backup-' + dateSubstring ];
-                                for ( let j = 0; j < trCodeInitial.length; j++ ) {
-                                    if ( result['DATA'][i].TR_CODE.startsWith( trCodeInitial[j] ) ) {
-                                        result['DATA'][i].IMAGE_PATH = imagePath[j];
+                                for ( let i = 0; i < data.length; i++ ) {
+                                    for ( let j = 0; j < trCodeInitial.length; j++ ) {
+                                        if ( data[i].TR_CODE.startsWith( trCodeInitial[j] ) ) {
+                                            data[i].IMAGE_PATH = imagePath[j];
+                                        }
                                     }
-                                }
-                                result['DATA'][i].MIME_TYPE = "image/jpeg";
-                                result['DATA'][i].SYNC_TIME = dateNow
-                                result['DATA'][i].INSERT_TIME = result['DATA'][i].INSERT_TIME === "" ? "" : parseInt( Helper.date_format( result['DATA'][i].INSERT_TIME, 'YYYYMMDDhhmmss' ) );
-                                result['DATA'][i].UPDATE_TIME = 0;
-                                result['DATA'][i].DELETE_TIME = 0;
-                                result['DATA'][i].UPDATE_USER = "";
-                                result['DATA'][i].DELETE_USER = "";
-                                result['DATA'][i].STATUS_SYNC = "Y";
-                                result['DATA'][i].IMAGE_URL = undefined;
-
-                                let dataResult = result['DATA'][i];
-                                let args = {
-                                    data: dataResult,
-                                    headers: { 
-                                        "Content-Type": "application/json", 
-                                        "Authorization": req.headers.authorization
+                                    data[i].MIME_TYPE = "image/jpeg";
+                                    data[i].SYNC_TIME = dateNow
+                                    data[i].INSERT_TIME = data[i].INSERT_TIME === "" ? "" : parseInt( Helper.date_format( data[i].INSERT_TIME, 'YYYYMMDDhhmmss' ) );
+                                    data[i].UPDATE_TIME = 0;
+                                    data[i].DELETE_TIME = 0;
+                                    data[i].UPDATE_USER = "";
+                                    data[i].DELETE_USER = "";
+                                    data[i].STATUS_SYNC = "Y";
+                                    data[i].IMAGE_URL = undefined;
+        
+                                    let dataResult = data[i];
+                                    let args = {
+                                        data: dataResult,
+                                        headers: { 
+                                            "Content-Type": "application/json", 
+                                            "Authorization": req.headers.authorization
+                                        }
                                     }
+                                    let request = client.post( imageServiceUrl + '/api/v1.1/auth/upload/image/foto-transaksi', args, function ( data, response ) {
+                                        console.log( 'sukses simpan image' );
+                                    } );
+                                    request.on( 'error', ( err ) => {
+                                        console.log( `IMAGE ${err}` );
+                                    } );
                                 }
-                                let request = client.post( imageServiceUrl + '/api/v1.1/auth/upload/image/foto-transaksi', args, function ( data, response ) {
-                                    console.log( 'sukses simpan image' );
-                                } );
-                                request.on( 'error', ( err ) => {
-                                    console.log( `IMAGE ${err}` );
-                                } );
-                            } 
-                        }
+                            } );
+                        } 
                     } );
                 } );
                 res.send( {
@@ -285,6 +337,10 @@
                 data: []
             } );
         }
+    }
+    async function realmListToArrayObject(object){
+        let temp = Object.values(object);
+        return temp;
     }
     /*exports.read_database_backup = async ( req, res ) => {
         if ( !req.files ) {
