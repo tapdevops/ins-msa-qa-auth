@@ -23,6 +23,15 @@
  | Versi 1.1
  |--------------------------------------------------------------------------
  */
+
+ /*
+ |---------------------------------------------------------------------------------------------
+ | Fungsi read_database digunakan untuk membaca file json berisi data transaksi
+ | ( finding, ebcc detail, ebcc header, inspection header, inspection detail, inspection track, 
+ | inspection genba, dan image) yang diupload melalui web. Data-data tersebut kemudian ditambahkan 
+ | ke mongodb
+ |---------------------------------------------------------------------------------------------
+ */
     exports.read_database = async ( req, res ) => {
         if ( !req.files ) {
             return res.send( {
