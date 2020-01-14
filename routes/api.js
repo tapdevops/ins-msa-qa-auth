@@ -92,78 +92,78 @@ module.exports = (app) => {
 	 |--------------------------------------------------------------------------
 	 */
 	// Auth
-	app.post('/api/v1.2/auth/login', Controllers.v_1_1.Auth.login);
-	app.get('/api/v1.2/auth/contacts', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Auth.contacts);
-	app.get('/api/v1.2/auth/generate/token', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Auth.generate_token);
+	app.post('/api/v1.2/auth/login', Controllers.v_1_2.Auth.login);
+	app.get('/api/v1.2/auth/contacts', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Auth.contacts);
+	app.get('/api/v1.2/auth/generate/token', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Auth.generate_token);
 
 	// Category
-	app.get('/api/v1.2/category', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Category.find);
-	app.get('/api/v1.2/category/:start_date/:end_date', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Category.sync_mobile);
+	app.get('/api/v1.2/category', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Category.find);
+	app.get('/api/v1.2/category/:start_date/:end_date', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Category.sync_mobile);
 
 	// Content
-	app.get('/api/v1.2/content', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Content.find);
-	app.get('/api/v1.2/content/:id', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Content.find_one);
-	app.get('/api/v1.2/content/:start_date/:end_date', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Content.sync_mobile);
-	app.get('/api/v1.2/content-label', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Content.label_find);
-	app.get('/api/v1.2/content-label/:id', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Content.label_find_one);
+	app.get('/api/v1.2/content', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Content.find);
+	app.get('/api/v1.2/content/:id', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Content.find_one);
+	app.get('/api/v1.2/content/:start_date/:end_date', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Content.sync_mobile);
+	app.get('/api/v1.2/content-label', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Content.label_find);
+	app.get('/api/v1.2/content-label/:id', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Content.label_find_one);
 
 	// Kriteria
-	app.get('/api/v1.2/kriteria', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Kriteria.find);
-	app.get('/api/v1.2/kriteria/:start_date/:end_date', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Kriteria.sync_mobile);
+	app.get('/api/v1.2/kriteria', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Kriteria.find);
+	app.get('/api/v1.2/kriteria/:start_date/:end_date', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Kriteria.sync_mobile);
 
 	// Parameter
-	app.get('/api/v1.2/parameter', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Parameter.find);
-	app.get('/api/v1.2/parameter/track', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Parameter.time_track_find_one);
+	app.get('/api/v1.2/parameter', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Parameter.find);
+	app.get('/api/v1.2/parameter/track', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Parameter.time_track_find_one);
 
 	// Sync Mobile 
-	app.post('/api/v1.2/sync/mobile', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.create);
-	app.post('/api/v1.2/sync/mobile/reset', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.reset);
-	app.get('/api/v1.2/mobile-sync/finding-images', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.finding_images_find);
-	app.get('/api/v1.2/mobile-sync/auth/contact', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.contact_find);
-	app.get('/api/v1.2/mobile-sync/finding', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.finding_find);
-	app.get('/api/v1.2/mobile-sync/auth/kriteria', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.kriteria_find);
-	app.get('/api/v1.2/mobile-sync/auth/category', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.category_find);
-	app.get('/api/v1.2/mobile-sync/ebcc/kualitas', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.ebcc_kualitas_find);
-	app.get('/api/v1.2/mobile-sync/auth/content', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.content_find);
-	app.get('/api/v1.2/mobile-sync/auth/content-label', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.content_label_find);
-	app.get('/api/v1.2/mobile-sync/hectare-statement/afdeling', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.hs_afdeling_find);
-	app.get('/api/v1.2/mobile-sync/hectare-statement/block', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.hs_block_find);
-	app.get('/api/v1.2/mobile-sync/hectare-statement/comp', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.hs_comp_find);
-	app.get('/api/v1.2/mobile-sync/hectare-statement/est', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.hs_est_find);
-	app.get('/api/v1.2/mobile-sync/hectare-statement/land-use', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.hs_land_use_find);
-	app.get('/api/v1.2/mobile-sync/hectare-statement/region', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncMobile.hs_region_find);
+	app.post('/api/v1.2/sync/mobile', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.create);
+	app.post('/api/v1.2/sync/mobile/reset', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.reset);
+	app.get('/api/v1.2/mobile-sync/finding-images', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.finding_images_find);
+	app.get('/api/v1.2/mobile-sync/auth/contact', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.contact_find);
+	app.get('/api/v1.2/mobile-sync/finding', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.finding_find);
+	app.get('/api/v1.2/mobile-sync/auth/kriteria', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.kriteria_find);
+	app.get('/api/v1.2/mobile-sync/auth/category', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.category_find);
+	app.get('/api/v1.2/mobile-sync/ebcc/kualitas', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.ebcc_kualitas_find);
+	app.get('/api/v1.2/mobile-sync/auth/content', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.content_find);
+	app.get('/api/v1.2/mobile-sync/auth/content-label', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.content_label_find);
+	app.get('/api/v1.2/mobile-sync/hectare-statement/afdeling', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.hs_afdeling_find);
+	app.get('/api/v1.2/mobile-sync/hectare-statement/block', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.hs_block_find);
+	app.get('/api/v1.2/mobile-sync/hectare-statement/comp', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.hs_comp_find);
+	app.get('/api/v1.2/mobile-sync/hectare-statement/est', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.hs_est_find);
+	app.get('/api/v1.2/mobile-sync/hectare-statement/land-use', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.hs_land_use_find);
+	app.get('/api/v1.2/mobile-sync/hectare-statement/region', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncMobile.hs_region_find);
 
 	// Sync TAP
-	app.post('/api/v1.2/sync/tap/employee-hris', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncTAP.sync_employee_hris);
-	app.post('/api/v1.2/sync/tap/employee-sap', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.SyncTAP.sync_employee_sap);
+	app.post('/api/v1.2/sync/tap/employee-hris', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncTAP.sync_employee_hris);
+	app.post('/api/v1.2/sync/tap/employee-sap', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.SyncTAP.sync_employee_sap);
 
 	// User
-	app.post('/api/v1.2/user/create', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.User.create);
-	app.put('/api/v1.2/user/update/:id', Middleware.v_1_0.VerifyToken, Controllers.v_1_1.User.update);
+	app.post('/api/v1.2/user/create', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.User.create);
+	app.put('/api/v1.2/user/update/:id', Middleware.v_1_0.VerifyToken, Controllers.v_1_2.User.update);
 
 	// Server
-	app.get('/api/v1.2/server/service-list', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Server.service_list);
-	app.get('/api/v1.2/server/time', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Server.time);
-	app.post('/api/v1.2/server/apk-version', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Server.apk_version);
-	app.get('/api/v1.2/server/apk-version/:id', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Server.current_apk_version);
+	app.get('/api/v1.2/server/service-list', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Server.service_list);
+	app.get('/api/v1.2/server/time', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Server.time);
+	app.post('/api/v1.2/server/apk-version', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Server.apk_version);
+	app.get('/api/v1.2/server/apk-version/:id', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.Server.current_apk_version);
 
 	// User
-	app.get('/api/v1.2/user/data', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.User.user_data);
+	app.get('/api/v1.2/user/data', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.User.user_data);
 
 	//export kafka
-	app.get('/api/v1.2/export-kafka/auth', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ExportKafka.export_kafka);
+	app.get('/api/v1.2/export-kafka/auth', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.ExportKafka.export_kafka);
 
 	// GET Inspection User By Month
-	app.get('/api/v1.2/auth-month/:month', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ExportKafka.find_by_month);
+	app.get('/api/v1.2/auth-month/:month', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.ExportKafka.find_by_month);
 
 	// Post Realm 
-	app.post('/api/v1.2/import/database', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ImportDB.read_database);
+	app.post('/api/v1.2/import/database', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.ImportDB.read_database);
 
 	// Export Realm 
-	app.post('/api/v1.2/export/database', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ExportDB.export_json);
+	app.post('/api/v1.2/export/database', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.ExportDB.export_json);
 
 	//update FIREBASE_TOKEN
-	app.put('/api/v1.2/firebase/token', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Auth.update_firebase_token);
+	app.put('/api/v1.2/firebase/token', Middleware.v_1_2.VerifyToken, Controllers.v_1_1.Auth.update_firebase_token);
 
 
 	/*
