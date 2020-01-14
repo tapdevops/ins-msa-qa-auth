@@ -8,19 +8,19 @@
  */
  	// Libraries
 	const Libraries = {
-		Helper: require( _directory_base + '/app/v1.1/Http/Libraries/Helper.js' )
+		Helper: require( _directory_base + '/app/v1.2/Http/Libraries/Helper.js' )
 	}
 
  	// Models
 	const Models = {
-		Kriteria: require( _directory_base + '/app/v1.1/Http/Models/KriteriaModel.js' ),
-		Content: require( _directory_base + '/app/v1.1/Http/Models/ContentModel.js' ),
-		Category: require( _directory_base + '/app/v1.1/Http/Models/CategoryModel.js' ),
-		ContentLabel: require( _directory_base + '/app/v1.1/Http/Models/ContentLabelModel.js' ),
-		SyncMobile: require( _directory_base + '/app/v1.1/Http/Models/SyncMobileModel.js' ),
-		SyncMobileLog: require( _directory_base + '/app/v1.1/Http/Models/SyncMobileLogModel.js' ),
-		UserAuth: require( _directory_base + '/app/v1.1/Http/Models/UserAuthModel.js' ),
-		ViewUserAuth: require( _directory_base + '/app/v1.1/Http/Models/ViewUserAuthModel.js' )
+		Kriteria: require( _directory_base + '/app/v1.2/Http/Models/KriteriaModel.js' ),
+		Content: require( _directory_base + '/app/v1.2/Http/Models/ContentModel.js' ),
+		Category: require( _directory_base + '/app/v1.2/Http/Models/CategoryModel.js' ),
+		ContentLabel: require( _directory_base + '/app/v1.2/Http/Models/ContentLabelModel.js' ),
+		SyncMobile: require( _directory_base + '/app/v1.2/Http/Models/SyncMobileModel.js' ),
+		SyncMobileLog: require( _directory_base + '/app/v1.2/Http/Models/SyncMobileLogModel.js' ),
+		UserAuth: require( _directory_base + '/app/v1.2/Http/Models/UserAuthModel.js' ),
+		ViewUserAuth: require( _directory_base + '/app/v1.2/Http/Models/ViewUserAuthModel.js' )
 	}
 
 	// Node Module
@@ -228,6 +228,7 @@
 					var temp_insert = [];
 					var temp_update = [];
 					var temp_delete = [];
+					
 					data_insert.forEach( function( data ) { 
 						if ( start_date && end_date  ) {
 							if ( data.DELETE_TIME >= start_date && data.DELETE_TIME <= end_date ) {
@@ -237,11 +238,10 @@
 									USER_ROLE: data.USER_ROLE,
 									LOCATION_CODE: String( data.LOCATION_CODE ),
 									REF_ROLE: data.REF_ROLE,
-									JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
-									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
+									JOB:  data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB ? data.PJS_JOB : ""  ,
+									FULLNAME:  data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME ?  data.PJS_FULLNAME : ""  
 								} );
 							}
-
 							if ( data.INSERT_TIME >= start_date && data.INSERT_TIME <= end_date ) {
 								temp_insert.push( {
 									USER_AUTH_CODE: data.USER_AUTH_CODE,
@@ -249,10 +249,9 @@
 									USER_ROLE: data.USER_ROLE,
 									LOCATION_CODE: String( data.LOCATION_CODE ),
 									REF_ROLE: data.REF_ROLE,
-									JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
-									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
-								} );
-								
+									JOB:  data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB ? data.PJS_JOB : ""  ,
+									FULLNAME:  data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME ?  data.PJS_FULLNAME : ""  
+								} );								
 							}
 							if ( data.UPDATE_TIME >= start_date && data.UPDATE_TIME <= end_date ) {
 								temp_update.push( {
@@ -261,8 +260,8 @@
 									USER_ROLE: data.USER_ROLE,
 									LOCATION_CODE: String( data.LOCATION_CODE ),
 									REF_ROLE: data.REF_ROLE,
-									JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
-									FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
+									JOB:  data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB ? data.PJS_JOB : ""  ,
+									FULLNAME:  data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME ?  data.PJS_FULLNAME : ""  
 								} );
 							}
 						}
@@ -273,8 +272,8 @@
 								USER_ROLE: data.USER_ROLE,
 								LOCATION_CODE: String( data.LOCATION_CODE ),
 								REF_ROLE: data.REF_ROLE,
-								JOB: ( data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB  ),
-								FULLNAME: ( data.HRIS_FULLNAME ? data.HRIS_JOB : data.PJS_FULLNAME  )
+								JOB:  data.HRIS_JOB ? data.HRIS_JOB : data.PJS_JOB ? data.PJS_JOB : ""  ,
+								FULLNAME:  data.HRIS_FULLNAME ? data.HRIS_FULLNAME : data.PJS_FULLNAME ?  data.PJS_FULLNAME : ""  
 							} );
 						}
 					} );
@@ -324,11 +323,10 @@
 			.limit( 1 )
 			.then( data => {
 				if ( data.length == 0 ) {
-					var url = service_url + '/ebcc/kualitas';
+					var url = service_url + '/api/v1.2/ebcc/kualitas';
 					var args = {
 						headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
 					};
-
 					( new NodeRestClient() ).get( url, args, function ( data, response ) {
 						var insert = [];
 						if ( data.data.length > 0 ) {
@@ -402,7 +400,7 @@
 			.limit( 1 )
 			.then( data => {
 				if ( data.length == 0 ) {
-					var url = service_url + '/api/v1.1/finding';
+					var url = service_url + '/api/v1.2/finding';
 					var args = {
 						headers: {
 							"Content-Type": "application/json", 
@@ -437,7 +435,7 @@
 							"Authorization": req.headers.authorization
 						}
 					};
-					var url = service_url + '/api/v1.1/sync-mobile/finding/' + start_date + '/' + end_date;
+					var url = service_url + '/api/v1.2/sync-mobile/finding/' + start_date + '/' + end_date;
 
 					( new NodeRestClient() ).get( url, args, function ( data, response ) {
 						res.json( {
@@ -479,7 +477,7 @@
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
 				IMEI: auth.IMEI,
-				TABEL_UPDATE: 'finding'
+				TABEL_UPDATE: 'finding-image'
 			} )
 			.sort( { TGL_MOBILE_SYNC: -1 } )
 			.limit( 1 )
@@ -491,7 +489,6 @@
 						data: {}
 					} );
 				}
-
 				if ( data.length > 0 ) {
 					var dt = data[0];
 					var start_date = Libraries.Helper.date_format( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
@@ -1717,6 +1714,8 @@
 					__v: 0
 				} )
 				.then( data_first_sync => {
+
+					
 					if( !data_first_sync ) {
 						return res.send( {
 							status: false,
@@ -1724,13 +1723,34 @@
 							data: {}
 						} );
 					}
+					if ( config.app.env == 'prod' ) {
+						var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.prod + '/';
+					}
+					else if ( config.app.env == 'qa' ) {
+						var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.qa + '/';
+					}
+					else if ( config.app.env == 'dev' ) {
+						var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.dev + '/' ;
+					}
+
+					let temp_insert_first = [];
+					data_first_sync.forEach( function( data_category ) {
+						var path = 'files/images/category/' + data_category.ICON;
+						temp_insert_first.push( {
+							CATEGORY_CODE: data_category.CATEGORY_CODE,
+							CATEGORY_NAME: data_category.CATEGORY_NAME,
+							ICON: data_category.ICON,
+							ICON_URL: path_global + path
+						} ) ;
+					} )
+					
 
 					return res.json( { 
 						"status": true,
 						"message": "First time sync",
 						"data": {
 							hapus: [],
-							simpan: data_first_sync,
+							simpan: temp_insert_first,
 							ubah: []
 						}
 					} );

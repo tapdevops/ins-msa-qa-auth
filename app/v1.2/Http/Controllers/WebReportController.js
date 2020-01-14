@@ -8,8 +8,8 @@
  */
  	// Models
 	const Models = {
-		Kriteria: require( _directory_base + '/app/v1.1/Http/Models/KriteriaModel.js' ),
-		ViewContentInspeksi: require( _directory_base + '/app/v1.1/Http/Models/ViewContentInspeksiModel.js' )
+		Kriteria: require( _directory_base + '/app/v1.2/Http/Models/KriteriaModel.js' ),
+		ViewContentInspeksi: require( _directory_base + '/app/v1.2/Http/Models/ViewContentInspeksiModel.js' )
 	}
 
 /*

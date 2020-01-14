@@ -8,13 +8,13 @@
  */
  	// Libraries
 	const Libraries = {
-		Helper: require( _directory_base + '/app/v1.1/Http/Libraries/Helper.js' )
+		Helper: require( _directory_base + '/app/v1.2/Http/Libraries/Helper.js' )
 	}
 
  	// Models
 	const Models = {
-		Module: require( _directory_base + '/app/v1.1/Http/Models/ModuleModel.js' ),
-		UserAuthorization: require( _directory_base + '/app/v1.1/Http/Models/UserAuthorizationModel.js' ),
+		Module: require( _directory_base + '/app/v1.2/Http/Models/ModuleModel.js' ),
+		UserAuthorization: require( _directory_base + '/app/v1.2/Http/Models/UserAuthorizationModel.js' ),
 	}
 
  /*

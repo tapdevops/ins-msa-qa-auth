@@ -8,12 +8,12 @@
  */
  	// Libraries
 	const Libraries = {
-		Helper: require( _directory_base + '/app/v1.1/Http/Libraries/Helper.js' )
+		Helper: require( _directory_base + '/app/v1.2/Http/Libraries/Helper.js' )
 	}
 
  	// Models
 	const Models = {
-		Parameter: require( _directory_base + '/app/v1.1/Http/Models/ParameterModel.js' )
+		Parameter: require( _directory_base + '/app/v1.2/Http/Models/ParameterModel.js' )
 	}
 
 /*

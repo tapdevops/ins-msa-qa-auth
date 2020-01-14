@@ -8,13 +8,13 @@
  */
  	// Libraries
 	const Libraries = {
-		Helper: require( _directory_base + '/app/v1.1/Http/Libraries/Helper.js' )
+		Helper: require( _directory_base + '/app/v1.2/Http/Libraries/Helper.js' )
 	}
 
  	// Models
 	const Models = {
-		EmployeeHRIS: require( _directory_base + '/app/v1.1/Http/Models/EmployeeHRISModel.js' ),
-		EmployeeSAP: require( _directory_base + '/app/v1.1/Http/Models/EmployeeSAPModel.js' ),
+		EmployeeHRIS: require( _directory_base + '/app/v1.2/Http/Models/EmployeeHRISModel.js' ),
+		EmployeeSAP: require( _directory_base + '/app/v1.2/Http/Models/EmployeeSAPModel.js' ),
 	}
 
 /*

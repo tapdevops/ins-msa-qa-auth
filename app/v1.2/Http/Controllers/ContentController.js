@@ -8,13 +8,13 @@
  */
  	// Models
 	const Models = {
-		Content: require( _directory_base + '/app/v1.1/Http/Models/ContentModel.js' ),
-		ContentLabel: require( _directory_base + '/app/v1.1/Http/Models/ContentLabelModel.js' )
+		Content: require( _directory_base + '/app/v1.2/Http/Models/ContentModel.js' ),
+		ContentLabel: require( _directory_base + '/app/v1.2/Http/Models/ContentLabelModel.js' )
 	}
 
 	//Libraries
 	const Libraries = {
-		Helper: require( _directory_base + '/app/v1.1/Http/Libraries/Helper.js' )
+		Helper: require( _directory_base + '/app/v1.2/Http/Libraries/Helper.js' )
 	}
 
  /*
