@@ -19,7 +19,7 @@ const Controllers = {
 		WebReport: require(_directory_base + '/app/v2.0/Http/Controllers/WebReportController.js'),
 		ExportKafka: require(_directory_base + '/app/v2.0/Http/Controllers/ExportKafkaController.js'),
 		ImportDB: require(_directory_base + '/app/v2.0/Http/Controllers/ImportDBController.js'),
-		ExportDB: require(_directory_base + '/app/v2.0/Http/Controllers/ExportDBController.js'),
+		// ExportDB: require(_directory_base + '/app/v2.0/Http/Controllers/ExportDBController.js'),
 	},
 	v_1_2: {
 		Auth: require(_directory_base + '/app/v1.2/Http/Controllers/AuthController.js'),
@@ -35,7 +35,7 @@ const Controllers = {
 		WebReport: require(_directory_base + '/app/v1.2/Http/Controllers/WebReportController.js'),
 		ExportKafka: require(_directory_base + '/app/v1.2/Http/Controllers/ExportKafkaController.js'),
 		ImportDB: require(_directory_base + '/app/v1.2/Http/Controllers/ImportDBController.js'),
-		ExportDB: require(_directory_base + '/app/v1.2/Http/Controllers/ExportDBController.js'),
+		// ExportDB: require(_directory_base + '/app/v1.2/Http/Controllers/ExportDBController.js'),
 	},
 	v_1_1: {
 		Auth: require(_directory_base + '/app/v1.1/Http/Controllers/AuthController.js'),
@@ -51,7 +51,7 @@ const Controllers = {
 		WebReport: require(_directory_base + '/app/v1.1/Http/Controllers/WebReportController.js'),
 		ExportKafka: require(_directory_base + '/app/v1.1/Http/Controllers/ExportKafkaController.js'),
 		ImportDB: require(_directory_base + '/app/v1.1/Http/Controllers/ImportDBController.js'),
-		ExportDB: require(_directory_base + '/app/v1.1/Http/Controllers/ExportDBController.js'),
+		// ExportDB: require(_directory_base + '/app/v1.1/Http/Controllers/ExportDBController.js'),
 	},
 	v_1_0: {
 		Auth: require(_directory_base + '/app/v1.0/Http/Controllers/AuthController.js'),
