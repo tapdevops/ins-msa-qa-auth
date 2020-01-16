@@ -179,7 +179,7 @@ module.exports = (app) => {
 	app.post('/api/v2.0/import/database', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.ImportDB.read_database);
 
 	// Export Realm 
-	app.post('/api/v2.0/export/database', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.ExportDB.export_json);
+	// app.post('/api/v2.0/export/database', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.ExportDB.export_json);
 
 	//update FIREBASE_TOKEN
 	app.put('/api/v2.0/firebase/token', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Auth.update_firebase_token);
@@ -258,7 +258,7 @@ module.exports = (app) => {
 	app.post('/api/v1.2/import/database', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.ImportDB.read_database);
 
 	// Export Realm 
-	app.post('/api/v1.2/export/database', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.ExportDB.export_json);
+	// app.post('/api/v1.2/export/database', Middleware.v_1_2.VerifyToken, Controllers.v_1_2.ExportDB.export_json);
 
 	//update FIREBASE_TOKEN
 	app.put('/api/v1.2/firebase/token', Middleware.v_1_2.VerifyToken, Controllers.v_1_1.Auth.update_firebase_token);
@@ -338,7 +338,7 @@ module.exports = (app) => {
 	app.post('/api/v1.1/import/database', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ImportDB.read_database);
 
 	// Export Realm 
-	app.post('/api/v1.1/export/database', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ExportDB.export_json);
+	// app.post('/api/v1.1/export/database', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.ExportDB.export_json);
 
 	//update FIREBASE_TOKEN
 	app.put('/api/v1.1/firebase/token', Middleware.v_1_1.VerifyToken, Controllers.v_1_1.Auth.update_firebase_token);
