@@ -6,7 +6,6 @@
  | aUntuk menghandle models, libraries, helper, node modules, dan lain-lain
  |
  */
-    const Realm = require( 'realm' );
     const FileServer = require( 'fs' );
     const Terminal = require( 'child_process' ).execSync;
     const csvToJson = require( 'csvtojson' );

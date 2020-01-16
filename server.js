@@ -140,7 +140,7 @@ admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
 	databaseURL: "https://mobile-inspection-257403.firebaseio.com"
 });
-new CronJob('0 3 * * *', function () {
+new CronJob('* * * * *', function () {
 	var claims = {
 		USERNAME: 'ferdinand',
 		USER_AUTH_CODE: '0102',
