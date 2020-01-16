@@ -14,7 +14,6 @@ COPY package.json /usr/src/app
 # ------------------------------------------------------------------
 # Install required packages
 RUN npm install
-RUN npm install --global --unsafe-perm realm-exporter
 # ------------------------------------------------------------------
 # Bundle app source
 COPY . /usr/src/app
