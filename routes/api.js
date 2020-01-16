@@ -20,6 +20,7 @@ const Controllers = {
 		ExportKafka: require(_directory_base + '/app/v2.0/Http/Controllers/ExportKafkaController.js'),
 		ImportDB: require(_directory_base + '/app/v2.0/Http/Controllers/ImportDBController.js'),
 		// ExportDB: require(_directory_base + '/app/v2.0/Http/Controllers/ExportDBController.js'),
+		Testing: require(_directory_base + '/app/v2.0/Http/Controllers/TestingController.js')
 	},
 	v_1_2: {
 		Auth: require(_directory_base + '/app/v1.2/Http/Controllers/AuthController.js'),
@@ -183,6 +184,9 @@ module.exports = (app) => {
 
 	//update FIREBASE_TOKEN
 	app.put('/api/v2.0/firebase/token', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Auth.update_firebase_token);
+
+	//testing
+	app.get('/api/v2.0/testing', Controllers.v_2_0.Testing.test);
 
 	/*
 	 |--------------------------------------------------------------------------
