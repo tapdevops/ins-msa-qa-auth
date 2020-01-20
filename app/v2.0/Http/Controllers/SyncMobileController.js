@@ -1724,16 +1724,13 @@
 						} );
 					}
 					if ( config.app.env == 'prod' ) {
-						// var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.prod + '/';
-						var path_global = req.protocol + '://' + 'app.tap-agri.com' + '/' + config.app.path.prod + '/';
+						var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.prod + '/';
 					}
 					else if ( config.app.env == 'qa' ) {
-						// var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.qa + '/';
-						var path_global = req.protocol + '://' + 'app.tap-agri.com' + '/' + config.app.path.qa + '/';
+						var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.qa + '/';
 					}
 					else if ( config.app.env == 'dev' ) {
-						// var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.dev + '/' ;
-						var path_global = req.protocol + '://' + 'app.tap-agri.com' + '/' + config.app.path.dev + '/' ;
+						var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.dev + '/' ;
 					}
 					console.log(req.hostname);
 					let temp_insert_first = [];

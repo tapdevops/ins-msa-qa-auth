@@ -94,6 +94,12 @@
 										then: {
 											"$concat": [ config_url.microservice_reports, "$API_URL_PARAMETER" ]
 										}
+									},
+									{
+										case: { $eq: [ "$MICROSERVICE", "INTERNAL TAP" ] }, 
+										then: {
+											"$concat": [ config_url.msa_internal_tap, "$API_URL_PARAMETER" ]
+										}
 									}
 								],
 								default: ""
