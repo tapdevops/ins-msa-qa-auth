@@ -24,7 +24,8 @@
 	}
 
 	// Node Module
-	const NodeRestClient = require( 'node-rest-client' ).Client;
+	var Client = require('node-rest-client').Client;
+	var client = new Client();
 
 /*
  |--------------------------------------------------------------------------
@@ -393,12 +394,13 @@
 
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
-				IMEI: auth.IMEI,
+				IMEI: "353513101354749",//auth.IMEI,
 				TABEL_UPDATE: 'finding'
 			} )
 			.sort( { TGL_MOBILE_SYNC: -1 } )
 			.limit( 1 )
 			.then( data => {
+				console.log(data);
 				if ( data.length == 0 ) {
 					var url = service_url + '/api/v2.0/finding';
 					var args = {
@@ -408,41 +410,93 @@
 						}
 					};
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					let request = client.get( url, args, function ( data, response ) {
 						var insert = [];
-						if ( data.data.length > 0 ) {
-							insert = data.data;
-						}
-						
-						return res.json( { 
-							"status": data.status,
-							"message": "First time sync",
-							"data": {
-								hapus: [],
-								simpan: data.data,
-								ubah: []
+						if(data.data) {
+							if ( data.data.length > 0 ) {
+								insert = data.data;
 							}
-						} );
+							return res.json( {
+								"status": data.status,
+								"message": "First time sync",
+								"data": {
+									hapus: [],
+									simpan: data.data,
+									ubah: []
+								}
+							} );
+						} else {
+							return res.send({
+								status:false,
+								message: "periksa url: " + url,
+								data:[]
+							});
+						}
+					});
+					request.on('requestTimeout', function (req) {
+						console.log('request has expired');
+						req.abort();
+					});
+					 
+					request.on('responseTimeout', function (res) {
+						console.log('response has expired');
+					 
+					});
+					 
+					//it's usefull to handle request errors to avoid, for example, socket hang up errors on request timeouts
+					request.on('error', function (err) {
+						console.log('request error', err);
+						return res.send({
+							status: false,
+							message: err.message,
+							data: []
+						})
 					});
 				}
 				else {
 					var dt = data[0];
 					var start_date = Libraries.Helper.date_format( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
-					var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDD' ) + '235959';
+					var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDD' );
 					var args = {
 						headers: {
 							"Content-Type": "application/json", 
 							"Authorization": req.headers.authorization
 						}
 					};
-					var url = service_url + '/api/v2.0/sync-mobile/finding/' + start_date + '/' + end_date;
-
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
-						res.json( {
-							status: data.status,
-							message: data.message,
-							data: data.data
-						} );
+					var urlFindingWithDate = service_url + '/api/v2.0/sync-mobile/finding/' + start_date + '/' + end_date;
+					let request = client.get( urlFindingWithDate, args, function ( data, response ) {
+						if(data.data) {
+							res.json( {
+								status: data.status,
+								message: data.message,
+								data: data.data
+							} );
+						} else {
+							return res.send({
+								status: false,
+								message: 'Periksa service ' + urlFindingWithDate,
+								data: []
+							});
+						}
+						
+					});
+					request.on('requestTimeout', function (req) {
+						console.log('request has expired');
+						req.abort();
+					});
+					 
+					request.on('responseTimeout', function (res) {
+						console.log('response has expired');
+					});
+					 
+					//it's usefull to handle request errors to avoid, for example, socket hang up errors on request timeouts
+					request.on('error', function (err) {
+						console.log('request error', err);
+						return res.send({
+							status: false,
+							message: err,
+							data: []
+						})
 					});
 				}
 				
@@ -454,9 +508,10 @@
 						data: {}
 					} );
 				}
+				console.log(err);
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,//'Error retrieving data',
 					data: {}
 				} );
 			} );
