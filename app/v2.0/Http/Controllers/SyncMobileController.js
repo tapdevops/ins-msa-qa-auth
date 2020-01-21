@@ -394,7 +394,7 @@
 
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
-				IMEI: "353513101354749",//auth.IMEI,
+				IMEI: auth.IMEI,
 				TABEL_UPDATE: 'finding'
 			} )
 			.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -409,7 +409,7 @@
 							"Authorization": req.headers.authorization
 						}
 					};
-
+					console.log(url);
 					let request = client.get( url, args, function ( data, response ) {
 						var insert = [];
 						if(data.data) {
@@ -464,6 +464,7 @@
 						}
 					};
 					var urlFindingWithDate = service_url + '/api/v2.0/sync-mobile/finding/' + start_date + '/' + end_date;
+					console.log(urlFindingWithDate);
 					let request = client.get( urlFindingWithDate, args, function ( data, response ) {
 						if(data.data) {
 							res.json( {
