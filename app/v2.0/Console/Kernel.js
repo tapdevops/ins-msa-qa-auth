@@ -36,7 +36,7 @@ class Kernel {
             }
             const url = config.app.url[config.app.env].msa_internal_tap + `/api/v1.0/taksasi`;
             let request = client.get(url, args, async function (data, response) {
-                if (data) {
+                if (data.data) {
                     if (data.data.length == 0) {
                         return console.log(`Data titik restan pada tanggal ini kosong!`);
                     }
