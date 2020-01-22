@@ -376,7 +376,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -639,7 +639,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -720,7 +720,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -802,7 +802,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -885,7 +885,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -967,7 +967,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -1050,7 +1050,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -1131,7 +1131,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -1529,7 +1529,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -1732,7 +1732,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -1788,7 +1788,6 @@
 					else if ( config.app.env == 'dev' ) {
 						var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.dev + '/' ;
 					}
-					console.log(req.hostname);
 					let temp_insert_first = [];
 					data_first_sync.forEach( function( data_category ) {
 						var path = 'files/images/category/' + data_category.ICON;
@@ -1962,7 +1961,7 @@
 			}
 			return res.send( {
 				status: false,
-				message: 'Error retrieving data',
+				message: err.message,
 				data: {}
 			} );
 		} );
@@ -2024,7 +2023,7 @@
 			else {
 				return res.send( {
 					status: false,
-					message: 'Error! Kode salah.',
+					message: err.message,
 					data: {}
 				} );
 			}
