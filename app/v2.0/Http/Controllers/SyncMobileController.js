@@ -328,7 +328,7 @@
 					var args = {
 						headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
 					};
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						var insert = [];
 						if ( data.data.length > 0 ) {
 							insert = data.data;
@@ -357,7 +357,7 @@
 					};
 					var url = service_url + '/sync-mobile/kualitas/' + start_date + '/' + end_date;
 					
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						res.json( {
 							status: data.status,
 							message: data.message,
@@ -570,7 +570,7 @@
 
 				var url = service_url + '/sync-mobile/finding-images/' + start_date + '/' + end_date;
 				
-				( new NodeRestClient() ).get( url, args, function ( data, response ) {
+				client.get( url, args, function ( data, response ) {
 					if ( data.data.length > 0 ) {
 						var trcode = [];
 						for ( i = 0; i <= ( data.data.length - 1 ); i++ ) {
@@ -596,7 +596,7 @@
 								timeout: 10000
 							}
 						};
-						( new NodeRestClient() ).post( finding_images_url, finding_images_args, function( data, response ) {
+						client.post( finding_images_url, finding_images_args, function( data, response ) {
 							res.json( {
 								"status": data.status,
 								"message": data.message,
@@ -672,7 +672,7 @@
 						}
 					};
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						var insert = [];
 						if ( data.data.length > 0 ) {
 							insert = data.data;
@@ -701,7 +701,7 @@
 					};
 					var url = service_url + '/sync-mobile/afdeling/' + start_date + '/' + end_date;
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						res.json( {
 							status: data.status,
 							message: data.message,
@@ -754,7 +754,7 @@
 						}
 					};
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						var insert = [];
 						if ( data.data.length > 0 ) {
 							insert = data.data;
@@ -783,7 +783,7 @@
 					};
 					var url = service_url + '/sync-mobile/block/' + start_date + '/' + end_date;
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						res.json( {
 							status: data.status,
 							message: data.message,
@@ -836,7 +836,7 @@
 						}
 					};
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						var insert = [];
 						if ( data.data.length > 0 ) {
 							insert = data.data;
@@ -865,7 +865,7 @@
 					};
 					var url = service_url + '/sync-mobile/comp/' + start_date + '/' + end_date;
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						console.log( "RES: ", res );
 						res.json( {
 							status: data.status,
@@ -919,7 +919,7 @@
 						}
 					};
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						var insert = [];
 						if ( data.data.length > 0 ) {
 							insert = data.data;
@@ -948,7 +948,7 @@
 					};
 					var url = service_url + '/sync-mobile/est/' + start_date + '/' + end_date;
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						res.json( {
 							status: data.status,
 							message: data.message,
@@ -1001,7 +1001,7 @@
 						}
 					};
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						var insert = [];
 						if ( data.data.length > 0 ) {
 							insert = data.data;
@@ -1030,7 +1030,7 @@
 					};
 					var url = service_url + '/sync-mobile/land-use/' + start_date + '/' + end_date;
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						res.json( {
 							status: data.status,
 							message: data.message,
@@ -1083,7 +1083,7 @@
 						}
 					};
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						var insert = [];
 						if ( data.data.length > 0 ) {
 							insert = data.data;
@@ -1112,7 +1112,7 @@
 					};
 					var url = service_url + '/sync-mobile/region/' + start_date + '/' + end_date;
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						res.json( {
 							status: data.status,
 							message: data.message,
