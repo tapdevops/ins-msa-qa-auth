@@ -100,6 +100,12 @@
 										then: {
 											"$concat": [ config_url.msa_internal_tap, "$API_URL_PARAMETER" ]
 										}
+									},
+									{
+										case: { $eq: [ "$MICROSERVICE", "POINT" ] }, 
+										then: {
+											"$concat": [ config_url.microservice_point, "$API_URL_PARAMETER" ]
+										}
 									}
 								],
 								default: ""
