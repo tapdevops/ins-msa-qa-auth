@@ -60,7 +60,7 @@
 					microservice_images: 'http://149.129.250.199:4012',
 					microservice_reports: 'http://taptest.tap-agri.com/mobileinspectiondev/ins-msa-dev-reports',
 					microservice_point: 'http://taptest.tap-agri.com/mobileinspectiondev/ins-msa-dev-point',
-					msa_internal_tap: 'http://msadev.tap-agri.com:4015'
+					msa_internal_tap: 'http://msadev.tap-agri.com'
 				},
 				qa: {
 					ldap: 'http://tap-ldapdev.tap-agri.com/login',
