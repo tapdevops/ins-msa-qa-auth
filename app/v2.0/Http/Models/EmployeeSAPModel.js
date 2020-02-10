@@ -44,7 +44,6 @@ const EmployeeSAPSchema = Mongoose.Schema({
 		set: v => Math.round(v),
 		alias: 'i'
 	},
-	
 });
 
 /*
