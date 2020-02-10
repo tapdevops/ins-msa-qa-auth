@@ -34,7 +34,13 @@ const EmployeeHRISSchema = Mongoose.Schema({
 		get: v => Math.round(v),
 		set: v => Math.round(v),
 		alias: 'i'
-	}
+	},
+	EMPLOYEE_RESIGNDATE: {
+		type: Number,
+		get: v => Math.round(v),
+		set: v => Math.round(v),
+		alias: 'i'
+	},
 });
 
 /*

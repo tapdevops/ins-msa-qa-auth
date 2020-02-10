@@ -52,7 +52,8 @@
 					INSERT_TIME_DW: Libraries.Helper.date_format( req.body.INSERT_TIME_DW, 'YYYYMMDDhhmmss' ) || 0,
 					UPDATE_TIME_DW: Libraries.Helper.date_format( req.body.UPDATE_TIME_DW, 'YYYYMMDDhhmmss' ) || 0,
 					DELETE_TIME_DW: Libraries.Helper.date_format( req.body.DELETE_TIME_DW, 'YYYYMMDDhhmmss' ) || 0,
-					LAST_UPDATE: Libraries.Helper.date_format( 'now', 'YYYYMMDD' ).substr( 0, 8 )
+					LAST_UPDATE: Libraries.Helper.date_format( 'now', 'YYYYMMDD' ).substr( 0, 8 ),
+					EMPLOYEE_RESIGNDATE: Libraries.Helper.date_format( req.body.EMPLOYEE_RESIGNDATE, 'YYYYMMDDhhmmss' ) || 0,
 				} );
 				
 				empHRIS.save()
@@ -170,7 +171,8 @@
 					START_VALID: Libraries.Helper.date_format( req.body.START_VALID, 'YYYYMMDDhhmmss' ).substr( 0, 8 ) || 0,
 					INSERT_TIME_DW: Libraries.Helper.date_format( req.body.INSERT_TIME_DW, 'YYYYMMDDhhmmss' ) || 0,
 					UPDATE_TIME_DW: Libraries.Helper.date_format( req.body.UPDATE_TIME_DW, 'YYYYMMDDhhmmss' ) || 0,
-					LAST_UPDATE: Libraries.Helper.date_format( 'now', 'YYYYMMDD' ).substr( 0, 8 )
+					LAST_UPDATE: Libraries.Helper.date_format( 'now', 'YYYYMMDD' ).substr( 0, 8 ),
+					RES_DATE: Libraries.Helper.date_format( req.body.RES_DATE, 'YYYYMMDDhhmmss' ) || 0,
 				} );
 				
 				empHRIS.save()
