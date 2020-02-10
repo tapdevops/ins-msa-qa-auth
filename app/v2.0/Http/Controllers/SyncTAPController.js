@@ -73,7 +73,7 @@
 			}
 			// Kondisi data sudah ada, check value, jika sama tidak diupdate, jika beda diupdate dan dimasukkan ke Sync List
 			else {
-				if ( data.EMPLOYEE_FULLNAME != req.body.EMPLOYEE_FULLNAME || data.EMPLOYEE_USERNAME != req.body.EMPLOYEE_USERNAME ) {
+				if ( data.EMPLOYEE_FULLNAME != req.body.EMPLOYEE_FULLNAME || data.EMPLOYEE_USERNAME != req.body.EMPLOYEE_USERNAME || data.EMPLOYEE_RESIGNDATE != req.body.EMPLOYEE_RESIGNDATE ) {
 					Models.EmployeeHRIS.findOneAndUpdate( { 
 						EMPLOYEE_NIK: req.body.EMPLOYEE_NIK
 					}, {
@@ -193,7 +193,7 @@
 			}
 			// Kondisi data sudah ada, check value, jika sama tidak diupdate, jika beda diupdate dan dimasukkan ke Sync List
 			else {
-				if ( data.EMPLOYEE_NAME != req.body.EMPLOYEE_NAME || data.JOB_CODE != req.body.JOB_CODE || data.END_VALID != req.body.END_VALID ) {
+				if ( data.EMPLOYEE_NAME != req.body.EMPLOYEE_NAME || data.JOB_CODE != req.body.JOB_CODE || data.END_VALID != req.body.END_VALID || data.RES_DATE != req.body.RES_DATE ) {
 					Models.EmployeeSAP.findOneAndUpdate( { 
 						NIK: req.body.NIK
 					}, {
