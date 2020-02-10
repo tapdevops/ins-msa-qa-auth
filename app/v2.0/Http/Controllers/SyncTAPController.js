@@ -53,7 +53,7 @@
 					UPDATE_TIME_DW: Libraries.Helper.date_format( req.body.UPDATE_TIME_DW, 'YYYYMMDDhhmmss' ) || 0,
 					DELETE_TIME_DW: Libraries.Helper.date_format( req.body.DELETE_TIME_DW, 'YYYYMMDDhhmmss' ) || 0,
 					LAST_UPDATE: Libraries.Helper.date_format( 'now', 'YYYYMMDD' ).substr( 0, 8 ),
-					EMPLOYEE_RESIGNDATE: Libraries.Helper.date_format( req.body.EMPLOYEE_RESIGNDATE, 'YYYYMMDDhhmmss' ) || 0,
+					EMPLOYEE_RESIGNDATE: Libraries.Helper.date_format( req.body.EMPLOYEE_RESIGNDATE, 'YYYYMMDDhhmmss' ) || 0
 				} );
 				
 				empHRIS.save()
@@ -85,7 +85,8 @@
 						INSERT_TIME_DW: Libraries.Helper.date_format( req.body.INSERT_TIME_DW, 'YYYYMMDDhhmmss' ),
 						UPDATE_TIME_DW: Libraries.Helper.date_format( req.body.UPDATE_TIME_DW, 'YYYYMMDDhhmmss' ),
 						DELETE_TIME_DW: Libraries.Helper.date_format( req.body.DELETE_TIME_DW, 'YYYYMMDDhhmmss' ),
-						LAST_UPDATE: Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' )
+						LAST_UPDATE: Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ),
+						EMPLOYEE_RESIGNDATE: Libraries.Helper.date_format( req.body.EMPLOYEE_RESIGNDATE, 'YYYYMMDDhhmmss' )
 					}, { new: true } )
 					.then( data => {
 						if( !data ) {
