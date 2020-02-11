@@ -446,7 +446,7 @@
 					
 				]
 				, LAST_UPDATE: {
-					$lte: parseInt(dateFormat(now, "yyyymmdd") + '000000')
+					$lte: parseInt(dateformat(now, "yyyymmdd") + '000000')
 				}
 			} )
 			.sort( {
@@ -480,7 +480,7 @@
 					}
 				]
 				, LAST_UPDATE: {
-					$lte: parseInt(dateFormat(now, "yyyymmdd") + '000000')
+					$lte: parseInt(dateformat(now, "yyyymmdd") + '000000')
 				}
 				
 			} )
