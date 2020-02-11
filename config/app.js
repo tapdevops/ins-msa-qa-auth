@@ -59,7 +59,8 @@
 					microservice_inspection: 'http://taptest.tap-agri.com/mobileinspectiondev/ins-msa-dev-inspection',
 					microservice_images: 'http://149.129.250.199:4012',
 					microservice_reports: 'http://taptest.tap-agri.com/mobileinspectiondev/ins-msa-dev-reports',
-					microservice_point: 'http://taptest.tap-agri.com/mobileinspectiondev/ins-msa-dev-point'
+					microservice_point: 'http://taptest.tap-agri.com/mobileinspectiondev/ins-msa-dev-point',
+					msa_internal_tap: 'http://msadev.tap-agri.com'
 					
 				},
 				qa: {
