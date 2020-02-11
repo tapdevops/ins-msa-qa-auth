@@ -22,6 +22,9 @@
 		ViewUserAuth: require( _directory_base + '/app/v2.0/Http/Models/ViewUserAuthModel.js' ),
 	}
 
+	//node_modules
+	const dateformat = require('dateformat');
+
 /*
  |--------------------------------------------------------------------------
  | Versi 1.0
@@ -406,7 +409,7 @@
 	 * --------------------------------------------------------------------------
 	 */
 		exports.hris_sap_search = async ( req, res ) => {
-
+			let now = new Date();
 			// Check parameter, jika tidak ada parameter query maka proses di stop. 
 			if ( !req.query.q ) {
 				return res.send({
@@ -438,8 +441,13 @@
 								}
 							}
 						]
-					}
+					},
+					
+					
 				]
+				, LAST_UPDATE: {
+					$lte: parseInt(dateFormat(now, "yyyymmdd") + '000000')
+				}
 			} )
 			.sort( {
 				EMPLOYEE_NAME : 1
@@ -471,6 +479,9 @@
 						]
 					}
 				]
+				, LAST_UPDATE: {
+					$lte: parseInt(dateFormat(now, "yyyymmdd") + '000000')
+				}
 				
 			} )
 			.sort( {
