@@ -1,8 +1,7 @@
 #Ignoring Dockerfile and config/app.js
 
-Dockerfile
 config/app.js
-node_modules/
+/node_modules
 public/tmp/import-db-json/*
 app/v2.0/Http/Controllers/ExportDBController.js
 app/v1.1/Http/Controllers/ExportDBController.js

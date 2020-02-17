@@ -84,42 +84,42 @@ const App = Express();
 | APP Init
 |--------------------------------------------------------------------------
 */
-// Routing Folder
-App.use('/files', Express.static('public'));
+	// Routing Folder
+	App.use('/files', Express.static('public'));
 
-// Parse request of content-type - application/json
-App.use(BodyParser.json({ limit: '50mb' }));
+	// Parse request of content-type - application/json
+	App.use(BodyParser.json({ limit: '50mb' }));
 
-// Parse request of content-type - application/x-www-form-urlencoded
-App.use(BodyParser.urlencoded({ extended: true, limit: '50mb', parameterLimit: 5000000 }));
+	// Parse request of content-type - application/x-www-form-urlencoded
+	App.use(BodyParser.urlencoded({ extended: true, limit: '50mb', parameterLimit: 5000000 }));
 
-// Add Express Upload to App
-App.use(ExpressUpload({
-	limits: { fileSize: 50 * 1024 * 1024 }
-}));
+	// Add Express Upload to App
+	App.use(ExpressUpload({
+		limits: { fileSize: 50 * 1024 * 1024 }
+	}));
 
-// Setup Database
-Mongoose.Promise = global.Promise;
-Mongoose.connect(config.database.url, {
-	useNewUrlParser: true,
-	ssl: config.database.ssl
-}).then(() => {
-	console.log("Database :");
-	console.log("\tStatus \t\t: Connected");
-	console.log("\tMongoDB URL \t: " + config.database.url + " (" + config.app.env + ")");
-}).catch(err => {
-	console.log("Database :");
-	console.log("\tDatabase Status : Not Connected");
-	console.log("\tMongoDB URL \t: " + config.database.url + " (" + config.app.env + ")");
-});
+	// Setup Database
+	Mongoose.Promise = global.Promise;
+	Mongoose.connect(config.database.url, {
+		useNewUrlParser: true,
+		ssl: config.database.ssl
+	}).then(() => {
+		console.log("Database :");
+		console.log("\tStatus \t\t: Connected");
+		console.log("\tMongoDB URL \t: " + config.database.url + " (" + config.app.env + ")");
+	}).catch(err => {
+		console.log("Database :");
+		console.log("\tDatabase Status : Not Connected");
+		console.log("\tMongoDB URL \t: " + config.database.url + " (" + config.app.env + ")");
+	});
 
-// Server Running Message
-App.listen(parseInt(config.app.port[config.app.env]), () => {
-	console.log("Server :");
-	console.log("\tStatus \t\t: OK");
-	console.log("\tService \t: " + config.app.name + " (" + config.app.env + ")");
-	console.log("\tPort \t\t: " + config.app.port[config.app.env]);
-});
+	// Server Running Message
+	App.listen(parseInt(config.app.port[config.app.env]), () => {
+		console.log("Server :");
+		console.log("\tStatus \t\t: OK");
+		console.log("\tService \t: " + config.app.name + " (" + config.app.env + ")");
+		console.log("\tPort \t\t: " + config.app.port[config.app.env]);
+	});
 
 /*
  |--------------------------------------------------------------------------

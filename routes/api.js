@@ -188,6 +188,8 @@ module.exports = (app) => {
 	//testing
 	app.get('/api/v2.0/testing', Controllers.v_2_0.Testing.test);
 
+	//get user 
+	app.get('/api/v2.0/user-search', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.User.hris_sap_search);
 	/*
 	 |--------------------------------------------------------------------------
 	 | API Versi 1.2

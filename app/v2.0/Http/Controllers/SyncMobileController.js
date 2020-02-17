@@ -24,7 +24,8 @@
 	}
 
 	// Node Module
-	const NodeRestClient = require( 'node-rest-client' ).Client;
+	var Client = require('node-rest-client').Client;
+	var client = new Client();
 
 /*
  |--------------------------------------------------------------------------
@@ -327,7 +328,7 @@
 					var args = {
 						headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
 					};
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						var insert = [];
 						if ( data.data.length > 0 ) {
 							insert = data.data;
@@ -356,7 +357,7 @@
 					};
 					var url = service_url + '/sync-mobile/kualitas/' + start_date + '/' + end_date;
 					
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						res.json( {
 							status: data.status,
 							message: data.message,
@@ -375,7 +376,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -399,6 +400,7 @@
 			.sort( { TGL_MOBILE_SYNC: -1 } )
 			.limit( 1 )
 			.then( data => {
+				console.log(data);
 				if ( data.length == 0 ) {
 					var url = service_url + '/api/v2.0/finding';
 					var args = {
@@ -407,42 +409,95 @@
 							"Authorization": req.headers.authorization
 						}
 					};
-
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					console.log(url);
+					let request = client.get( url, args, function ( data, response ) {
 						var insert = [];
-						if ( data.data.length > 0 ) {
-							insert = data.data;
-						}
-						
-						return res.json( { 
-							"status": data.status,
-							"message": "First time sync",
-							"data": {
-								hapus: [],
-								simpan: data.data,
-								ubah: []
+						if(data.data) {
+							if ( data.data.length > 0 ) {
+								insert = data.data;
 							}
-						} );
+							return res.json( {
+								"status": data.status,
+								"message": "First time sync",
+								"data": {
+									hapus: [],
+									simpan: data.data,
+									ubah: []
+								}
+							} );
+						} else {
+							return res.send({
+								status:false,
+								message: "periksa url: " + url,
+								data:[]
+							});
+						}
+					});
+					request.on('requestTimeout', function (req) {
+						console.log('request has expired');
+						req.abort();
+					});
+					 
+					request.on('responseTimeout', function (res) {
+						console.log('response has expired');
+					 
+					});
+					 
+					//it's usefull to handle request errors to avoid, for example, socket hang up errors on request timeouts
+					request.on('error', function (err) {
+						console.log('request error', err);
+						return res.send({
+							status: false,
+							message: err.message,
+							data: []
+						})
 					});
 				}
 				else {
 					var dt = data[0];
 					var start_date = Libraries.Helper.date_format( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
-					var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDD' ) + '235959';
+					var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDD' );
 					var args = {
 						headers: {
 							"Content-Type": "application/json", 
 							"Authorization": req.headers.authorization
 						}
 					};
-					var url = service_url + '/api/v2.0/sync-mobile/finding/' + start_date + '/' + end_date;
-
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
-						res.json( {
-							status: data.status,
-							message: data.message,
-							data: data.data
-						} );
+					var urlFindingWithDate = service_url + '/api/v2.0/sync-mobile/finding/' + start_date + '/' + end_date;
+					console.log(urlFindingWithDate);
+					let request = client.get( urlFindingWithDate, args, function ( data, response ) {
+						if(data.data) {
+							res.json( {
+								status: data.status,
+								message: data.message,
+								data: data.data
+							} );
+						} else {
+							return res.send({
+								status: false,
+								message: 'Periksa service ' + urlFindingWithDate,
+								data: []
+							});
+						}
+						
+					});
+					request.on('requestTimeout', function (req) {
+						console.log('request has expired');
+						req.abort();
+					});
+					 
+					request.on('responseTimeout', function (res) {
+						console.log('response has expired');
+					});
+					 
+					//it's usefull to handle request errors to avoid, for example, socket hang up errors on request timeouts
+					request.on('error', function (err) {
+						console.log('request error', err);
+						return res.send({
+							status: false,
+							message: err,
+							data: []
+						})
 					});
 				}
 				
@@ -454,9 +509,10 @@
 						data: {}
 					} );
 				}
+				console.log(err);
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,//'Error retrieving data',
 					data: {}
 				} );
 			} );
@@ -514,7 +570,7 @@
 
 				var url = service_url + '/sync-mobile/finding-images/' + start_date + '/' + end_date;
 				
-				( new NodeRestClient() ).get( url, args, function ( data, response ) {
+				client.get( url, args, function ( data, response ) {
 					if ( data.data.length > 0 ) {
 						var trcode = [];
 						for ( i = 0; i <= ( data.data.length - 1 ); i++ ) {
@@ -540,7 +596,7 @@
 								timeout: 10000
 							}
 						};
-						( new NodeRestClient() ).post( finding_images_url, finding_images_args, function( data, response ) {
+						client.post( finding_images_url, finding_images_args, function( data, response ) {
 							res.json( {
 								"status": data.status,
 								"message": data.message,
@@ -583,7 +639,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -616,7 +672,7 @@
 						}
 					};
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						var insert = [];
 						if ( data.data.length > 0 ) {
 							insert = data.data;
@@ -645,7 +701,7 @@
 					};
 					var url = service_url + '/sync-mobile/afdeling/' + start_date + '/' + end_date;
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						res.json( {
 							status: data.status,
 							message: data.message,
@@ -664,7 +720,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -698,7 +754,7 @@
 						}
 					};
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						var insert = [];
 						if ( data.data.length > 0 ) {
 							insert = data.data;
@@ -727,7 +783,7 @@
 					};
 					var url = service_url + '/sync-mobile/block/' + start_date + '/' + end_date;
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						res.json( {
 							status: data.status,
 							message: data.message,
@@ -746,7 +802,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -780,7 +836,7 @@
 						}
 					};
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						var insert = [];
 						if ( data.data.length > 0 ) {
 							insert = data.data;
@@ -809,7 +865,7 @@
 					};
 					var url = service_url + '/sync-mobile/comp/' + start_date + '/' + end_date;
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						console.log( "RES: ", res );
 						res.json( {
 							status: data.status,
@@ -829,7 +885,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -863,7 +919,7 @@
 						}
 					};
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						var insert = [];
 						if ( data.data.length > 0 ) {
 							insert = data.data;
@@ -892,7 +948,7 @@
 					};
 					var url = service_url + '/sync-mobile/est/' + start_date + '/' + end_date;
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						res.json( {
 							status: data.status,
 							message: data.message,
@@ -911,7 +967,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -945,7 +1001,7 @@
 						}
 					};
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						var insert = [];
 						if ( data.data.length > 0 ) {
 							insert = data.data;
@@ -974,7 +1030,7 @@
 					};
 					var url = service_url + '/sync-mobile/land-use/' + start_date + '/' + end_date;
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						res.json( {
 							status: data.status,
 							message: data.message,
@@ -994,7 +1050,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -1027,7 +1083,7 @@
 						}
 					};
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						var insert = [];
 						if ( data.data.length > 0 ) {
 							insert = data.data;
@@ -1056,7 +1112,7 @@
 					};
 					var url = service_url + '/sync-mobile/region/' + start_date + '/' + end_date;
 
-					( new NodeRestClient() ).get( url, args, function ( data, response ) {
+					client.get( url, args, function ( data, response ) {
 						res.json( {
 							status: data.status,
 							message: data.message,
@@ -1075,7 +1131,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -1473,7 +1529,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -1676,7 +1732,7 @@
 				}
 				return res.send( {
 					status: false,
-					message: 'Error retrieving data',
+					message: err.message,
 					data: {}
 				} );
 			} );
@@ -1732,7 +1788,6 @@
 					else if ( config.app.env == 'dev' ) {
 						var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.dev + '/' ;
 					}
-					console.log(req.hostname);
 					let temp_insert_first = [];
 					data_first_sync.forEach( function( data_category ) {
 						var path = 'files/images/category/' + data_category.ICON;
@@ -1906,7 +1961,7 @@
 			}
 			return res.send( {
 				status: false,
-				message: 'Error retrieving data',
+				message: err.message,
 				data: {}
 			} );
 		} );
@@ -1968,7 +2023,7 @@
 			else {
 				return res.send( {
 					status: false,
-					message: 'Error! Kode salah.',
+					message: err.message,
 					data: {}
 				} );
 			}

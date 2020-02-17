@@ -52,7 +52,8 @@
 					INSERT_TIME_DW: Libraries.Helper.date_format( req.body.INSERT_TIME_DW, 'YYYYMMDDhhmmss' ) || 0,
 					UPDATE_TIME_DW: Libraries.Helper.date_format( req.body.UPDATE_TIME_DW, 'YYYYMMDDhhmmss' ) || 0,
 					DELETE_TIME_DW: Libraries.Helper.date_format( req.body.DELETE_TIME_DW, 'YYYYMMDDhhmmss' ) || 0,
-					LAST_UPDATE: Libraries.Helper.date_format( 'now', 'YYYYMMDD' ).substr( 0, 8 )
+					LAST_UPDATE: Libraries.Helper.date_format( 'now', 'YYYYMMDD' ).substr( 0, 8 ),
+					EMPLOYEE_RESIGNDATE: Libraries.Helper.date_format( req.body.EMPLOYEE_RESIGNDATE, 'YYYYMMDDhhmmss' ) || 0
 				} );
 				
 				empHRIS.save()
@@ -72,7 +73,7 @@
 			}
 			// Kondisi data sudah ada, check value, jika sama tidak diupdate, jika beda diupdate dan dimasukkan ke Sync List
 			else {
-				if ( data.EMPLOYEE_FULLNAME != req.body.EMPLOYEE_FULLNAME || data.EMPLOYEE_USERNAME != req.body.EMPLOYEE_USERNAME ) {
+				// if ( data.EMPLOYEE_FULLNAME != req.body.EMPLOYEE_FULLNAME || data.EMPLOYEE_USERNAME != req.body.EMPLOYEE_USERNAME || data.EMPLOYEE_RESIGNDATE != req.body.EMPLOYEE_RESIGNDATE ) {
 					Models.EmployeeHRIS.findOneAndUpdate( { 
 						EMPLOYEE_NIK: req.body.EMPLOYEE_NIK
 					}, {
@@ -84,7 +85,8 @@
 						INSERT_TIME_DW: Libraries.Helper.date_format( req.body.INSERT_TIME_DW, 'YYYYMMDDhhmmss' ),
 						UPDATE_TIME_DW: Libraries.Helper.date_format( req.body.UPDATE_TIME_DW, 'YYYYMMDDhhmmss' ),
 						DELETE_TIME_DW: Libraries.Helper.date_format( req.body.DELETE_TIME_DW, 'YYYYMMDDhhmmss' ),
-						LAST_UPDATE: Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' )
+						LAST_UPDATE: Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ),
+						EMPLOYEE_RESIGNDATE: Libraries.Helper.date_format( req.body.EMPLOYEE_RESIGNDATE, 'YYYYMMDDhhmmss' )
 					}, { new: true } )
 					.then( data => {
 						if( !data ) {
@@ -115,14 +117,14 @@
 							data: {}
 						} );
 					} );
-				}
-				else {
-					return res.send( {
-						status: true,
-						message: 'Skip Update',
-						data: {}
-					} );
-				}
+				// }
+				// else {
+				// 	return res.send( {
+				// 		status: true,
+				// 		message: 'Skip Update',
+				// 		data: {}
+				// 	} );
+				// }
 			}
 			
 		} ).catch( err => {
@@ -170,7 +172,8 @@
 					START_VALID: Libraries.Helper.date_format( req.body.START_VALID, 'YYYYMMDDhhmmss' ).substr( 0, 8 ) || 0,
 					INSERT_TIME_DW: Libraries.Helper.date_format( req.body.INSERT_TIME_DW, 'YYYYMMDDhhmmss' ) || 0,
 					UPDATE_TIME_DW: Libraries.Helper.date_format( req.body.UPDATE_TIME_DW, 'YYYYMMDDhhmmss' ) || 0,
-					LAST_UPDATE: Libraries.Helper.date_format( 'now', 'YYYYMMDD' ).substr( 0, 8 )
+					LAST_UPDATE: Libraries.Helper.date_format( 'now', 'YYYYMMDD' ).substr( 0, 8 ),
+					RES_DATE: Libraries.Helper.date_format( req.body.RES_DATE, 'YYYYMMDDhhmmss' ) || 0,
 				} );
 				
 				empHRIS.save()
@@ -190,7 +193,7 @@
 			}
 			// Kondisi data sudah ada, check value, jika sama tidak diupdate, jika beda diupdate dan dimasukkan ke Sync List
 			else {
-				if ( data.EMPLOYEE_NAME != req.body.EMPLOYEE_NAME || data.JOB_CODE != req.body.JOB_CODE || data.END_VALID != req.body.END_VALID ) {
+				// if ( data.EMPLOYEE_NAME != req.body.EMPLOYEE_NAME || data.JOB_CODE != req.body.JOB_CODE || data.END_VALID != req.body.END_VALID || data.RES_DATE != req.body.RES_DATE ) {
 					Models.EmployeeSAP.findOneAndUpdate( { 
 						NIK: req.body.NIK
 					}, {
@@ -231,14 +234,14 @@
 							data: {}
 						} );
 					} );
-				}
-				else {
-					return res.send( {
-						status: true,
-						message: 'Skip Update',
-						data: {}
-					} );
-				}
+				// }
+				// else {
+				// 	return res.send( {
+				// 		status: true,
+				// 		message: 'Skip Update',
+				// 		data: {}
+				// 	} );
+				// }
 			}
 			
 		} ).catch( err => {
