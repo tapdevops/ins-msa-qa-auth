@@ -57,7 +57,7 @@
 					microservice_finding: 'http://apis.tap-agri.com/mobileinspectiondev/ins-msa-dev-finding',
 					microservice_hectare_statement: 'http://apis.tap-agri.com/mobileinspectiondev/ins-msa-dev-hectarestatement',
 					microservice_inspection: 'http://apis.tap-agri.com/mobileinspectiondev/ins-msa-dev-inspection',
-					microservice_images: 'http://149.129.250.199:4012',
+					microservice_images: 'http://image.tap-agri.com:4012',
 					microservice_reports: 'http://apis.tap-agri.com/mobileinspectiondev/ins-msa-dev-reports',
 					microservice_point: 'http://apis.tap-agri.com/mobileinspectiondev/ins-msa-dev-point',
 					msa_internal_tap: 'http://msadev.tap-agri.com'
@@ -70,7 +70,7 @@
 					microservice_finding: 'http://apis.tap-agri.com/mobileinspectionqa/ins-msa-qa-finding',
 					microservice_hectare_statement: 'http://apis.tap-agri.com/mobileinspectionqa/ins-msa-qa-hectarestatement',
 					microservice_inspection: 'http://apis.tap-agri.com/mobileinspectionqa/ins-msa-qa-inspection',
-					microservice_images: 'http://149.129.246.66:5012',
+					microservice_images: 'http://image.tap-agri.com:5012',
 					microservice_reports: 'http://apis.tap-agri.com/mobileinspectionqa/ins-msa-qa-reports',
 					microservice_point: 'http://apis.tap-agri.com/mobileinspectiondev/ins-msa-dev-point',
 					msa_internal_tap: 'http://msaqa.tap-agri.com'
