@@ -72,7 +72,7 @@
 					microservice_inspection: 'http://apis.tap-agri.com/mobileinspectionqa/ins-msa-qa-inspection',
 					microservice_images: 'http://image.tap-agri.com:5012',
 					microservice_reports: 'http://apis.tap-agri.com/mobileinspectionqa/ins-msa-qa-reports',
-					microservice_point: 'http://apis.tap-agri.com/mobileinspectiondev/ins-msa-dev-point',
+					microservice_point: 'http://apis.tap-agri.com/mobileinspectionqa/ins-msa-qa-point',
 					msa_internal_tap: 'http://msaqa.tap-agri.com'
 				},
 				prod: {
@@ -84,7 +84,7 @@
 					microservice_inspection: 'http://apis.tap-agri.com/mobileinspection/ins-msa-inspection',
 					microservice_images: 'http://image.tap-agri.com:3012',
 					microservice_reports: 'http://apis.tap-agri.com/mobileinspection/ins-msa-reports',
-					microservice_point: 'http://apis.tap-agri.com/mobileinspectiondev/ins-msa-dev-point',
+					microservice_point: 'http://apis.tap-agri.com/mobileinspection/ins-msa-point',
 					msa_internal_tap: 'http://msa.tap-agri.com'
 				}
 			},
