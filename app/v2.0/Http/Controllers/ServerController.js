@@ -275,7 +275,8 @@
 						_id: 0,
 						INSERT_USER: 1,
 						APK_VERSION: 1,
-						IMEI: 1
+						IMEI: 1,
+						INSERT_TIME: 1
 					}
 				},
 				{
