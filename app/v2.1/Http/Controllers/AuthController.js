@@ -444,23 +444,51 @@
 	  * di mobile hampir phabis.
 	  * --------------------------------------------------------------------
 	*/
-		exports.generate_token = ( req, res ) => {
+		exports.generate_token = async ( req, res ) => {
 			var auth = req.auth;
+			let user = await Models.UserAuth.findOne({USER_AUTH_CODE: auth.USER_AUTH_CODE})
+			
 			var claims = {
-				USERNAME: auth.USERNAME,
-				USER_AUTH_CODE: auth.USER_AUTH_CODE,
-				USER_ROLE: auth.USER_ROLE,
-				LOCATION_CODE: auth.LOCATION_CODE,
-				REFFERENCE_ROLE: auth.REFFERENCE_ROLE,
-				EMPLOYEE_NIK: auth.EMPLOYEE_NIK,
+				USERNAME: user.USERNAME,
+				USER_AUTH_CODE: user.USER_AUTH_CODE,
+				USER_ROLE: user.USER_ROLE,
+				LOCATION_CODE: user.LOCATION_CODE,
+				REFFERENCE_ROLE: user.REF_ROLE,
+				EMPLOYEE_NIK: user.EMPLOYEE_NIK,
 				IMEI: auth.IMEI
 			};
 			var token = Libraries.Security.generate_token( claims ); // Generate Token
 
+			var datetimeNow = Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' );
+			var loginData = {
+				USER_AUTH_CODE: user.USER_AUTH_CODE || "",
+				USERNAME: user.USERNAME || "",
+				ACCESS_TOKEN: token || "",
+				LAST_LOGIN: datetimeNow,
+				LOG_LOGIN: 1,
+				IMEI: auth.IMEI || ""
+			};
+			Models.Login.findOneAndUpdate( { 
+				EMPLOYEE_NIK: auth.EMPLOYEE_NIK
+			}, loginData, { new: true } )
+			.then(() => {
+				console.log( "[Success] Update Data Login" );
+			})
+			.catch(err => {
+				console.log( "[Failed] Update Data Login" );
+			});
 			return res.json( {
 				status: true,
 				message: "Success! Token berhasil digenerate. ",
-				data: token
+				data: {
+					USER_AUTH_CODE: user.USER_AUTH_CODE,
+					USERNAME: user.USERNAME,
+					USER_ROLE: user.USER_ROLE,
+					LOCATION_CODE: user.LOCATION_CODE,
+					REFFERENCE_ROLE: user.REF_ROLE,
+					NIK: user.EMPLOYEE_NIK,
+					ACCESS_TOKEN: token
+				}
 			} );
 		};
 	
