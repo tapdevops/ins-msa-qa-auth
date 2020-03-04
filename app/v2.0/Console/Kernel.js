@@ -12,6 +12,7 @@ const serviceAccount = require(_directory_base + '/public/key/push-notification.
 const Helper = require(_directory_base + '/app/v2.0/Http/Libraries/Helper.js');
 const Client = require('node-rest-client').Client;
 const client = new Client();
+const KafkaServer = require(_directory_base + '/app/v2.0/Http/Libraries/KafkaServer.js')
 
 /*
 |--------------------------------------------------------------------------
