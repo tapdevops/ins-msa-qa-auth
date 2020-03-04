@@ -152,6 +152,9 @@ new CronJob('0 3 * * *', function () {
 	Kernel.pushNotification(admin, token);
 }, null, true, 'Asia/Jakarta');
 
+new CronJob('0 0 * * *', function () {
+	Kernel.pushAllUsers()
+}, null, true, 'Asia/Jakarta');
 /*
  |--------------------------------------------------------------------------
  | Exports
