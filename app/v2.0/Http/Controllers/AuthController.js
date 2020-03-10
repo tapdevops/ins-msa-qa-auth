@@ -479,7 +479,6 @@
 				} );
 			}
 			let FIREBASE_TOKEN = req.body.FIREBASE_TOKEN;
-			console.log("test");
 			try {
 				await Models.UserAuth.findOneAndUpdate( { USER_AUTH_CODE: req.auth.USER_AUTH_CODE },
 					{ FIREBASE_TOKEN }, 
