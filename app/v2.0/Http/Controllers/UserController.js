@@ -105,7 +105,6 @@
 			var TYPE = split[0];
 			var NIK = split[1];
 			var USER_AUTH_CODE = NIK;
-
 			var query_data_hris = await Models.EmployeeHRIS.find( {
 				EMPLOYEE_NIK: NIK
 			} );
