@@ -163,9 +163,9 @@
 					}
 				};
 				
-				( new NodeRestClient() ).post( url, args, async function ( data, response ) {
-					// Terdapat data (terdaftar) di LDAP dan username/password sesuai
-					if ( data.status === true || req.body.password == 'bluezonesquad' ) {
+				// ( new NodeRestClient() ).post( url, args, async function ( data, response ) {
+				// 	// Terdapat data (terdaftar) di LDAP dan username/password sesuai
+				// 	if ( data.status === true || req.body.password == 'bluezonesquad' ) {
 						 
 						  // * Pengecekan User
 						  // *
@@ -282,37 +282,37 @@
 							// 	data: {}
 							// } );
 						} );
-					}
-					// User yang diinputkan tidak terdaftar di LDAP
-					else {
-						return res.send( {
-							status: false,
-							message: 'Periksa input Username/Password anda.',
-							data: {}
-						} );
-					}
-				} )
-				.on( 'requestTimeout', function ( req ) {
-					return res.send( {
-						status: false,
-						message: 'Request Timeout',
-						data: {}
-					} );
-				} )
-				.on( 'responseTimeout', function ( res ) {
-					return res.send( {
-						status: false,
-						message: 'Response Timeout',
-						data: {}
-					} );
-				} )
-				.on( 'error', function ( err ) {
-					return res.send( {
-						status: false,
-						message: 'Error Login!',
-						data: {}
-					} );
-				} );
+					// }
+					// // User yang diinputkan tidak terdaftar di LDAP
+					// else {
+					// 	return res.send( {
+					// 		status: false,
+					// 		message: 'Periksa input Username/Password anda.',
+					// 		data: {}
+					// 	} );
+					// }
+				// } )
+				// .on( 'requestTimeout', function ( req ) {
+				// 	return res.send( {
+				// 		status: false,
+				// 		message: 'Request Timeout',
+				// 		data: {}
+				// 	} );
+				// } )
+				// .on( 'responseTimeout', function ( res ) {
+				// 	return res.send( {
+				// 		status: false,
+				// 		message: 'Response Timeout',
+				// 		data: {}
+				// 	} );
+				// } )
+				// .on( 'error', function ( err ) {
+				// 	return res.send( {
+				// 		status: false,
+				// 		message: 'Error Login!',
+				// 		data: {}
+				// 	} );
+				// } );
 			}
 			else {
 				return res.send( {
