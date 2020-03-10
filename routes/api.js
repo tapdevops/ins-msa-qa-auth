@@ -5,9 +5,6 @@
 */
 // Controllers
 const Controllers = {
-	v_2_1: {
-		Auth: require(_directory_base + '/app/v2.1/Http/Controllers/AuthController.js'),
-	},
 	v_2_0: {
 		Auth: require(_directory_base + '/app/v2.0/Http/Controllers/AuthController.js'),
 		Category: require(_directory_base + '/app/v2.0/Http/Controllers/CategoryController.js'),
@@ -108,13 +105,6 @@ module.exports = (app) => {
 			}
 		})
 	});
-
-	/*
-	 |--------------------------------------------------------------------------
-	 | API Versi 2.1
-	 |--------------------------------------------------------------------------
-	 */
-	app.get('/api/v2.1/auth/generate/token', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.Auth.generate_token);
 
 	/*
 	 |--------------------------------------------------------------------------
