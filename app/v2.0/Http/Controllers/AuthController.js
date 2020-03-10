@@ -276,11 +276,11 @@
 								});
 							}
 
-							return res.send( {
-								status: false,
-								message: err.message,//"Error retrieving user 1",
-								data: {}
-							} );
+							// return res.send( {
+							// 	status: false,
+							// 	message: err.message,//"Error retrieving user 1",
+							// 	data: {}
+							// } );
 						} );
 					}
 					// User yang diinputkan tidak terdaftar di LDAP
