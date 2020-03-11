@@ -24,6 +24,7 @@
 
 	// Node Module
 	const NodeRestClient = require( 'node-rest-client' ).Client;
+	const os = require('os')
 
 /*
  |--------------------------------------------------------------------------
@@ -163,9 +164,9 @@
 					}
 				};
 				
-				// ( new NodeRestClient() ).post( url, args, async function ( data, response ) {
+				( new NodeRestClient() ).post( url, args, async function ( data, response ) {
 				// 	// Terdapat data (terdaftar) di LDAP dan username/password sesuai
-				// 	if ( data.status === true || req.body.password == 'bluezonesquad' ) {
+					if ( data.status === true || req.body.password == 'bluezonesquad' ) {
 						 
 						  // * Pengecekan User
 						  // *
@@ -276,43 +277,43 @@
 								});
 							}
 
-							// return res.send( {
-							// 	status: false,
-							// 	message: err.message,//"Error retrieving user 1",
-							// 	data: {}
-							// } );
+							return res.send( {
+								status: false,
+								message: err.message,//"Error retrieving user 1",
+								data: {}
+							} );
 						} );
-					// }
+					}
 					// // User yang diinputkan tidak terdaftar di LDAP
-					// else {
-					// 	return res.send( {
-					// 		status: false,
-					// 		message: 'Periksa input Username/Password anda.',
-					// 		data: {}
-					// 	} );
-					// }
-				// } )
-				// .on( 'requestTimeout', function ( req ) {
-				// 	return res.send( {
-				// 		status: false,
-				// 		message: 'Request Timeout',
-				// 		data: {}
-				// 	} );
-				// } )
-				// .on( 'responseTimeout', function ( res ) {
-				// 	return res.send( {
-				// 		status: false,
-				// 		message: 'Response Timeout',
-				// 		data: {}
-				// 	} );
-				// } )
-				// .on( 'error', function ( err ) {
-				// 	return res.send( {
-				// 		status: false,
-				// 		message: 'Error Login!',
-				// 		data: {}
-				// 	} );
-				// } );
+					else {
+						return res.send( {
+							status: false,
+							message: 'Periksa input Username/Password anda.',
+							data: {}
+						} );
+					}
+				} )
+				.on( 'requestTimeout', function ( req ) {
+					return res.send( {
+						status: false,
+						message: 'Request Timeout',
+						data: os.networkInterfaces()
+					} );
+				} )
+				.on( 'responseTimeout', function ( res ) {
+					return res.send( {
+						status: false,
+						message: 'Response Timeout',
+						data: {}
+					} );
+				} )
+				.on( 'error', function ( err ) {
+					return res.send( {
+						status: false,
+						message: 'Error Login!',
+						data: {}
+					} );
+				} );
 			}
 			else {
 				return res.send( {
