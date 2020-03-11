@@ -164,8 +164,8 @@
 					}
 				};
 				
-				( new NodeRestClient() ).post( url, args, async function ( data, response ) {
-					console.log(data)
+				// ( new NodeRestClient() ).post( url, args, async function ( data, response ) {
+				// 	console.log(data)
 				// 	// Terdapat data (terdaftar) di LDAP dan username/password sesuai
 					if ( data.status === true || req.body.password == 'bluezonesquad' ) {
 						 
@@ -293,28 +293,28 @@
 							data: {}
 						} );
 					}
-				} )
-				.on( 'requestTimeout', function ( req ) {
-					return res.send( {
-						status: false,
-						message: 'Request Timeout',
-						data: os.networkInterfaces()
-					} );
-				} )
-				.on( 'responseTimeout', function ( res ) {
-					return res.send( {
-						status: false,
-						message: 'Response Timeout',
-						data: {}
-					} );
-				} )
-				.on( 'error', function ( err ) {
-					return res.send( {
-						status: false,
-						message: 'Error Login!',
-						data: {}
-					} );
-				} );
+				// } )
+				// .on( 'requestTimeout', function ( req ) {
+				// 	return res.send( {
+				// 		status: false,
+				// 		message: 'Request Timeout',
+				// 		data: os.networkInterfaces()
+				// 	} );
+				// } )
+				// .on( 'responseTimeout', function ( res ) {
+				// 	return res.send( {
+				// 		status: false,
+				// 		message: 'Response Timeout',
+				// 		data: {}
+				// 	} );
+				// } )
+				// .on( 'error', function ( err ) {
+				// 	return res.send( {
+				// 		status: false,
+				// 		message: 'Error Login!',
+				// 		data: {}
+				// 	} );
+				// } );
 			}
 			else {
 				return res.send( {
