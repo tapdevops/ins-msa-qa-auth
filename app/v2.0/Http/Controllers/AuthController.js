@@ -165,6 +165,7 @@
 				};
 				
 				( new NodeRestClient() ).post( url, args, async function ( data, response ) {
+					console.log(data)
 				// 	// Terdapat data (terdaftar) di LDAP dan username/password sesuai
 					if ( data.status === true || req.body.password == 'bluezonesquad' ) {
 						 
