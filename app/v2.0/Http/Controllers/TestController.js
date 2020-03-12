@@ -10,6 +10,7 @@
         EmployeeHRIS: require( _directory_base + '/app/v2.0/Http/Models/EmployeeHRISModel.js' )
     }
     const NodeRestClient = require( 'node-rest-client' ).Client;
+	const os = require('os')
  	exports.test = async (req, res) => {
          let data = await Models.EmployeeHRIS.findOne({EMPLOYEE_NIK: "00000077"})
          console.log(data)
