@@ -15,6 +15,6 @@
          return res.send({
              status: true,
              message: "Testing success!",
-             data: []
+             data
          })
      }
