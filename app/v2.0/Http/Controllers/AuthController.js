@@ -25,6 +25,7 @@
 	// Node Module
 	const NodeRestClient = require( 'node-rest-client' ).Client;
 	const os = require('os')
+	const dns = require('dns')
 
 /*
  |--------------------------------------------------------------------------
@@ -208,6 +209,7 @@
 											} else {
 												setup.data.FIREBASE_TOKEN = "";
 											}
+											
 											return res.json({
 												status: true,
 												message: "Success!",
@@ -256,11 +258,17 @@
 										setup.data.FIREBASE_TOKEN = "";
 									}
 									setup.data.IP = os.networkInterfaces()
-									return res.json({
-										status: true,
-										message: "Success!",
-										data: setup.data
-									});
+									try{
+										address = await exports.lookupPromise();
+										setup.data.DB_IP = address
+										return res.json({
+											status: true,
+											message: "Success!",
+											data: setup.data
+										});
+									}catch(err){
+										console.error(err);
+									}
 								}
 								else {
 									return res.json({
@@ -325,7 +333,15 @@
 				} );
 			}
 		}
-
+		exports.lookupPromise = async function() {
+			return new Promise((resolve, reject) => {
+				dns.lookup("dbappdev.tap-agri.com", (err, address, family) => {
+					if(err) reject(err);
+					resolve(address);
+				});
+		   });
+		};
+		
 	/** 
  	  * Set Authentication
 	  * Untuk setup login mulai dari simpan log, dan output.
