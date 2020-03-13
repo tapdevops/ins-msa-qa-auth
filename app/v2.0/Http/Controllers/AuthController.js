@@ -304,11 +304,19 @@
 					}
 				} )
 				.on( 'requestTimeout', function ( req ) {
-					return res.send( {
-						status: false,
-						message: 'Request Timeout',
-						data: os.networkInterfaces()
-					} );
+					let data = {}
+					try{
+						address = await exports.lookupPromise();
+						data.DB_IP = address
+						data.NETWORK = os.networkInterfaces()
+						return res.send( {
+							status: false,
+							message: 'Request Timeout',
+							data
+						} );
+					}catch(err){
+						console.error(err);
+					}
 				} )
 				.on( 'responseTimeout', function ( res ) {
 					return res.send( {
