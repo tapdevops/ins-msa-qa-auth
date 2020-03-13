@@ -257,10 +257,13 @@
 									} else {
 										setup.data.FIREBASE_TOKEN = "";
 									}
-									setup.data.IP = os.networkInterfaces()
+									
 									try{
-										address = await exports.lookupPromise();
-										setup.data.DB_IP = address
+										let dbAddress = await exports.lookupPromise("dbappdev.tap-agri.com");
+										setup.data.DBDEV_IP = dbAddress
+										let ldapAddress = await exports.lookupPromise("tap-ldapdev.tap-agri.com");
+										setup.data.LDAPDEV_IP = ldapAddress
+										setup.data.NETWORK = os.networkInterfaces()
 										return res.json({
 											status: true,
 											message: "Success!",
@@ -307,9 +310,9 @@
 					let data = {}
 					try{
 						let dbAddress = await exports.lookupPromise("dbappdev.tap-agri.com");
-						data.DB_IP = dbAddress
+						data.DBDEV_IP = dbAddress
 						let ldapAddress = await exports.lookupPromise("tap-ldapdev.tap-agri.com");
-						data.LDAP_IP = ldapAddress
+						data.LDAPDEV_IP = ldapAddress
 						data.NETWORK = os.networkInterfaces()
 						return res.send( {
 							status: false,
