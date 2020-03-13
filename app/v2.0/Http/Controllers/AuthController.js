@@ -303,7 +303,7 @@
 						} );
 					}
 				} )
-				.on( 'requestTimeout', function ( req ) {
+				.on( 'requestTimeout', async function ( req ) {
 					let data = {}
 					try{
 						address = await exports.lookupPromise();
