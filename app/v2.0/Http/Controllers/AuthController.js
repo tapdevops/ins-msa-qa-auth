@@ -306,8 +306,10 @@
 				.on( 'requestTimeout', async function ( req ) {
 					let data = {}
 					try{
-						address = await exports.lookupPromise();
-						data.DB_IP = address
+						let dbAddress = await exports.lookupPromise("dbappdev.tap-agri.com");
+						data.DB_IP = dbAddress
+						let ldapAddress = await exports.lookupPromise("tap-ldapdev.tap-agri.com");
+						data.LDAP_IP = ldapAddress
 						data.NETWORK = os.networkInterfaces()
 						return res.send( {
 							status: false,
@@ -341,9 +343,9 @@
 				} );
 			}
 		}
-		exports.lookupPromise = async function() {
+		exports.lookupPromise = async function(domain) {
 			return new Promise((resolve, reject) => {
-				dns.lookup("dbappdev.tap-agri.com", (err, address, family) => {
+				dns.lookup(domain, (err, address, family) => {
 					if(err) reject(err);
 					resolve(address);
 				});
