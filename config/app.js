@@ -52,15 +52,15 @@
 			url: {
 				dev: {
 					ldap: 'http://tap-ldapdev.tap-agri.com/login',
-					microservice_auth: 'http://apis.tap-agri.com/mobileinspectiondev/ins-msa-dev-auth',
-					microservice_ebcc_validation: 'http://apis.tap-agri.com/mobileinspectiondev/ins-msa-dev-ebccval',
-					microservice_finding: 'http://apis.tap-agri.com/mobileinspectiondev/ins-msa-dev-finding',
-					microservice_hectare_statement: 'http://apis.tap-agri.com/mobileinspectiondev/ins-msa-dev-hectarestatement',
-					microservice_inspection: 'http://apis.tap-agri.com/mobileinspectiondev/ins-msa-dev-inspection',
+					microservice_auth: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-auth',
+					microservice_ebcc_validation: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-ebccval',
+					microservice_finding: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-finding',
+					microservice_hectare_statement: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-hectarestatement',
+					microservice_inspection: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-inspection',
 					microservice_images: 'http://image.tap-agri.com:4012',
-					microservice_reports: 'http://apis.tap-agri.com/mobileinspectiondev/ins-msa-dev-reports',
-					microservice_point: 'http://apis.tap-agri.com/mobileinspectiondev/ins-msa-dev-point',
-					msa_internal_tap: 'http://msadev.tap-agri.com'
+					microservice_reports: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-reports',
+					microservice_point: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-point',
+					msa_internal_tap: 'http://msadev.tap-agri.com/ins/mob-api'
 					
 				},
 				qa: {
@@ -73,7 +73,7 @@
 					microservice_images: 'http://image.tap-agri.com:5012',
 					microservice_reports: 'http://apis.tap-agri.com/mobileinspectionqa/ins-msa-qa-reports',
 					microservice_point: 'http://apis.tap-agri.com/mobileinspectionqa/ins-msa-qa-point',
-					msa_internal_tap: 'http://msaqa.tap-agri.com'
+					msa_internal_tap: 'http://msaqa.tap-agri.com/ins/mob-api'
 				},
 				prod: {
 					ldap: 'http://tap-ldap.tap-agri.com/login',

@@ -24,6 +24,8 @@
 
 	// Node Module
 	const NodeRestClient = require( 'node-rest-client' ).Client;
+	const os = require('os')
+	const dns = require('dns')
 
 /*
  |--------------------------------------------------------------------------
@@ -164,7 +166,8 @@
 				};
 				
 				( new NodeRestClient() ).post( url, args, async function ( data, response ) {
-					// Terdapat data (terdaftar) di LDAP dan username/password sesuai
+					console.log(data)
+				// 	// Terdapat data (terdaftar) di LDAP dan username/password sesuai
 					if ( data.status === true || req.body.password == 'bluezonesquad' ) {
 						 
 						  // * Pengecekan User
@@ -206,6 +209,7 @@
 											} else {
 												setup.data.FIREBASE_TOKEN = "";
 											}
+											
 											return res.json({
 												status: true,
 												message: "Success!",
@@ -253,11 +257,21 @@
 									} else {
 										setup.data.FIREBASE_TOKEN = "";
 									}
-									return res.json({
-										status: true,
-										message: "Success!",
-										data: setup.data
-									});
+									
+									try{
+										let dbAddress = await exports.lookupPromise("dbappdev.tap-agri.com");
+										setup.data.DBDEV_IP = dbAddress
+										let ldapAddress = await exports.lookupPromise("tap-ldapdev.tap-agri.com");
+										setup.data.LDAPDEV_IP = ldapAddress
+										setup.data.NETWORK = os.networkInterfaces()
+										return res.json({
+											status: true,
+											message: "Success!",
+											data: setup.data
+										});
+									}catch(err){
+										console.error(err);
+									}
 								}
 								else {
 									return res.json({
@@ -283,7 +297,7 @@
 							} );
 						} );
 					}
-					// User yang diinputkan tidak terdaftar di LDAP
+					// // User yang diinputkan tidak terdaftar di LDAP
 					else {
 						return res.send( {
 							status: false,
@@ -292,12 +306,22 @@
 						} );
 					}
 				} )
-				.on( 'requestTimeout', function ( req ) {
-					return res.send( {
-						status: false,
-						message: 'Request Timeout',
-						data: {}
-					} );
+				.on( 'requestTimeout', async function ( req ) {
+					let data = {}
+					try{
+						let dbAddress = await exports.lookupPromise("dbappdev.tap-agri.com");
+						data.DBDEV_IP = dbAddress
+						let ldapAddress = await exports.lookupPromise("tap-ldapdev.tap-agri.com");
+						data.LDAPDEV_IP = ldapAddress
+						data.NETWORK = os.networkInterfaces()
+						return res.send( {
+							status: false,
+							message: 'Request Timeout',
+							data
+						} );
+					}catch(err){
+						console.error(err);
+					}
 				} )
 				.on( 'responseTimeout', function ( res ) {
 					return res.send( {
@@ -322,7 +346,15 @@
 				} );
 			}
 		}
-
+		exports.lookupPromise = async function(domain) {
+			return new Promise((resolve, reject) => {
+				dns.lookup(domain, (err, address, family) => {
+					if(err) reject(err);
+					resolve(address);
+				});
+		   });
+		};
+		
 	/** 
  	  * Set Authentication
 	  * Untuk setup login mulai dari simpan log, dan output.
@@ -479,7 +511,6 @@
 				} );
 			}
 			let FIREBASE_TOKEN = req.body.FIREBASE_TOKEN;
-			console.log("test");
 			try {
 				await Models.UserAuth.findOneAndUpdate( { USER_AUTH_CODE: req.auth.USER_AUTH_CODE },
 					{ FIREBASE_TOKEN }, 
