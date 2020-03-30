@@ -256,22 +256,13 @@
 										setup.data.FIREBASE_TOKEN = firebaseToken.FIREBASE_TOKEN;
 									} else {
 										setup.data.FIREBASE_TOKEN = "";
-									}
-									
-									try{
-										let dbAddress = await exports.lookupPromise("dbappdev.tap-agri.com");
-										setup.data.DBDEV_IP = dbAddress
-										let ldapAddress = await exports.lookupPromise("tap-ldapdev.tap-agri.com");
-										setup.data.LDAPDEV_IP = ldapAddress
-										setup.data.NETWORK = os.networkInterfaces()
-										return res.json({
-											status: true,
-											message: "Success!",
-											data: setup.data
-										});
-									}catch(err){
-										console.error(err);
-									}
+									}								
+									return res.json({
+										status: true,
+										message: "Success!",
+										data: setup.data
+									});
+								
 								}
 								else {
 									return res.json({
