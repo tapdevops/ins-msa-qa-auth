@@ -112,9 +112,8 @@ module.exports = (app) => {
 	 |--------------------------------------------------------------------------
 	 */
 
-	//test 
-	app.get('/api/v2.0/auth/test', Controllers.v_2_0.Test.test);
-	app.get('/api/v2.0/auth/company', Controllers.v_2_0.Test.getCompany);
+	//get all EmployeeHRIS
+	// app.get('/api/v2.0/auth/employees', Controllers.v_2_0.Auth.getEmployeeHRIS);
 	// Auth
 	app.post('/api/v2.0/auth/login', Controllers.v_2_0.Auth.login);
 	app.get('/api/v2.0/auth/contacts', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Auth.contacts);
