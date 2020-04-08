@@ -60,7 +60,7 @@
 					microservice_images: 'http://image.tap-agri.com:4012',
 					microservice_reports: 'http://apis.tap-agri.com/mobileinspectiondev/ins-msa-dev-reports',
 					microservice_point: 'http://apis.tap-agri.com/mobileinspectiondev/ins-msa-dev-point',
-					msa_internal_tap: 'http://msadev.tap-agri.com/ins/mob-api'
+					msa_internal_tap: 'http://msadev.tap-agri.com/ins/mob_ins'
 					
 				},
 				qa: {
@@ -73,7 +73,7 @@
 					microservice_images: 'http://image.tap-agri.com:5012',
 					microservice_reports: 'http://apis.tap-agri.com/mobileinspectionqa/ins-msa-qa-reports',
 					microservice_point: 'http://apis.tap-agri.com/mobileinspectionqa/ins-msa-qa-point',
-					msa_internal_tap: 'http://msaqa.tap-agri.com/ins/mob-api'
+					msa_internal_tap: 'http://msaqa.tap-agri.com/ins/mob_ins'
 				},
 				prod: {
 					ldap: 'http://tap-ldap.tap-agri.com/login',
@@ -85,7 +85,7 @@
 					microservice_images: 'http://image.tap-agri.com:3012',
 					microservice_reports: 'http://apis.tap-agri.com/mobileinspection/ins-msa-reports',
 					microservice_point: 'http://apis.tap-agri.com/mobileinspection/ins-msa-point',
-					msa_internal_tap: 'http://msa.tap-agri.com'
+					msa_internal_tap: 'http://msa.tap-agri.com/ins/mob_ins'
 				}
 			},
 
