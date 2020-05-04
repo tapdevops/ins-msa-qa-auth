@@ -298,21 +298,11 @@
 					}
 				} )
 				.on( 'requestTimeout', async function ( req ) {
-					let data = {}
-					try{
-						let dbAddress = await exports.lookupPromise("dbappdev.tap-agri.com");
-						data.DBDEV_IP = dbAddress
-						let ldapAddress = await exports.lookupPromise("tap-ldapdev.tap-agri.com");
-						data.LDAPDEV_IP = ldapAddress
-						data.NETWORK = os.networkInterfaces()
-						return res.send( {
-							status: false,
-							message: 'Request Timeout',
-							data
-						} );
-					}catch(err){
-						console.error(err);
-					}
+					return res.send( {
+						status: false,
+						message: 'Request Timeout',
+						data
+					} );
 				} )
 				.on( 'responseTimeout', function ( res ) {
 					return res.send( {
@@ -337,14 +327,6 @@
 				} );
 			}
 		}
-		exports.lookupPromise = async function(domain) {
-			return new Promise((resolve, reject) => {
-				dns.lookup(domain, (err, address, family) => {
-					if(err) reject(err);
-					resolve(address);
-				});
-		   });
-		};
 		
 	/** 
  	  * Set Authentication
