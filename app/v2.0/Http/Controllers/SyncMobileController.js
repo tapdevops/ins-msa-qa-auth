@@ -1787,11 +1787,9 @@
 					else if ( config.app.env == 'qa' ) {
 						// var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.qa + '/';
 						var path_global = req.protocol + '://apis.tap-agri.com/' + config.app.path.qa + '/';
-					}
-					else if ( config.app.env == 'dev' ) {
+					} else if ( config.app.env == 'dev' ) {
 						// var path_global = req.protocol + '://' + req.get( 'host' ) + '/' + config.app.path.dev + '/' ;
 						var path_global = req.protocol + '://apis.tap-agri.com/' + config.app.path.dev + '/' ;
-
 					}
 					let temp_insert_first = [];
 					data_first_sync.forEach( function( data_category ) {

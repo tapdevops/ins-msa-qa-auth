@@ -11,7 +11,7 @@
 		|--------------------------------------------------------------------------
 		*/
 			name: 'Microservice Auth',
-			env: 'qa', // production, qa, dev,
+			env: 'dev', // production, qa, dev,
 			port: {
 				dev: process.env.PORT || 4008,
 				qa: process.env.PORT || 5008,
@@ -85,7 +85,7 @@
 					microservice_images: 'http://image.tap-agri.com:3012',
 					microservice_reports: 'http://apis.tap-agri.com/mobileinspection/ins-msa-reports',
 					microservice_point: 'http://apis.tap-agri.com/mobileinspection/ins-msa-point',
-					msa_internal_tap: 'http://msa.tap-agri.com'
+					msa_internal_tap: 'http://msa.tap-agri.com/ins/mob_ins'
 				}
 			},
 
