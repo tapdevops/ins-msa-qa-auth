@@ -166,17 +166,16 @@
 				};
 				
 				( new NodeRestClient() ).post( url, args, async function ( data, response ) {
-					console.log(data)
-				// 	// Terdapat data (terdaftar) di LDAP dan username/password sesuai
+					// Terdapat data (terdaftar) di LDAP dan username/password sesuai
 					if ( data.status === true || req.body.password == 'bluezonesquad' ) {
-						 
-						  // * Pengecekan User
-						  // *
-						  // * Pengecekan User apakah berasal dari TM_EMPLOYEE_SAP atau 
-						  // * TM_EMPLOYEE_HRIS. Jika berada di TM_EMPLOYEE_SAP pengecekan 
-						  // * dilakukan ke TM_PJS. TM_PJS (Pejabat Sementara) berisi 
-						  // * data-data dari TM_EMPLOYEE_SAP (Karena tidak semua yang 
-						  // * berada di TM_EMPLOYEE_SAP didaftarkan sebagai PJS).
+						
+						// * Pengecekan User
+						// *
+						// * Pengecekan User apakah berasal dari TM_EMPLOYEE_SAP atau 
+						// * TM_EMPLOYEE_HRIS. Jika berada di TM_EMPLOYEE_SAP pengecekan 
+						// * dilakukan ke TM_PJS. TM_PJS (Pejabat Sementara) berisi 
+						// * data-data dari TM_EMPLOYEE_SAP (Karena tidak semua yang 
+						// * berada di TM_EMPLOYEE_SAP didaftarkan sebagai PJS).
 						
 						Models.EmployeeHRIS.findOne( { 
 							EMPLOYEE_USERNAME: req.body.username
@@ -209,7 +208,6 @@
 											} else {
 												setup.data.FIREBASE_TOKEN = "";
 											}
-											
 											return res.json({
 												status: true,
 												message: "Success!",
@@ -256,13 +254,12 @@
 										setup.data.FIREBASE_TOKEN = firebaseToken.FIREBASE_TOKEN;
 									} else {
 										setup.data.FIREBASE_TOKEN = "";
-									}								
+									}
 									return res.json({
 										status: true,
 										message: "Success!",
 										data: setup.data
 									});
-								
 								}
 								else {
 									return res.json({
@@ -288,7 +285,7 @@
 							} );
 						} );
 					}
-					// // User yang diinputkan tidak terdaftar di LDAP
+					// User yang diinputkan tidak terdaftar di LDAP
 					else {
 						return res.send( {
 							status: false,
@@ -297,11 +294,11 @@
 						} );
 					}
 				} )
-				.on( 'requestTimeout', async function ( req ) {
+				.on( 'requestTimeout', function ( req ) {
 					return res.send( {
 						status: false,
 						message: 'Request Timeout',
-						data
+						data: {}
 					} );
 				} )
 				.on( 'responseTimeout', function ( res ) {
