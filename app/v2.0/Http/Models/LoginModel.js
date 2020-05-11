@@ -11,7 +11,7 @@ const LoginSchema = Mongoose.Schema({
 	ACCESS_TOKEN: String,
 	LAST_LOGIN: String,
 	LOG_LOGIN: String,
-	IMEI: String,
+	IMEI: [String],
 	INSERT_TIME: {
 		type: Number,
 		get: v => Math.floor(v),
