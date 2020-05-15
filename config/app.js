@@ -60,7 +60,7 @@
 					microservice_images: 'http://image.tap-agri.com:4012',
 					microservice_reports: 'http://appdev.tap-agri.com/mobileinspectiondev/ins-msa-dev-reports',
 					microservice_point: 'http://appdev.tap-agri.com/mobileinspectiondev/ins-msa-dev-point',
-					msa_internal_tap: 'http://msadev.tap-agri.com/ins/mob_ins'
+					msa_internal_tap: 'http://dockerdev.tap-agri.com/ins/mob_ins'
 					
 				},
 				qa: {
