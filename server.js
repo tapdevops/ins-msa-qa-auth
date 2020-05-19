@@ -21,6 +21,8 @@ const Express = require('express');
 const Mongoose = require('mongoose');
 const ExpressUpload = require('express-fileupload');
 const CronJob = require('cron').CronJob;
+const timeout = require('connect-timeout');
+
 // Primary Variable
 const App = Express();
 
@@ -120,6 +122,9 @@ const App = Express();
 		console.log("\tService \t: " + config.app.name + " (" + config.app.env + ")");
 		console.log("\tPort \t\t: " + config.app.port[config.app.env]);
 	});
+
+	//set timeout 5 minutes
+	App.use(timeout('300s'))
 
 /*
  |--------------------------------------------------------------------------
