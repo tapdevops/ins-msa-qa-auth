@@ -52,16 +52,15 @@
 			url: {
 				dev: {
 					ldap: 'http://tap-ldapdev.tap-agri.com/login',
-					microservice_auth: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-auth',
-					microservice_ebcc_validation: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-ebccval',
-					microservice_finding: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-finding',
-					microservice_hectare_statement: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-hectarestatement',
-					microservice_inspection: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-inspection',
+					microservice_auth: 'http://apisdev.tap-agri.com/mobileinspectiondev/ins-msa-dev-auth',
+					microservice_ebcc_validation: 'http://apisdev.tap-agri.com/mobileinspectiondev/ins-msa-dev-ebccval',
+					microservice_finding: 'http://apisdev.tap-agri.com/mobileinspectiondev/ins-msa-dev-finding',
+					microservice_hectare_statement: 'http://apisdev.tap-agri.com/mobileinspectiondev/ins-msa-dev-hectarestatement',
+					microservice_inspection: 'http://apisdev.tap-agri.com/mobileinspectiondev/ins-msa-dev-inspection',
 					microservice_images: 'http://image.tap-agri.com:4012',
-					microservice_reports: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-reports',
-					microservice_point: 'http://app.tap-agri.com/mobileinspectiondev/ins-msa-dev-point',
-					msa_internal_tap: 'http://msadev.tap-agri.com/ins/mob_ins'
-					
+					microservice_reports: 'http://apisdev.tap-agri.com/mobileinspectiondev/ins-msa-dev-reports',
+					microservice_point: 'http://apisdev.tap-agri.com/mobileinspectiondev/ins-msa-dev-point',
+					msa_internal_tap: 'http://dockerdev.tap-agri.com/ins/mob_ins'
 				},
 				qa: {
 					ldap: 'http://tap-ldapdev.tap-agri.com/login',
@@ -85,7 +84,7 @@
 					microservice_images: 'http://image.tap-agri.com:3012',
 					microservice_reports: 'http://apis.tap-agri.com/mobileinspection/ins-msa-reports',
 					microservice_point: 'http://apis.tap-agri.com/mobileinspection/ins-msa-point',
-					msa_internal_tap: 'http://msa.tap-agri.com/ins/mob_ins'
+					msa_internal_tap: 'http://docker.tap-agri.com/ins/mob_ins'
 				}
 			},
 
