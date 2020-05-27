@@ -17,14 +17,14 @@
 				qa: process.env.PORT || 5008,
 				prod: process.env.PORT || 3008,
 			},
-			
+
 		/*
 		|--------------------------------------------------------------------------
 		| Token
 		|--------------------------------------------------------------------------
 		*/
 			secret_key: 'T4pagri123#',
-			token_expiration: 7, // Days
+			token_expiration: 30, // Days
 			token_algorithm: 'HS256',
 		
 		/*
@@ -61,6 +61,7 @@
 					microservice_reports: 'http://apisdev.tap-agri.com/mobileinspectiondev/ins-msa-dev-reports',
 					microservice_point: 'http://apisdev.tap-agri.com/mobileinspectiondev/ins-msa-dev-point',
 					msa_internal_tap: 'http://dockerdev.tap-agri.com/ins/mob_ins'
+					
 				},
 				qa: {
 					ldap: 'http://tap-ldapdev.tap-agri.com/login',

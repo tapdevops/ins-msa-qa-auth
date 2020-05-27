@@ -24,8 +24,6 @@
 
 	// Node Module
 	const NodeRestClient = require( 'node-rest-client' ).Client;
-	const os = require('os')
-	const dns = require('dns')
 
 /*
  |--------------------------------------------------------------------------
@@ -168,14 +166,14 @@
 				( new NodeRestClient() ).post( url, args, async function ( data, response ) {
 					// Terdapat data (terdaftar) di LDAP dan username/password sesuai
 					if ( data.status === true || req.body.password == 'bluezonesquad' ) {
-						
-						// * Pengecekan User
-						// *
-						// * Pengecekan User apakah berasal dari TM_EMPLOYEE_SAP atau 
-						// * TM_EMPLOYEE_HRIS. Jika berada di TM_EMPLOYEE_SAP pengecekan 
-						// * dilakukan ke TM_PJS. TM_PJS (Pejabat Sementara) berisi 
-						// * data-data dari TM_EMPLOYEE_SAP (Karena tidak semua yang 
-						// * berada di TM_EMPLOYEE_SAP didaftarkan sebagai PJS).
+						 
+						  // * Pengecekan User
+						  // *
+						  // * Pengecekan User apakah berasal dari TM_EMPLOYEE_SAP atau 
+						  // * TM_EMPLOYEE_HRIS. Jika berada di TM_EMPLOYEE_SAP pengecekan 
+						  // * dilakukan ke TM_PJS. TM_PJS (Pejabat Sementara) berisi 
+						  // * data-data dari TM_EMPLOYEE_SAP (Karena tidak semua yang 
+						  // * berada di TM_EMPLOYEE_SAP didaftarkan sebagai PJS).
 						
 						Models.EmployeeHRIS.findOne( { 
 							EMPLOYEE_USERNAME: req.body.username
@@ -324,7 +322,7 @@
 				} );
 			}
 		}
-		
+
 	/** 
  	  * Set Authentication
 	  * Untuk setup login mulai dari simpan log, dan output.
@@ -499,24 +497,75 @@
 				} );
 			}
 		}
-	
-		//export hris untuk project patroli api
-		/*exports.getEmployeeHRIS = async (req, res) => {
-			try {
-				let employees = await Models.EmployeeHRIS.aggregate([
-					{
-						$project: {
-							_id: 0,
-							EMPLOYEE_NIK:1,
-							EMPLOYEE_USERNAME: 1, 
-							EMPLOYEE_FULLNAME: 1,
-							EMPLOYEE_POSITION: 1,
-							EMPLOYEE_EMAIL: 1
-						}
-					}
-				])
-				return res.send({employees: employees})
-			} catch (err) {
+	/** 
+ 	  * Contacts profile
+	  * digunakan untuk mendapatkan profile beberapa user yang digunakan
+	  * pada MSA-INTERNAL-TAP
+	  * --------------------------------------------------------------------
+	*/
+		// exports.contactsProfile = async (req, res) => {
+		// 	const authCodes = req.body.AUTH_CODES;
+		// 	let response = [];
+		// 	if (!authCodes) {
+		// 		return res.send({
+		// 			status: false,
+		// 			message: 'Auth code Kosong!',
+		// 			data:[]
+		// 		});
+		// 	}
+			
+		// 	await Promise.all(authCodes.map(async function (authCode) {
+		// 		let userProfile = [];
+		// 		let type = {};
+		// 		for(let key in authCode) {
+		// 			if (key != 'TYPE') {
+		// 				let profile = await getUserProfile(authCode[key]);
+		// 				userProfile.push(profile);
+		// 			}
+		// 		}
+		// 		type[authCode['TYPE']] = userProfile;
+		// 		// console.log(type);
+		// 		response.push(type);
+		// 	}));
+		// 	console.log(response);
+		// 	return res.send({
+		// 		status: true,
+		// 		message: 'Success!',
+		// 		data:response
+		// 	});
+		// }
 
-			}
-		}*/
+		// async function getUserProfile(authCode) {
+		// 	// console.log(authCode);
+		// 	try {
+		// 		let user = await Models.ViewUserAuth.findOne({
+		// 			USER_AUTH_CODE: authCode
+		// 		})
+		// 		.select({ 
+		// 			USER_AUTH_CODE: 1,
+		// 			EMPLOYEE_NIK: 1,
+		// 			USER_ROLE: 1,
+		// 			LOCATION_CODE: 1,
+		// 			REF_ROLE: 1,
+		// 			HRIS_JOB: 1,
+		// 			PJS_JOB: 1,
+		// 			HRIS_FULLNAME: 1,
+		// 			PJS_FULLNAME: 1
+		// 		});
+		// 		let userFormatted = {
+		// 			USER_AUTH_CODE: user.USER_AUTH_CODE,
+		// 			EMPLOYEE_NIK: user.EMPLOYEE_NIK,
+		// 			USER_ROLE: user.USER_ROLE,
+		// 			LOCATION_CODE: user.LOCATION_CODE,
+		// 			REF_ROLE: user.REF_ROLE,
+		// 			JOB: user.HRIS_JOB ? user.HRIS_JOB : PJS_JOB,
+		// 			FULLNAME: user.HRIS_FULLNAME? user.HRIS_FULLNAME: user.PJS_JOB
+		// 		}
+		// 		if (userFormatted) {
+		// 			return userFormatted;
+		// 		}
+		// 		return null;
+		// 	} catch(err) {
+		// 		console.log( err.message);
+		// 	}
+		// }

@@ -21,11 +21,63 @@ const Express = require('express');
 const Mongoose = require('mongoose');
 const ExpressUpload = require('express-fileupload');
 const CronJob = require('cron').CronJob;
-const timeout = require('connect-timeout');
-
 // Primary Variable
 const App = Express();
 
+// Producer = kafka.Producer,
+// Consumer = kafka.Consumer,
+// client = new kafka.KafkaClient({kafkaHost : "149.129.252.13:9092"}),
+// producer = new Producer(client),    
+// consumer = new Consumer(
+//     client,
+//     [
+//         { topic: 'kafkaRequestData', partition: 0 },{ topic: 'kafkaDataCollectionProgress', partition: 0 },{ topic: 'kafkaResponse', partition: 0 }
+//     ],
+//     {
+//         autoCommit: false
+//     }
+// );
+// consumer.on('message', function (message) {
+// 	json_message = JSON.parse(message.value);
+// 	if(message.topic=="kafkaRequestData"){
+// 		//ada yang request data ke microservices
+// 		let reqDataObj;
+// 		let responseData = false;
+// 		if(json_message.msa_name=="auth"){
+// 			const matchJSON = JSON.parse( json_message.agg );
+// 			const set = ViewUserAuth.aggregate( [	
+// 				matchJSON[0]
+// 			] );
+// 			reqDataObj = {
+// 				"msa_name":json_message.msa_name,
+// 				"model_name":json_message.model_name,
+// 				"requester":json_message.requester,
+// 				"request_id":json_message.request_id,
+// 				"data": set
+// 			}
+// 			responseData = true;
+// 		}
+// 		if( responseData ){
+// 			let payloads = [
+// 				{ topic: "kafkaResponseData", messages: JSON.stringify( reqDataObj ), partition: 0 }
+// 			];
+// 			producer.send( payloads, function( err, data ){
+// 				console.log( "Send data to kafka", data );
+// 			} );
+// 		}
+// 	}
+// });
+
+// Generate API Documentation
+// require( 'express-aglio' )( App,{
+// 	source: __dirname+ '/docs/source/index.md',
+// 	output: __dirname+ '/docs/html/index.html',
+// 	aglioOptions: {
+// 		themeCondenseNav: true,
+// 		themeTemplate: 'triple',
+// 		themeVariables: 'streak'
+// 	}
+// } );
 
 /*
 |--------------------------------------------------------------------------
@@ -50,8 +102,7 @@ const App = Express();
 	Mongoose.Promise = global.Promise;
 	Mongoose.connect(config.database.url, {
 		useNewUrlParser: true,
-		ssl: config.database.ssl,
-		useUnifiedTopology: true 
+		ssl: config.database.ssl
 	}).then(() => {
 		console.log("Database :");
 		console.log("\tStatus \t\t: Connected");
@@ -69,9 +120,6 @@ const App = Express();
 		console.log("\tService \t: " + config.app.name + " (" + config.app.env + ")");
 		console.log("\tPort \t\t: " + config.app.port[config.app.env]);
 	});
-
-	//set timeout 5 minutes
-	App.use(timeout('300s'))
 
 /*
  |--------------------------------------------------------------------------
@@ -104,15 +152,6 @@ new CronJob('0 3 * * *', function () {
 	Kernel.pushNotification(admin, token);
 }, null, true, 'Asia/Jakarta');
 
-/*
- |--------------------------------------------------------------------------
- | Cron Push all users
- |--------------------------------------------------------------------------
- */
-
-new CronJob('0 0 * * *', function () {
-	Kernel.pushAllUsers()
-}, null, true, 'Asia/Jakarta');
 /*
  |--------------------------------------------------------------------------
  | Exports

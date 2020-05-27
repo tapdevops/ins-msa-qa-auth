@@ -30,8 +30,7 @@
 		 */
 		generate_token( claims ) {
 			var setup = NJWT.create( claims, config.app.secret_key, config.app.token_algorithm );
-			setup.setExpiration( new Date().getTime() + (config.app.token_expiration * 24 * 60 * 60 * 1000 ) );
-			// setup.setExpiration( new Date().getTime() + (15 * 60 * 1000 ) );
+				setup.setExpiration( new Date().getTime() + ( config.app.token_expiration * 24 * 60 * 60 * 1000 ) );
 			var token = setup.compact();
 			return token;
 		}
