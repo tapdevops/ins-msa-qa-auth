@@ -85,7 +85,7 @@
 					microservice_images: 'http://image.tap-agri.com:3012',
 					microservice_reports: 'http://apis.tap-agri.com/mobileinspection/ins-msa-reports',
 					microservice_point: 'http://apis.tap-agri.com/mobileinspection/ins-msa-point',
-					msa_internal_tap: 'http://docker.tap-agri.com/ins/mob_ins'
+					msa_internal_tap: 'http://msa.tap-agri.com/ins/mob_ins'
 				}
 			},
 
