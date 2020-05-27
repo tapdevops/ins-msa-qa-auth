@@ -11,7 +11,7 @@
 		|--------------------------------------------------------------------------
 		*/
 			name: 'Microservice Auth',
-			env: 'prod', // production, qa, dev,
+			env: 'dev', // production, qa, dev,
 			port: {
 				dev: process.env.PORT || 4008,
 				qa: process.env.PORT || 5008,
