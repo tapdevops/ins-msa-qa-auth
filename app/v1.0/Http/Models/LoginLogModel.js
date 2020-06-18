@@ -10,7 +10,7 @@
 		ACCESS_TOKEN: String,
 		EMPLOYEE_NIK: String,
 		USERNAME: String,
-		IMEI: String,
+		DEVICE_ID: String,
 		DATE_LOGIN: {
 			type: Number,
 			get: v => Math.floor( v ),
