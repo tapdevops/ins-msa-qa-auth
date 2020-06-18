@@ -10,7 +10,7 @@
 	const APKVersionSchema = Mongoose.Schema( {
 		INSERT_USER: String,
 		APK_VERSION: SchemaTypes.Double,
-		IMEI: String,
+		DEVICE_ID: String,
 		INSERT_TIME: {
 			type: Number,
 			get: v => Math.floor( v ),

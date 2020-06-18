@@ -30,7 +30,7 @@
  */
  	/**
 	 * Create
-	 * Untuk membuat data mobile sync (pencatatan imei, apa yang di sync, dan 
+	 * Untuk membuat data mobile sync (pencatatan device_id, apa yang di sync, dan 
 	 * wakty sync).
 	 * --------------------------------------------------------------------------
 	 */
@@ -48,7 +48,7 @@
 			const set = new Models.SyncMobile( { 
 				TGL_MOBILE_SYNC: Libraries.Helper.date_format( req.body.TGL_MOBILE_SYNC, 'YYYYMMDDhhmmss' ),
 				TABEL_UPDATE: req.body.TABEL_UPDATE || "",
-				IMEI: auth.IMEI,
+				DEVICE_ID: auth.DEVICE_ID,
 				INSERT_USER: auth.USER_AUTH_CODE,
 				INSERT_TIME: Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ),
 			} );
@@ -66,7 +66,7 @@
 				const set_log = new Models.SyncMobileLog( {
 					TGL_MOBILE_SYNC: Libraries.Helper.date_format( req.body.TGL_MOBILE_SYNC, 'YYYYMMDDhhmmss' ),
 					TABEL_UPDATE: req.body.TABEL_UPDATE || "",
-					IMEI: auth.IMEI,
+					DEVICE_ID: auth.DEVICE_ID,
 					INSERT_USER: auth.USER_AUTH_CODE,
 					INSERT_TIME: Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ),
 				} );
@@ -166,7 +166,7 @@
 			var sync_mobile = await Models.SyncMobile
 				.findOne( {
 					INSERT_USER: auth.USER_AUTH_CODE,
-					IMEI: auth.IMEI,
+					DEVICE_ID: auth.DEVICE_ID,
 					TABEL_UPDATE: 'auth/contact'
 				} )
 				.sort( { 
@@ -344,7 +344,7 @@
 			var service_url = config.app.url[config.app.env].microservice_ebcc_validation;
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
-				IMEI: auth.IMEI,
+				DEVICE_ID: auth.DEVICE_ID,
 				TABEL_UPDATE: 'ebcc/kualitas'
 			} )
 			.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -423,7 +423,7 @@
 
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
-				IMEI: auth.IMEI,
+				DEVICE_ID: auth.DEVICE_ID,
 				TABEL_UPDATE: 'finding'
 			} )
 			.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -506,7 +506,7 @@
 			
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
-				IMEI: auth.IMEI,
+				DEVICE_ID: auth.DEVICE_ID,
 				TABEL_UPDATE: 'finding'
 			} )
 			.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -632,7 +632,7 @@
 
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
-				IMEI: auth.IMEI,
+				DEVICE_ID: auth.DEVICE_ID,
 				TABEL_UPDATE: 'hectare-statement/afdeling'
 			} )
 			.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -714,7 +714,7 @@
 
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
-				IMEI: auth.IMEI,
+				DEVICE_ID: auth.DEVICE_ID,
 				TABEL_UPDATE: 'hectare-statement/block'
 			} )
 			.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -796,7 +796,7 @@
 
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
-				IMEI: auth.IMEI,
+				DEVICE_ID: auth.DEVICE_ID,
 				TABEL_UPDATE: 'hectare-statement/comp'
 			} )
 			.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -878,7 +878,7 @@
 
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
-				IMEI: auth.IMEI,
+				DEVICE_ID: auth.DEVICE_ID,
 				TABEL_UPDATE: 'hectare-statement/est'
 			} )
 			.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -960,7 +960,7 @@
 			
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
-				IMEI: auth.IMEI,
+				DEVICE_ID: auth.DEVICE_ID,
 				TABEL_UPDATE: 'hectare-statement/land-use'
 			} )
 			.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -1042,7 +1042,7 @@
 
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
-				IMEI: auth.IMEI,
+				DEVICE_ID: auth.DEVICE_ID,
 				TABEL_UPDATE: 'hectare-statement/region'
 			} )
 			.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -1122,7 +1122,7 @@
 			var auth = req.auth;
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
-				IMEI: auth.IMEI,
+				DEVICE_ID: auth.DEVICE_ID,
 				TABEL_UPDATE: 'auth/kriteria'
 			} )
 			.sort( { TGL_MOBILE_SYNC: -1 } )

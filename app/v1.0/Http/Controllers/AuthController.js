@@ -188,7 +188,7 @@
 									else {
 										var options = {
 											EMPLOYEE_NIK: data_pjs.EMPLOYEE_NIK,
-											IMEI: req.body.imei,
+											DEVICE_ID: req.body.device_id,
 											USERNAME: req.body.username,
 											JOB_CODE: data_pjs.JOB_CODE
 										}
@@ -228,7 +228,7 @@
 							else {
 								var options = {
 									EMPLOYEE_NIK: data_hris.EMPLOYEE_NIK,
-									IMEI: req.body.imei,
+									DEVICE_ID: req.body.device_id,
 									USERNAME: req.body.username,
 									JOB_CODE: data_hris.EMPLOYEE_POSITION
 								}
@@ -341,7 +341,7 @@
 					LOCATION_CODE: auth.LOCATION_CODE,
 					REFFERENCE_ROLE: auth.REF_ROLE,
 					EMPLOYEE_NIK: auth.EMPLOYEE_NIK,
-					IMEI: data.IMEI
+					DEVICE_ID: data.DEVICE_ID
 				};
 				var token = Libraries.Security.generate_token( claims ); // Generate Token
 				var datetime_now = Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' );
@@ -354,7 +354,7 @@
 					ACCESS_TOKEN: token || "",
 					LAST_LOGIN: datetime_now,
 					LOG_LOGIN: 1,
-					IMEI: data.IMEI || ""
+					DEVICE_ID: data.DEVICE_ID || ""
 				};
 
 				// Jika belum ada data login, maka insert data baru
@@ -390,7 +390,7 @@
 					ACCESS_TOKEN: token || "",
 					EMPLOYEE_NIK: auth.EMPLOYEE_NIK || "",
 					USERNAME: data.USERNAME || "",
-					IMEI: data.IMEI || "",
+					DEVICE_ID: data.DEVICE_ID || "",
 					DATE_LOGIN: datetime_now
 				}
 				var insert_data_login_log = await ( new Models.LoginLog( login_log_data ) ).save();
@@ -435,7 +435,7 @@
 				LOCATION_CODE: auth.LOCATION_CODE,
 				REFFERENCE_ROLE: auth.REFFERENCE_ROLE,
 				EMPLOYEE_NIK: auth.EMPLOYEE_NIK,
-				IMEI: auth.IMEI
+				DEVICE_ID: auth.DEVICE_ID
 			};
 			var token = Libraries.Security.generate_token( claims ); // Generate Token
 

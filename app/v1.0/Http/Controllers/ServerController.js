@@ -142,7 +142,7 @@
 			const set = new Models.APKVersion( {
 				INSERT_USER: req.body.INSERT_USER,
 				APK_VERSION: parseFloat( req.body.APK_VERSION ),
-				IMEI: req.body.IMEI,
+				DEVICE_ID: req.body.DEVICE_ID,
 				INSERT_TIME: Libraries.Helper.date_format( req.body.INSERT_TIME, 'YYYYMMDDhhmmss'),
 			});
 			set.save()
@@ -228,8 +228,8 @@
 					APK_VERSION: {
 						$first: "$APK_VERSION"
 					},
-					IMEI: {
-						$first: "$IMEI"
+					DEVICE_ID: {
+						$first: "$DEVICE_ID"
 					}
 				}
 			},
@@ -238,7 +238,7 @@
 					_id: 0,
 					INSERT_USER: "$_id.INSERT_USER",
 					APK_VERSION: 1,
-					IMEI: 1
+					DEVICE_ID: 1
 				}
 			},
 			{

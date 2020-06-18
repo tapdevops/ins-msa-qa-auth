@@ -12,7 +12,7 @@
 			alias: 'i'
 		},
 		TABEL_UPDATE: String,
-		IMEI: String,
+		DEVICE_ID: String,
 		INSERT_USER: String,
 		INSERT_TIME: {
 			type: Number,
