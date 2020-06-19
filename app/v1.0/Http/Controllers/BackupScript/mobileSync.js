@@ -22,7 +22,7 @@ exports.findContact = async ( req, res ) => {
 	var mobileSync = await mobileSyncModel
 		.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			DEVICE_ID: auth.DEVICE_ID,
+			IMEI: auth.IMEI,
 			TABEL_UPDATE: 'auth/contact'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -190,7 +190,7 @@ exports.findEBCCKualitas = ( req, res ) => {
 
 	mobileSyncModel.find( {
 		INSERT_USER: auth.USER_AUTH_CODE,
-		DEVICE_ID: auth.DEVICE_ID,
+		IMEI: auth.IMEI,
 		TABEL_UPDATE: 'ebcc/kualitas'
 	} )
 	.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -271,7 +271,7 @@ exports.findRegion = ( req, res ) => {
 
 	mobileSyncModel.find( {
 		INSERT_USER: auth.USER_AUTH_CODE,
-		DEVICE_ID: auth.DEVICE_ID,
+		IMEI: auth.IMEI,
 		TABEL_UPDATE: 'hectare-statement/region'
 	} )
 	.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -287,7 +287,7 @@ exports.findRegion = ( req, res ) => {
 
 		console.log( data );
 		if ( data.length > 0 ) {
-			// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan DEVICE_ID
+			// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 			var dt = data[0];
 			var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
 			var end_date = date.convert( 'now', 'YYYYMMDDhhmmss' );
@@ -376,7 +376,7 @@ exports.find = ( req, res ) => {
 				_id: 0,
 				TGL_MOBILE_SYNC: 1,
 				TABEL_UPDATE: 1,
-				DEVICE_ID: 1
+				IMEI: 1
 			} )
 			.then( data => {
 				if ( !data ) {
@@ -393,7 +393,7 @@ exports.find = ( req, res ) => {
 					response.push( {
 						TGL_MOBILE_SYNC: date.convert( String( result.TGL_MOBILE_SYNC ), 'YYYY-MM-DD hh-mm-ss' ),
 						TABEL_UPDATE: result.TABEL_UPDATE,
-						DEVICE_ID: result.DEVICE_ID,
+						IMEI: result.IMEI,
 					} );
 				} );
 
@@ -435,7 +435,7 @@ exports.create = ( req, res ) => {
 	const set = new mobileSyncModel({
 		TGL_MOBILE_SYNC: date.convert( req.body.TGL_MOBILE_SYNC, 'YYYYMMDDhhmmss' ),
 		TABEL_UPDATE: req.body.TABEL_UPDATE || "",
-		DEVICE_ID: auth.DEVICE_ID,
+		IMEI: auth.IMEI,
 		INSERT_USER: auth.USER_AUTH_CODE,
 		INSERT_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
 	});
@@ -453,7 +453,7 @@ exports.create = ( req, res ) => {
 		const set_log = new mobileSyncLogModel({
 			TGL_MOBILE_SYNC: date.convert( req.body.TGL_MOBILE_SYNC, 'YYYYMMDDhhmmss' ),
 			TABEL_UPDATE: req.body.TABEL_UPDATE || "",
-			DEVICE_ID: auth.DEVICE_ID,
+			IMEI: auth.IMEI,
 			INSERT_USER: auth.USER_AUTH_CODE,
 			INSERT_TIME: date.convert( 'now', 'YYYYMMDDhhmmss' ),
 		});
@@ -562,7 +562,7 @@ exports.status = ( req, res ) => {
 		
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			DEVICE_ID: auth.DEVICE_ID,
+			IMEI: auth.IMEI,
 			TABEL_UPDATE: 'finding'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -577,7 +577,7 @@ exports.status = ( req, res ) => {
 			}
 
 			if ( data.length > 0 ) {
-				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan DEVICE_ID
+				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 				var dt = data[0];
 				//var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
 				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
@@ -782,7 +782,7 @@ exports.status = ( req, res ) => {
 
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			DEVICE_ID: auth.DEVICE_ID,
+			IMEI: auth.IMEI,
 			TABEL_UPDATE: 'finding'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -798,7 +798,7 @@ exports.status = ( req, res ) => {
 			}
 
 			if ( data.length > 0 ) {
-				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan DEVICE_ID
+				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 				var dt = data[0];
 				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
 				var end_date = date.convert( 'now', 'YYYYMMDD' ).substr( 0, 8 ) + '235959';
@@ -875,7 +875,7 @@ exports.status = ( req, res ) => {
 		
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			DEVICE_ID: auth.DEVICE_ID,
+			IMEI: auth.IMEI,
 			TABEL_UPDATE: 'hectare-statement/est'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -891,7 +891,7 @@ exports.status = ( req, res ) => {
 
 			if ( data.length > 0 ) {
 
-				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan DEVICE_ID
+				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 				var dt = data[0];
 				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
 				//var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
@@ -966,7 +966,7 @@ exports.status = ( req, res ) => {
 		
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			DEVICE_ID: auth.DEVICE_ID,
+			IMEI: auth.IMEI,
 			TABEL_UPDATE: 'hectare-statement/afdeling'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -982,7 +982,7 @@ exports.status = ( req, res ) => {
 
 			if ( data.length > 0 ) {
 
-				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan DEVICE_ID
+				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 				var dt = data[0];
 				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
 				//var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
@@ -1059,7 +1059,7 @@ exports.status = ( req, res ) => {
 		
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			DEVICE_ID: auth.DEVICE_ID,
+			IMEI: auth.IMEI,
 			TABEL_UPDATE: 'hectare-statement/block'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -1075,7 +1075,7 @@ exports.status = ( req, res ) => {
 
 			if ( data.length > 0 ) {
 
-				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan DEVICE_ID
+				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 				var dt = data[0];
 				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
 				//var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
@@ -1150,7 +1150,7 @@ exports.status = ( req, res ) => {
 		
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			DEVICE_ID: auth.DEVICE_ID,
+			IMEI: auth.IMEI,
 			TABEL_UPDATE: 'hectare-statement/comp'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -1166,7 +1166,7 @@ exports.status = ( req, res ) => {
 
 			if ( data.length > 0 ) {
 
-				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan DEVICE_ID
+				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 				var dt = data[0];
 				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
 				//var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
@@ -1243,7 +1243,7 @@ exports.status = ( req, res ) => {
 		
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			DEVICE_ID: auth.DEVICE_ID,
+			IMEI: auth.IMEI,
 			TABEL_UPDATE: 'hectare-statement/land-use'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )
@@ -1261,7 +1261,7 @@ exports.status = ( req, res ) => {
 
 			if ( data.length > 0 ) {
 
-				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan DEVICE_ID
+				// Terdapat data di T_MOBILE_SYNC dengan USER_AUTH_CODE dan IMEI
 				var dt = data[0];
 				//var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ), 'YYYYMMDDhhmmss' );
 				var start_date = date.convert( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
@@ -1334,7 +1334,7 @@ exports.status = ( req, res ) => {
 		
 		mobileSyncModel.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
-			DEVICE_ID: auth.DEVICE_ID,
+			IMEI: auth.IMEI,
 			TABEL_UPDATE: 'auth/kriteria'
 		} )
 		.sort( { TGL_MOBILE_SYNC: -1 } )

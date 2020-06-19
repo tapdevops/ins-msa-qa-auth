@@ -12,7 +12,7 @@ const SyncMobileLogSchema = Mongoose.Schema({
 		alias: 'i'
 	},
 	TABEL_UPDATE: String,
-	DEVICE_ID: String,
+	IMEI: String,
 	INSERT_USER: String,
 	INSERT_TIME: {
 		type: Number,
