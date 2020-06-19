@@ -13,7 +13,7 @@ Untuk mendapatkan akses token, anda harus login terlebih dahulu dengan user yang
 	{
 		"username": "username.ldap",
 		"password": "password123",
-		"device_id": "123456"
+		"imei": "123456"
 	}
 
 + Response 200 (application/json)

@@ -144,7 +144,7 @@ new CronJob('0 3 * * *', function () {
 	var claims = {
 		USERNAME: 'ferdinand',
 		USER_AUTH_CODE: '0102',
-		DEVICE_ID: '123txxx',
+		IMEI: '123txxx',
 		LOCATION_CODE: 'ALL'
 	};
 	let token = Security.generate_token(claims); // Generate Token

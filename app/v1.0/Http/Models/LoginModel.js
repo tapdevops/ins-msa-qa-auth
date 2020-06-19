@@ -11,7 +11,7 @@
 		ACCESS_TOKEN: String,
 		LAST_LOGIN: String,
 		LOG_LOGIN: String,
-		DEVICE_ID: String,
+		IMEI: String,
 		INSERT_TIME: {
 			type: Number,
 			get: v => Math.floor( v ),
