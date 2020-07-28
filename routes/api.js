@@ -7,6 +7,7 @@
 const Controllers = {
 	v_2_1: {
 		Auth: require(_directory_base + '/app/v2.1/Http/Controllers/AuthController.js'),
+		SyncMobile: require(_directory_base + '/app/v2.1/Http/Controllers/SyncMobileController.js'),
 	},
 	v_2_0: {
 		Auth: require(_directory_base + '/app/v2.0/Http/Controllers/AuthController.js'),
@@ -117,6 +118,11 @@ module.exports = (app) => {
 
 	//login ignore case. misalnya: Ervan.Hutajulu
 	app.post('/api/v2.1/auth/login', Controllers.v_2_1.Auth.login);
+	
+	//fix download berulang data finding hari ini
+	app.get('/api/v2.1/mobile-sync/finding', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.SyncMobile.finding_find);
+	app.get('/api/v2.1/mobile-sync/finding-images', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.SyncMobile.finding_images_find);
+
 
 	/*
 	 |--------------------------------------------------------------------------
