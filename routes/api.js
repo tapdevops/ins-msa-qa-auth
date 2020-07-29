@@ -8,6 +8,8 @@ const Controllers = {
 	v_2_1: {
 		Auth: require(_directory_base + '/app/v2.1/Http/Controllers/AuthController.js'),
 		SyncMobile: require(_directory_base + '/app/v2.1/Http/Controllers/SyncMobileController.js'),
+		ImportDB: require(_directory_base + '/app/v2.1/Http/Controllers/ImportDBController.js'),
+
 	},
 	v_2_0: {
 		Auth: require(_directory_base + '/app/v2.0/Http/Controllers/AuthController.js'),
@@ -122,6 +124,9 @@ module.exports = (app) => {
 	//fix download berulang data finding hari ini
 	app.get('/api/v2.1/mobile-sync/finding', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.SyncMobile.finding_find);
 	app.get('/api/v2.1/mobile-sync/finding-images', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.SyncMobile.finding_images_find);
+
+	//upload db mobile dengan module async
+	app.post('/api/v2.1/import/database', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.ImportDB.read_database);
 
 
 	/*
