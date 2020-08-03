@@ -118,7 +118,7 @@ module.exports = (app) => {
 	 |--------------------------------------------------------------------------
 	 */
 
-	//login ignore case. misalnya: Ervan.Hutajulu
+	//login ignore case. misalnya: Sentot.Santosa
 	app.post('/api/v2.1/auth/login', Controllers.v_2_1.Auth.login);
 	
 	//fix download berulang data finding hari ini
