@@ -746,7 +746,7 @@
 			.limit( 1 )
 			.then( data => {
 				if ( data.length == 0 ) {
-					var url = service_url + '/block';
+					var url = service_url + '/api/v2.1/block';
 					var args = {
 						headers: {
 							"Content-Type": "application/json", 
@@ -781,7 +781,7 @@
 							"Authorization": req.headers.authorization
 						}
 					};
-					var url = service_url + '/sync-mobile/block/' + start_date + '/' + end_date;
+					var url = service_url + '/api/v2.1/sync-mobile/block/' + start_date + '/' + end_date;
 
 					client.get( url, args, function ( data, response ) {
 						res.json( {
