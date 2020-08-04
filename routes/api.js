@@ -127,6 +127,8 @@ module.exports = (app) => {
 
 	//upload db mobile dengan module async
 	app.post('/api/v2.1/import/database', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.ImportDB.read_database);
+	//sync data block ke mobile dengan tambahan field topografi
+	app.get('/api/v2.1/mobile-sync/hectare-statement/block', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.SyncMobile.hs_block_find);
 
 
 	/*
