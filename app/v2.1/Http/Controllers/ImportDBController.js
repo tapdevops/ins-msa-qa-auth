@@ -353,7 +353,7 @@
                     let sendFindingData = function(callbackFinding) {
                         finding.forEach(function(fnd) {
                             axios.defaults.headers.common['Authorization'] = req.headers.authorization;
-                            axios.post(findingServiceUrl + '/api/v2.0/finding', fnd, {headers: { "Content-Type": "application/json" }})
+                            axios.post(findingServiceUrl + '/api/v2.1/finding', fnd, {headers: { "Content-Type": "application/json" }})
                             .then(function (response) {
                                 console.log(response.data);
                             })
@@ -424,7 +424,7 @@
                     let sendEbccDetailData = function(callbackEbccDetail) {
                         ebccDetail.forEach(function(ebccD) {
                             axios.defaults.headers.common['Authorization'] = req.headers.authorization;
-                            axios.post(ebccServiceUrl + '/api/v2.0/ebcc/validation/detail', ebccD, {headers: { "Content-Type": "application/json" }})
+                            axios.post(ebccServiceUrl + '/api/v2.1/ebcc/validation/detail', ebccD, {headers: { "Content-Type": "application/json" }})
                             .then(function (response) {
                                 console.log(response.data);
                             })
@@ -436,7 +436,7 @@
                     let sendEbccHeaderData = function(callbackEbccHeader) {
                         ebccHeader.forEach(function(ebccH) {
                             axios.defaults.headers.common['Authorization'] = req.headers.authorization;
-                            axios.post(ebccServiceUrl + '/api/v2.0/ebcc/validation/header', ebccH, {headers: { "Content-Type": "application/json" }})
+                            axios.post(ebccServiceUrl + '/api/v2.1/ebcc/validation/header', ebccH, {headers: { "Content-Type": "application/json" }})
                             .then(function (response) {
                                 console.log(response.data);
                             })
@@ -503,19 +503,4 @@
         let temp = Object.values(object);
         return temp;
     }
-
-    // function sendFindingData(findings, callback, req) {
-    //     findings.forEach(function(finding) {
-    //         axios.defaults.headers.common['Authorization'] = req.headers.authorization;
-    //         axios.post(findingServiceUrl + '/api/v2.0/finding', finding, {headers: { "Content-Type": "application/json" }})
-    //         .then(function (response) {
-    //             callback(null, 'Success');
-    //         })
-    //         .catch(function (error) {
-    //             console.log(error);
-    //             callback(internalServerError, null);
-    //             return;
-    //         });
-    //     });
-    // }
     
