@@ -282,9 +282,9 @@
                             results.then( function ( data ) {
                                 let dateNow = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
                                 const trCodeInitial = [ 'F', 'V', 'I' ];
-                                const imagePath = [ 'image-finding/', 
-                                                    'image-ebcc/',
-                                                    'image-inspeksi/' ];
+                                const imagePath = [ 'images-finding/', 
+                                                    'images-ebcc/',
+                                                    'images-inspeksi/' ];
                                 for ( let i = 0; i < data.length; i++ ) {
                                     if (data[i].STATUS_SYNC == "N") {
                                         let dateFolderName;
