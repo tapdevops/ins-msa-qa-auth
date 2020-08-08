@@ -293,7 +293,7 @@
                                         if(imageCode.length == 20) {
                                             dateFolderName = imageCode.substring(6, 14);
                                             //misalnya 20200730
-                                        } else if (j == 1) {
+                                        } else if (imageCode.length == 18) {
                                             // karena panjang karakter image name ebcc selfie == 18 maka untuk mendapatkan tanggal insert_time adalah sbb:
                                             dateFolderName = '20' + imageCode.substring(6, 12) //misalnya 20200730
                                         } else {
