@@ -281,16 +281,27 @@
                             let results = realmListToArrayObject( result['DATA'] );
                             results.then( function ( data ) {
                                 let dateNow = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
-                                let dateSubstring = dateNow.toString().substring( 0, 8 );
                                 const trCodeInitial = [ 'F', 'V', 'I' ];
-                                const imagePath = [ 'image-finding/' + dateSubstring, 
-                                                    'image-ebcc/' + dateSubstring,
-                                                    'image-inspeksi/' + dateSubstring ];
+                                const imagePath = [ 'image-finding/', 
+                                                    'image-ebcc/',
+                                                    'image-inspeksi/' ];
                                 for ( let i = 0; i < data.length; i++ ) {
                                     if (data[i].STATUS_SYNC == "N") {
+                                        let dateFolderName;
+                                        let imageCode = data[i].IMAGE_CODE;
+                                        // karena panjang karakter image name ebcc janjang == 20 maka untuk mendapatkan tanggal insert_time adalah sbb:
+                                        if(imageCode.length == 20) {
+                                            dateFolderName = imageCode.substring(6, 14);
+                                            //misalnya 20200730
+                                        } else if (j == 1) {
+                                            // karena panjang karakter image name ebcc selfie == 18 maka untuk mendapatkan tanggal insert_time adalah sbb:
+                                            dateFolderName = '20' + imageCode.substring(6, 12) //misalnya 20200730
+                                        } else {
+                                            dateFolderName = '20' + imageCode.substring(5, 11)//misalnya 20200730
+                                        }
                                         for ( let j = 0; j < trCodeInitial.length; j++ ) {
                                             if ( data[i].TR_CODE.startsWith( trCodeInitial[j] ) ) {
-                                                data[i].IMAGE_PATH = imagePath[j];
+                                                data[i].IMAGE_PATH = imagePath[j] + dateFolderName;
                                             }
                                         }
                                         data[i].MIME_TYPE = "image/jpeg";
