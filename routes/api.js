@@ -122,6 +122,7 @@ module.exports = (app) => {
 	app.post('/api/v2.1/auth/login', Controllers.v_2_1.Auth.login);
 	
 	//fix download berulang data finding hari ini
+	app.get('/api/v2.1/mobile-sync/notification', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.SyncMobile.notificationFind);
 	app.get('/api/v2.1/mobile-sync/finding', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.SyncMobile.finding_find);
 	app.get('/api/v2.1/mobile-sync/finding-images', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.SyncMobile.finding_images_find);
 

@@ -26,6 +26,7 @@
 	// Node Module
 	var Client = require('node-rest-client').Client;
 	var client = new Client();
+	const axios = require('axios');
 
 /*
  |--------------------------------------------------------------------------
@@ -113,7 +114,59 @@
 				} );
 			} );
 		};
+	/**
+	 * Notification Find
+	 * Untuk sync data notification.
+	 * --------------------------------------------------------------------------
+	 */
 
+	exports.notificationFind = async ( req, res ) => {
+		let auth = req.auth;
+		var findingServiceUrl = config.app.url[config.app.env].microservice_finding;
+		Models.SyncMobile.findOne( {
+			INSERT_USER: auth.USER_AUTH_CODE,
+			IMEI: auth.IMEI,
+			TABEL_UPDATE: 'notification'
+		} )
+		.sort( { 
+			TGL_MOBILE_SYNC: -1 
+		} )
+		.limit( 1 )
+		.then( async (dataSync) => {
+			let startDate = 0;
+			let endDate = 99991231235959;
+			if(dataSync) {
+				startDate = dataSync.TGL_MOBILE_SYNC;
+				endDate = parseInt(Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ));
+			}
+			axios.defaults.headers.common['Authorization'] = req.headers.authorization;
+			// axios.get(findingServiceUrl + '/api/v2.1/notification', {
+			axios.get(`${findingServiceUrl}/api/v2.1/notification/${startDate}/${endDate}`)
+			.then(function (response) {
+				return res.send({
+					status: true,
+					message: 'Success',
+					data: response.data.data
+				});
+			})
+			.catch(function (error) {
+				console.log(error);
+				return res.send({
+					status: false,
+					message: 'Internal server error',
+					data: {}
+				} );
+			});
+		})
+		.catch(err => {
+			console.log(err);
+			return res.send({
+				status: false,
+				message: 'Internal server error',
+				data: {}
+			} );
+		});
+	}
 	/**
 	 * Contact Find
 	 * Untuk sync data contact.
