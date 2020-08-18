@@ -281,8 +281,9 @@
                             let results = realmListToArrayObject( result['DATA'] );
                             results.then( function ( data ) {
                                 let dateNow = parseInt( Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
-                                const trCodeInitial = [ 'F', 'V', 'I' ];
+                                const trCodeInitial = [ 'F', 'V', 'M', 'I' ];
                                 const imagePath = [ 'images-finding/', 
+                                                    'images-ebcc/',
                                                     'images-ebcc/',
                                                     'images-inspeksi/' ];
                                 for ( let i = 0; i < data.length; i++ ) {
@@ -302,6 +303,7 @@
                                         for ( let j = 0; j < trCodeInitial.length; j++ ) {
                                             if ( data[i].TR_CODE.startsWith( trCodeInitial[j] ) ) {
                                                 data[i].IMAGE_PATH = imagePath[j] + dateFolderName;
+                                                break;
                                             }
                                         }
                                         data[i].MIME_TYPE = "image/jpeg";
