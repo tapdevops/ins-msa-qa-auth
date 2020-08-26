@@ -2037,7 +2037,11 @@
 
 			var auth = req.auth;
 			if ( req.body.RESET_SYNC == 1 ) {
-				Models.SyncMobile.deleteMany( { INSERT_USER : auth.USER_AUTH_CODE } )
+				Models.SyncMobile.deleteMany( { 
+					INSERT_USER : auth.USER_AUTH_CODE,
+					IMEI: auth.IMEI, 
+					TABEL_UPDATE: { $ne: "notification" } //history sync notification tidak dihapus
+				 } )
 				.then( data => {
 					if( !data ) {
 						return res.status( 404 ).send( {

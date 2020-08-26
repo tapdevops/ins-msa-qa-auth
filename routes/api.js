@@ -130,6 +130,8 @@ module.exports = (app) => {
 	app.post('/api/v2.1/import/database', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.ImportDB.read_database);
 	//sync data block ke mobile dengan tambahan field topografi
 	app.get('/api/v2.1/mobile-sync/hectare-statement/block', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.SyncMobile.hs_block_find);
+	//update: reset dengan tambahan filter imei dan sync notification tidak direset
+	app.post('/api/v2.0/sync/mobile/reset', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.SyncMobile.reset);
 
 
 	/*
