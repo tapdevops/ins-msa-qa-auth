@@ -827,7 +827,7 @@
 				else {
 					var dt = data[0];
 					var start_date = Libraries.Helper.date_format( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
-					var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDD' ) + '235959';
+					var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDD' ).substr( 0, 8 ) + '235959';
 					var args = {
 						headers: {
 							"Content-Type": "application/json", 
