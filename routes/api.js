@@ -12,7 +12,7 @@ const Controllers = {
 		Auth: require(_directory_base + '/app/v2.1/Http/Controllers/AuthController.js'),
 		SyncMobile: require(_directory_base + '/app/v2.1/Http/Controllers/SyncMobileController.js'),
 		ImportDB: require(_directory_base + '/app/v2.1/Http/Controllers/ImportDBController.js'),
-
+		Parameter: require(_directory_base + '/app/v2.1/Http/Controllers/ParameterController.js'),
 	},
 	v_2_0: {
 		Auth: require(_directory_base + '/app/v2.0/Http/Controllers/AuthController.js'),
@@ -142,6 +142,8 @@ module.exports = (app) => {
 	app.get('/api/v2.1/mobile-sync/hectare-statement/block', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.SyncMobile.hs_block_find);
 	//update: reset dengan tambahan filter imei dan sync notification tidak direset
 	app.post('/api/v2.1/sync/mobile/reset', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.SyncMobile.reset);
+	//tambah parameter maps lat long dan tambah field PARAMETER_FOR
+	app.get('/api/v2.1/parameter/track', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.Parameter.time_track_find_one);
 
 
 	/*
