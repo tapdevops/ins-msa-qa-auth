@@ -296,8 +296,8 @@
             HOLIDAY_DESCRIPTION: holidayDescription,
             CREATED_DATE: createdDate,
             CREATED_BY : createdBy,
-            UPDATE_BY : updateBy,
-            UPDATE_DATE: updateDate,
+            UPDATED_BY : updateBy,
+            UPDATED_DATE: updateDate,
             INSERT_STAGING: insertStaging,
         }
         Models.ZpomHL.updateOne({
