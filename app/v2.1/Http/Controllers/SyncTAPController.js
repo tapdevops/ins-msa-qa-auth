@@ -283,7 +283,7 @@
                 data: []
             });
         }
-        holidayDate = Libraries.Helper.date_format(holidayDate, 'YYYYMMDDhhmmss');
+        holidayDate = Libraries.Helper.date_format(holidayDate, 'YYYYMMDD');
         createdDate = Libraries.Helper.date_format(createdBy, 'YYYYMMDDhhmmss');
         updateDate = Libraries.Helper.date_format(updateDate, 'YYYYMMDDhhmmss');
         insertStaging = Libraries.Helper.date_format(insertStaging, 'YYYYMMDDhhmmss');
