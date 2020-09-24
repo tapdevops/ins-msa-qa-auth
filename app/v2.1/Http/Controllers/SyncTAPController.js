@@ -270,8 +270,8 @@
         let holidayDescription = req.body.HOLIDAY_DESCRIPTION;
         let createdBy = req.body.CREATED_BY;
         let createdDate = req.body.CREATED_DATE;
-        let updateBy = req.body.UPDATE_BY;
-        let updateDate = req.body.UPDATE_DATE;
+        let updateBy = req.body.UPDATED_BY;
+        let updateDate = req.body.UPDATED_DATE;
         let insertStaging = req.body.INSERT_STAGING;
 		console.log(req.body);
         if(!werks || !lgort || !holidayDate || !country || !type 
