@@ -13,6 +13,7 @@ const Controllers = {
 		SyncMobile: require(_directory_base + '/app/v2.1/Http/Controllers/SyncMobileController.js'),
 		ImportDB: require(_directory_base + '/app/v2.1/Http/Controllers/ImportDBController.js'),
 		Parameter: require(_directory_base + '/app/v2.1/Http/Controllers/ParameterController.js'),
+		SyncTAP: require(_directory_base + '/app/v2.1/Http/Controllers/SyncTAPController.js'),
 	},
 	v_2_0: {
 		Auth: require(_directory_base + '/app/v2.0/Http/Controllers/AuthController.js'),
@@ -144,6 +145,7 @@ module.exports = (app) => {
 	app.post('/api/v2.1/sync/mobile/reset', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.SyncMobile.reset);
 	//tambah parameter maps lat long dan tambah field PARAMETER_FOR
 	app.get('/api/v2.1/parameter/track', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.Parameter.time_track_find_one);
+	app.post('/api/v2.1/sync/tap/zpom-hl', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.SyncTAP.syncHoliday);
 
 
 	/*

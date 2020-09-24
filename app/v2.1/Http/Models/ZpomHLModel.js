@@ -1,16 +1,3 @@
-werks,
-lgort,
-holiday_date,
-country,
-TYPE,
-hbsr,
-holiday_description,
-created_by,
-created_date,
-updated_by,
-updated_date,
-insert_staging
-
 /*
  |--------------------------------------------------------------------------
  | Models - Parameter
@@ -45,9 +32,12 @@ const ZpomHL = Mongoose.Schema({
 	},
 	UPDATE_BY: String,
 	UPDATE_DATE: {
-		type: Date,
+		type: Number,
+		get: v => Math.floor(v),
+		set: v => Math.floor(v),
+		alias: 'i',
 		default: function () {
-			return null;
+			return 0;
 		}
 	},
 	INSERT_STAGING: {
