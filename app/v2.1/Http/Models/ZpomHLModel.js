@@ -56,4 +56,4 @@ const ZpomHL = Mongoose.Schema({
  | Exports
  |--------------------------------------------------------------------------
  */
-module.exports = Mongoose.model('ZPOM_HL_v_2_1', ZpomHL, 'TM_ZPOM_HL');
+module.exports = Mongoose.model('Holiday_v_2_1', ZpomHL, 'TM_HOLIDAY');
