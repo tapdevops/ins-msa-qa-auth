@@ -145,7 +145,7 @@ module.exports = (app) => {
 	app.post('/api/v2.1/sync/mobile/reset', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.SyncMobile.reset);
 	//tambah parameter maps lat long dan tambah field PARAMETER_FOR
 	app.get('/api/v2.1/parameter/track', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.Parameter.time_track_find_one);
-	app.post('/api/v2.1/sync/tap/zpom-hl', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.SyncTAP.syncHoliday);
+	app.post('/api/v2.1/sync/tap/tm-holiday', Middleware.v_2_0.VerifyToken, Controllers.v_2_1.SyncTAP.syncHoliday);
 
 
 	/*
