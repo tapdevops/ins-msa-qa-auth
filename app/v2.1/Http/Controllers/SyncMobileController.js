@@ -516,7 +516,7 @@
 							"Authorization": req.headers.authorization
 						}
 					};
-					var urlFindingWithDate = service_url + '/api/v2.0/sync-mobile/finding/' + start_date + '/' + end_date;
+					var urlFindingWithDate = service_url + '/api/v2.1/sync-mobile/finding/' + start_date + '/' + end_date;
 					console.log(urlFindingWithDate);
 					let request = client.get( urlFindingWithDate, args, function ( data, response ) {
 						if(data.data) {
