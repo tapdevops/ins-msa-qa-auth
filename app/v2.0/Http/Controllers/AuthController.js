@@ -182,12 +182,12 @@
 						  // * berada di TM_EMPLOYEE_SAP didaftarkan sebagai PJS).
 						
 						Models.EmployeeHRIS.findOne( { 
-							EMPLOYEE_USERNAME: req.body.username
+							EMPLOYEE_USERNAME: username
 						} ).then( async data_hris => {
 							// Data tidak ada di TM_EMPLOYEE_HRIS, lanjut pengecekan ke TM_PJS
 							if( !data_hris ) {
 								Models.PJS.findOne( { 
-									USERNAME: req.body.username
+									USERNAME: username
 								} ).then( async data_pjs => {
 									if ( !data_pjs ) {
 										return res.send({
@@ -200,7 +200,7 @@
 										var options = {
 											EMPLOYEE_NIK: data_pjs.EMPLOYEE_NIK,
 											IMEI: req.body.imei,
-											USERNAME: req.body.username,
+											USERNAME: username,
 											JOB_CODE: data_pjs.JOB_CODE
 										}
 
@@ -247,7 +247,7 @@
 								var options = {
 									EMPLOYEE_NIK: data_hris.EMPLOYEE_NIK,
 									IMEI: req.body.imei,
-									USERNAME: req.body.username,
+									USERNAME: username,
 									JOB_CODE: data_hris.EMPLOYEE_POSITION
 								}
 								var setup = await exports.set_authentication( options );
