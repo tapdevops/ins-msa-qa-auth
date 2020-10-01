@@ -145,12 +145,18 @@
 	  * --------------------------------------------------------------------
 	*/
 		exports.login = async ( req, res ) => {
-			if ( req.body.username && req.body.password ) {
+			let username = req.body.username;
+			let password = req.body.password;
+			if ( username && password ) {
+				username = username.toLowerCase();
+				if(username.includes('@')) {
+					username = username.substring(0, username.indexOf('@'))
+				}
 				var url = config.app.url[config.app.env].ldap;
 				var args = {
 					data: {
-						username: req.body.username,
-						password: req.body.password
+						username: username,
+						password: password
 					},
 					headers: { "Content-Type": "application/json" },
 					requestConfig: {
@@ -165,7 +171,7 @@
 				
 				( new NodeRestClient() ).post( url, args, async function ( data, response ) {
 					// Terdapat data (terdaftar) di LDAP dan username/password sesuai
-					if ( data.status === true || req.body.password == 'bluezonesquad' ) {
+					if ( data.status === true || password == 'bluezonesquad' ) {
 						 
 						  // * Pengecekan User
 						  // *
