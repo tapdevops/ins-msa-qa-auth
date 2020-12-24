@@ -11,7 +11,7 @@
     "chai": "^4.2.0",
     "compression": "^1.6.2",
     "crypto": "^1.0.1",
-    "date-and-time": "^0.6.3",
+    "date-and-time": "^0.14.2",
     "dateformat": "^3.0.3",
     "express": "^4.16.4",
     "express-aglio": "^1.0.2",
