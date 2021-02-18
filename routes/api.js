@@ -123,6 +123,7 @@ module.exports = (app) => {
 	 */
 	//sync data block ke mobile dengan tambahan field topografi
 	app.get('/api/v2.2/mobile-sync/hectare-statement/block', Middleware.v_2_0.VerifyToken, Controllers.v_2_2.SyncMobile.hs_block_find);
+	app.get('/api/v2.0/mobile-sync/hectare-statement/road', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.SyncMobile.hs_road_find);
 	/*
 	 |--------------------------------------------------------------------------
 	 | API Versi 2.1

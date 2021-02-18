@@ -736,6 +736,8 @@
 			
 			var auth = req.auth;
 			var service_url = config.app.url[config.app.env].microservice_hectare_statement;
+			console.log(service_url + '/api/v2.2/sync-mobile/road/');
+
 
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
@@ -753,7 +755,7 @@
 							"Authorization": req.headers.authorization
 						}
 					};
-
+					console.log(url);
 					client.get( url, args, function ( data, response ) {
 						var insert = [];
 						if ( data.data.length > 0 ) {
@@ -1974,6 +1976,90 @@
 	 * Untuk mereset data user sesuai token di tabel TM_MOBILE_SYNC.
 	 * --------------------------------------------------------------------------
 	 */
+		/**
+	 * Road
+	 * Mengambil data TM_ROAD
+	 * --------------------------------------------------------------------------
+	 */
+	exports.hs_road_find = ( req, res ) => {
+		
+		var auth = req.auth;
+		var service_url = config.app.url[config.app.env].microservice_hectare_statement;
+		console.log(service_url);
+
+		Models.SyncMobile.find( {
+			INSERT_USER: auth.USER_AUTH_CODE,
+			IMEI: auth.IMEI,
+			TABEL_UPDATE: 'hectare-statement/road'
+		} )
+		.sort( { TGL_MOBILE_SYNC: -1 } )
+		.limit( 1 )
+		.then( data => {
+			if ( data.length == 0 ) {
+				var url = service_url + '/api/v2.2/road';
+				var args = {
+					headers: {
+						"Content-Type": "application/json", 
+						"Authorization": req.headers.authorization
+					}
+				};
+				console.log(url);
+				client.get( url, args, function ( data, response ) {
+					var insert = [];
+					if ( data.data.length > 0 ) {
+						insert = data.data;
+					}
+					
+					return res.json( { 
+						"status": data.status,
+						"message": "First time sync",
+						"data": {
+							hapus: [],
+							simpan: data.data,
+							ubah: []
+						}
+					} );
+				});
+			}
+			else {
+				var dt = data[0];
+				var start_date = Libraries.Helper.date_format( String( dt.TGL_MOBILE_SYNC ).substr( 0, 8 ) + '000000', 'YYYYMMDDhhmmss' );
+				var end_date = Libraries.Helper.date_format( 'now', 'YYYYMMDD' ) + '235959';
+				var args = {
+					headers: {
+						"Content-Type": "application/json", 
+						"Authorization": req.headers.authorization
+					}
+				};
+				var url = service_url + '/api/v2.2/sync-mobile/road/' + start_date + '/' + end_date;
+
+				client.get( url, args, function ( data, response ) {
+					res.json( {
+						status: data.status,
+						message: data.message,
+						data: data.data
+					} );
+				});
+			}
+			
+		} ).catch( err => {
+			if( err.kind === 'ObjectId' ) {
+				return res.send( {
+					status: false,
+					message: 'ObjectId Error',
+					data: {}
+				} );
+			}
+			return res.send( {
+				status: false,
+				message: err.message,
+				data: {}
+			} );
+		} );
+
+	};
+
+
 		exports.reset = ( req, res ) => {
 
 			if ( !req.body ) {
