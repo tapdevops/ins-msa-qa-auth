@@ -5,6 +5,9 @@
 */
 // Controllers
 const Controllers = {
+	v_2_3: {
+		SyncMobile: require(_directory_base + '/app/v2.2/Http/Controllers/SyncMobileController.js'),
+	},
 	v_2_2: {
 		SyncMobile: require(_directory_base + '/app/v2.1/Http/Controllers/SyncMobileController.js'),
 	},
@@ -123,7 +126,9 @@ module.exports = (app) => {
 	 */
 	//sync data block ke mobile dengan tambahan field topografi
 	app.get('/api/v2.2/mobile-sync/hectare-statement/block', Middleware.v_2_0.VerifyToken, Controllers.v_2_2.SyncMobile.hs_block_find);
-	app.get('/api/v2.0/mobile-sync/hectare-statement/road', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.SyncMobile.hs_road_find);
+	app.get('/api/v2.2/mobile-sync/hectare-statement/road', Middleware.v_2_0.VerifyToken, Controllers.v_2_3.SyncMobile.hs_road_find);
+	// tambahan field ROAD_CODE dan ROAD_NAME di TR_FINDING
+	app.get('/api/v2.2/mobile-sync/finding', Middleware.v_2_0.VerifyToken, Controllers.v_2_3.SyncMobile.finding_find);
 	/*
 	 |--------------------------------------------------------------------------
 	 | API Versi 2.1
@@ -197,6 +202,8 @@ module.exports = (app) => {
 	app.get('/api/v2.0/mobile-sync/hectare-statement/est', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.SyncMobile.hs_est_find);
 	app.get('/api/v2.0/mobile-sync/hectare-statement/land-use', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.SyncMobile.hs_land_use_find);
 	app.get('/api/v2.0/mobile-sync/hectare-statement/region', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.SyncMobile.hs_region_find);
+	app.get('/api/v2.0/mobile-sync/hectare-statement/road', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.SyncMobile.hs_road_find);
+
 
 	// Sync TAP
 	app.post('/api/v2.0/sync/tap/employee-hris', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.SyncTAP.sync_employee_hris);
