@@ -736,8 +736,6 @@
 			
 			var auth = req.auth;
 			var service_url = config.app.url[config.app.env].microservice_hectare_statement;
-			console.log(service_url + '/api/v2.2/sync-mobile/road/');
-
 
 			Models.SyncMobile.find( {
 				INSERT_USER: auth.USER_AUTH_CODE,
