@@ -118,7 +118,6 @@ module.exports = (app) => {
 			}
 		})
 	});
-
 	/*
 	 |--------------------------------------------------------------------------
 	 | API Versi 2.2
@@ -169,6 +168,7 @@ module.exports = (app) => {
 	// Category
 	app.get('/api/v2.0/category', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Category.find);
 	app.get('/api/v2.0/category/:start_date/:end_date', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Category.sync_mobile);
+	app.post('/api/v2.0/category/upload/icon', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Category.upload);
 
 	// Content
 	app.get('/api/v2.0/content', Middleware.v_2_0.VerifyToken, Controllers.v_2_0.Content.find);
