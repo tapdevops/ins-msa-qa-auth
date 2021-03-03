@@ -18,9 +18,58 @@
 
  /*
  |--------------------------------------------------------------------------
- | Versi 1.0
+ | Versi 2.0
  |--------------------------------------------------------------------------
  */
+		exports.upload = async ( req, res ) => {
+			console.log(req.body)
+			// Return FALSE jika tidak ada File yang di upload.
+			if( !req.files ) {
+				return res.status(400).send( {
+					status: false,
+					message: 'File not found!',
+					data: {}
+				} );
+			}
+			if( !req.files.IMAGES ) {
+				return res.status(400).send( {
+					status: false,
+					message: 'File not found!',
+					data: {}
+				} );
+			}
+			let files = [];
+			if (!req.files.IMAGES.length) {
+				files.push(req.files.IMAGES)
+			} else if (req.files.IMAGES.length > 0 ) {
+				files = req.files.IMAGES
+			}
+			var newpath = _directory_base + '/public/images/category/' + req.files.IMAGES.name;
+			var file = files[0]
+			if ( file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg' || file.mimetype == 'image/png') {
+				file.mv( newpath, function( err ) {
+					if (err) {
+						return res.status(500).send( {
+							status: false,
+							message: 'Upload fail!',
+							data: {}
+						} );
+					}else{
+						return res.status(200).send({
+							status: true,
+							message: 'Success',
+							data: []
+						})
+					}
+				});
+			}else{
+				return res.status(500).send( {
+					status: false,
+					message: 'Upload fail!',
+					data: {}
+				} );
+			}
+		};
  	/**
 	 * Find
 	 * Untuk menampilkan data category
