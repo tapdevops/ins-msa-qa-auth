@@ -89,6 +89,7 @@
 					__v: 0
 				} );
 
+				console.log(query.length);
 			if ( query.length > 0 ) {
 
 				var results = [];
