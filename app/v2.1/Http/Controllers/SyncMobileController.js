@@ -123,6 +123,7 @@
 	exports.notificationFind = async ( req, res ) => {
 		let auth = req.auth;
 		var findingServiceUrl = config.app.url[config.app.env].microservice_finding;
+		console.log(findingServiceUrl);
 		Models.SyncMobile.findOne( {
 			INSERT_USER: auth.USER_AUTH_CODE,
 			IMEI: auth.IMEI,

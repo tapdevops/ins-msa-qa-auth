@@ -1745,7 +1745,6 @@
 	 * --------------------------------------------------------------------------
 	 */
 	exports.category_find = ( req, res ) => {
-			
 		var auth = req.auth;
 		Models.SyncMobile.find( {
 			INSERT_USER: auth.USER_AUTH_CODE,
@@ -1822,8 +1821,8 @@
 			}
 			else {
 				var start_date = data_sync[0].TGL_MOBILE_SYNC;
+				
 				var end_date = parseInt( Libraries.Helper.date_format( 'now', 'YYYYMMDDhhmmss' ) );
-
 				Models.Category.find( 
 					{
 						$and: [
@@ -1865,7 +1864,6 @@
 					__v: 1
 				} )
 				.then( data_insert => {
-					console.log(data_insert);
 					var temp_insert = [];
 					var temp_update = [];
 					var temp_delete = [];
